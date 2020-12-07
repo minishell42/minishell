@@ -1,6 +1,7 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdbool.h>
+#include <sys/wait.h>
 
 #include "get_next_line.h"
 #include "libft.h"
