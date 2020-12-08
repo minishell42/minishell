@@ -6,7 +6,7 @@
 /*   By: dokang <dokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/02/25 14:44:12 by dokang            #+#    #+#             */
-/*   Updated: 2020/12/07 11:33:07 by dokang           ###   ########.fr       */
+/*   Updated: 2020/12/08 11:30:11 by dokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,5 +73,7 @@ t_list				*ft_lstmap(t_list *lst, void *(*f)(void *),\
 		void (*del)(void *));
 
 bool				are_equal(char *s1, char *s2);
+int					ft_isspace(int c);
+
 
 #endif

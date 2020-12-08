@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sangpark <sangpark@student.42.fr>          +#+  +:+       +#+        */
+/*   By: dokang <dokang@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/04/06 15:00:50 by sangpark          #+#    #+#             */
-/*   Updated: 2020/04/09 15:37:22 by sangpark         ###   ########.fr       */
+/*   Updated: 2020/12/08 11:29:56 by dokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,4 +69,6 @@ char			*ft_substr(char const *s, unsigned int start, size_t len);
 int				ft_tolower(int c);
 int				ft_toupper(int c);
 bool			are_equal(char *s1, char *s2);
+int				ft_isspace(int c);
+
 #endif
