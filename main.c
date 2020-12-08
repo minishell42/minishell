@@ -158,9 +158,9 @@ int			main(int argc, char **argv, char *envp[])
 	{
 		write(1, "minishell$ ", 12);
 		get_next_line(0, &line);
-		// command_lines = get_command_lines(line);
-		t_cmd_line *cmd_line = get_command_line(&line);
-		printf("command = %s, option = %s, param = %s\n", cmd_line->command, cmd_line->option, cmd_line->param);
+		command_lines = get_command_lines(line);
+		// t_cmd_line *cmd_line = get_command_line(&line);
+		// printf("command = %s, option = %s, param = %s\n", cmd_line->command, cmd_line->option, cmd_line->param);
 	}
 	return (0);
 }

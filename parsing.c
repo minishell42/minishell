@@ -64,69 +64,125 @@ char		*get_param(char *start)
 	return (param);
 }
 
-t_cmd_line	*get_command_line(char **line_ptr)
+void		remove_quotation(char *value)
+{
+	char	quot_flag;
+	int		index;
+
+	quot_flag = 0;
+	while (value && *value)
+	{
+		index = 0;
+		while (*value && *value != '"' && *value != '\'')
+			value++;
+		if (*value == '"' || *value == '\'')
+		{
+			if (quot_flag == 0)
+				quot_flag = *value;
+			else if (quot_flag == *value)
+				quot_flag = 0;
+		}
+		if (quot_flag == *value || quot_flag == 0)
+			while (value && value[index++])
+				value[index - 1] = value[index];
+		else
+			value++;
+	}
+}
+
+bool		parse_cmd_line(t_cmd_line *cmd_line, char *start, int len)
+{
+	char	*value;
+
+	value = ft_calloc(sizeof(char), len + 1);
+	ft_strlcpy(value, start, len + 1);
+	remove_quotation(value);
+	if (!cmd_line->command)
+	{
+		cmd_line->command = value;
+		cmd_line->command_num = get_command_num(cmd_line->command);
+		// !cmd_line->command_num 에러처리
+		return (true);
+	}
+	else if (cmd_line->command_num == ECHO && are_equal(value, "-n"))
+	{
+		if (!cmd_line->option)
+			cmd_line->option = value;
+		else
+			free(value);
+		return (true);
+	}
+	free(value);
+	return (false);
+}
+// 우리가 하고 싶은 것
+// 공백을 기준으로 cmd_line에 들어갈 값들을 분리
+// but 공백은 따옴표 안에 속하지 않는 공백만 인정
+void		check_quotation_in_line(char *line, int *index, char *quot_flag)
+{
+	while (line[*index] && !(ft_isspace(line[*index]) && *quot_flag == 0))
+	{
+		if (line[*index] == '\'' || line[*index] == '"')
+		{
+			if (*quot_flag == line[*index])
+				*quot_flag = 0;
+			else if (*quot_flag == 0)
+				*quot_flag = line[*index];
+		}
+		(*index)++;
+	}
+
+}
+
+t_cmd_line	*get_command_line(char **line_ptr, char *quot_flag)
 {	
 	t_cmd_line		*command_line;
-	int				i;
-	bool			quotation_flag;
+	int				index;
 	char			*start;
-	char			*value;
 	char			*line;
 	int				len;
 
+//  echo ";"; echo 123
 	line = ft_strtrim(*line_ptr, " ");
-	// printf("line = %s\n", line);
-	quotation_flag = false;
 	command_line = ft_calloc(sizeof(t_cmd_line), 1);
-	i = 0;
+	index = 0;
 	start = line;
-	while (line[i])
+	while (line[index])
 	{
-		if (line[i] == ' ' || !line[i + 1])
-		{
-			len = (line + i) - start;
-			if (!line[i + 1])
-				len++;
-			value = ft_calloc(sizeof(char), len + 1);
-			ft_strlcpy(value, start, len + 1);
-			if (!command_line->command)
-			{
-				command_line->command = value;
-				command_line->command_num = get_command_num(command_line->command);
-				// !command_line->command_num 에러처리
-			}
-			else if (command_line->command_num == ECHO && are_equal(value, "-n"))
-			{
-				if (!command_line->option)
-					command_line->option = value;
-				else
-					free(value);
-			}
-			else
-			{
-				free(value);
-				break;
-			}
-				// 나머지를 전부 param으로 넣어준다.
-				/* 심화
-					일단 쭉가면서 redirection, pipe, semi colon이 나오는지 확인하고
-					나오지 않는다면 모두 pram으로 넣어준다
-
-					나온다면 나온 문자열 전까지 저장하고 브레이크 
-				*/
-			while (line[i] == ' ' && line[i + 1] == ' ')
-				i++;
-			start = line + i + 1;
-		}
-		i++;
+		// 현재 문자가 공백이고 플래그가 서있지 않을 경우 저장
+		// 저장한 문자열을 적절한 cmd_line 필드에 분배
+		// if (line[index] == ' ' || !line[index + 1])
+		// {
+		// 	len = (line + index) - start;
+		// 	if (!line[index + 1])
+		// 		len++;
+		// 	if (!parse_cmd_line(command_line, start, len))
+		// 		break;
+		// 	while (line[index] == ' ' && line[index + 1] == ' ')
+		// 		index++;
+		// 	start = line + index + 1;
+		// }
+		// index++;
+		// printf("line : %c\nindex : %d\nquot_flag : %c\n", *line, index, *quot_flag);
+		check_quotation_in_line(line, &index, quot_flag);
+		// printf("line2 : %c\nindex2 : %d\nquot_flag2 : %c\n", *line, index, *quot_flag);
+		if (*quot_flag)
+			return (NULL);
+		len = (line + index) - start;
+		if (!line[index + 1])
+			len++;
+		if (!parse_cmd_line(command_line, start, len))
+			break;
+		while (line[index] == ' ' && line[index + 1] == ' ')
+			index++;
+		index++;
+		start = line + index;
+		// printf("end of while\n");
 	}
-	// value = ft_calloc(sizeof(char), ft_strlen(start) + 1);
-	// ft_strlcpy(value, start, ft_strlen(start) + 1);
+	// " " flag가 서지 않는 상태에서 ;를 만나면 ;을 널문자로 변경시키고 그 전까지의 값을 param으로 입력하고, line의 주소값을 ;다음의 주소값으로 민다.
 	command_line->param = get_param(start);
-	// printf("value = %s, len = %ld\n start = %c\n", value, ft_strlen(value), *start);
-	// command_line->param = value;
-	i += ft_strlen(command_line->param);
-	*line_ptr = line + i;
+	index += ft_strlen(command_line->param);
+	*line_ptr = line + index;
 	return (command_line);
 }
 
@@ -134,12 +190,20 @@ t_list	*get_command_lines(char *line)
 {
 	t_list			*list;
 	t_cmd_line		*command_line;
+	char			quot_flag;
 	// char			*tmp;
 
 	list = ft_calloc(sizeof(t_list), 1);
+	quot_flag = 0;
 	// tmp = ft_calloc(sizeof(char), ft_strlen(line));
 	while (line)
 	{
+		if (!(command_line = get_command_line(&line, &quot_flag)))
+		{
+			if (quot_flag)
+				write(1, "quotation mark is not pair\n", 28);
+			return (NULL);
+		}
 		// 일단 ; 상관없이 command_line이 하나만 있다고 생각.
 		// command_line = set_command_line(line);
 
