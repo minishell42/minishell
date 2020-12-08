@@ -10,6 +10,9 @@
 # include "libft.h"
 
 # define ECHO 1
+# define OUT_OVERRIDE 1
+# define REDIR_IN 2
+# define OUT_ENDLINE 3
 
 typedef struct		s_command_line
 {
@@ -17,6 +20,9 @@ typedef struct		s_command_line
     char			*option;
     char			*param;
 	int				command_num;
+    bool            pipe_flag;
+    int             redir_flag;
+    char            *redir_file;
 }					t_cmd_line;
 
 void				message_and_exit(char *message, bool built_in_error);
