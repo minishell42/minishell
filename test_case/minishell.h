@@ -20,7 +20,7 @@ typedef struct		s_command_line
 }					t_cmd_line;
 
 void				message_and_exit(char *message, bool built_in_error);
-t_cmd_line			*get_command_line(char **line_ptr);
+t_cmd_line			*get_command_line(char **line_ptr, char *quot_flag);
 t_list				*get_command_lines(char *line);
 char				*get_param(char *start);
 void				excute(t_cmd_line *cmd_line, char *envp[]);
