@@ -180,7 +180,6 @@ void test_get_command_line(t_list *env)
 	ft_lstadd_back(&env, ft_lstnew("ENV_TEST=1234"));
 	flag = 0;
 	cmd_line = get_command_line(&case13, &flag, env);
-	printf("5\n");
 	check_command_line(_case13, *cmd_line);
 	printf("====================  case13 OK  ==========================\n");
 }

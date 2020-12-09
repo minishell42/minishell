@@ -79,7 +79,6 @@ int	is_semicolon(int c)
 {
 	if (c == ';')
 	{
-		printf("%c\n", c);
 		return (true);
 	}
 	return (false);
@@ -379,9 +378,7 @@ bool		parse_cmd_line(t_cmd_line *cmd_line, char *start, int len, t_list *env)
 
 	value = ft_calloc(sizeof(char), len + 1);
 	ft_strlcpy(value, start, len + 1);
-	printf("before set env\n");
 	set_env(&value, env);
-	printf("after set env\n");
 	remove_quotation(value);
 	// ft_function for check in env valuable name
 	// if ((env_value = is_env(value, env)))
@@ -511,7 +508,6 @@ t_cmd_line	*get_command_line(char **line_ptr, char *quot_flag, t_list *env)
 	int				len;
 
 //  echo ";"; echo 123
-	printf("start get cmd line\n");
 	line = ft_strtrim(*line_ptr, " ");  // 메모리 누수 가능성 
 	command_line = ft_calloc(sizeof(t_cmd_line), 1);
 	index = 0;
@@ -540,21 +536,15 @@ t_cmd_line	*get_command_line(char **line_ptr, char *quot_flag, t_list *env)
 	}
 	// " " flag가 서지 않는 상태에서 ;를 만나면 ;을 널문자로 변경시키고 그 전까지의 값을 param으로 입력하고, line의 주소값을 ;다음의 주소값으로 민다.
 
-	printf("before set param\n");
 	set_param(command_line, start);
-	printf("after set param\n");
 	index += ft_strlen(command_line->param);
-	printf("before check redir\n");
 	check_redirection(command_line);
-	printf("after check redir\n");
 	if (command_line->redir_flag)
 		set_redirection_param(command_line);
 	else
 	{
 		// command_line->param free해야 함
-		printf("1\n");
 		set_multi_env(line, env);
-		printf("2\n");
 		remove_quotation(command_line->param);
 		command_line->param = ft_strtrim(command_line->param, " "); // 메모리 누수 가능성
 	}
