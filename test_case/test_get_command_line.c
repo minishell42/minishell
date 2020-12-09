@@ -5,7 +5,7 @@ char *get_err_msg(char *func_name, int case_number, char *expect, char *result)
 	char *msg;
 
 	msg = ft_calloc(sizeof(char), 200);
-	sprintf(msg, "func_name = %s\ncase_number = %d\nexpect = %s\nresult = %s\n",
+	sprintf(msg, "func_name = %s\ncase_number = %d\nexpect = '%s'\nresult = '%s'\n",
 					func_name, case_number, expect, result);
 	return (msg);
 }
@@ -57,12 +57,26 @@ void check_command_line(t_cmd_line expect, t_cmd_line result)
 		message = get_err_msg_int(name, case_number, expect.redir_flag, result.redir_flag);
 		message_and_exit(message, false);
 	}
-	if (!are_equal(expect.redir_file, result.redir_file))
+	char *expect_content;
+	char *result_content;
+	while (expect.redir_param)
 	{
-		printf("enter file\n");
-		message = get_err_msg(name, case_number, expect.redir_file, result.redir_file);
-		message_and_exit(message, false);
+		expect_content = (char *)expect.redir_param->content;
+		result_content = (char *)result.redir_param->content;
+		if (!are_equal(expect_content, result_content))
+		{
+			message = get_err_msg(name, case_number, expect_content, result_content);
+			message_and_exit(message, false);
+		}
+		expect.redir_param = expect.redir_param->next;
+		result.redir_param = result.redir_param->next;
 	}
+	// if (!are_equal(expect.redir_param, result.redir_param))
+	// {
+	// 	printf("enter file\n");
+	// 	message = get_err_msg(name, case_number, expect.redir_param, result.redir_param);
+	// 	message_and_exit(message, false);
+	// }
 }
 
 void test_get_command_line()
@@ -134,15 +148,31 @@ void test_get_command_line()
 	printf("====================  case9 OK  ==========================\n");
 
 	char *case10= "echo 1234 > file"; 
-	t_cmd_line _case10 = {"echo", 0, "1234", 1, 0, 1, "file"};
+	t_list	*expect = ft_lstnew("file");
+	t_cmd_line _case10 = {"echo", 0, "1234", 1, 0, 1, expect};
 	flag = 0;
 	cmd_line = get_command_line(&case10, &flag);
 	check_command_line(_case10, *cmd_line);
 	printf("====================  case10 OK  ==========================\n");
-	// char *case8= "echo \"-n\" 1234 1234"; 
-	// t_cmd_line _case8 = {"echo", "-n", "1234 1234"};
-	// flag = 0;
-	// cmd_line = get_command_line(&case8, &flag);
-	// check_command_line(_case8, *cmd_line);
-	// printf("====================  case8 OK  ==========================\n");
+
+	char *case11= "echo 1234 > file name is 42"; 
+	t_list	*expect2 = ft_lstnew("name");
+	t_list	*expect3 = ft_lstnew("is");
+	t_list	*expect4 = ft_lstnew("42");
+	ft_lstadd_back(&expect, expect2);
+	ft_lstadd_back(&expect, expect3);
+	ft_lstadd_back(&expect, expect4);
+	t_cmd_line _case11 = {"echo", 0, "1234", 1, 0, 1, expect};
+	flag = 0;
+	cmd_line = get_command_line(&case11, &flag);
+	check_command_line(_case11, *cmd_line);
+	printf("====================  case11 OK  ==========================\n");
+
+	char *case12= "echo 1234 > f\"ile\" name is 42";
+	t_cmd_line _case12 = {"echo", 0, "1234", 1, 0, 1, expect};
+	flag = 0;
+	cmd_line = get_command_line(&case12, &flag);
+	check_command_line(_case12, *cmd_line);
+	printf("====================  case12 OK  ==========================\n");
+
 }
