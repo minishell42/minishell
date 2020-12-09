@@ -16,18 +16,18 @@
 
 typedef struct		s_command_line
 {
-    char			*command;
-    char			*option;
-    char			*param;
+	char			*command;
+	char			*option;
+	char			*param;
 	int				command_num;
-    bool            pipe_flag;
-    int             redir_flag;
-    char            *redir_file;
+	bool			pipe_flag;
+	int				redir_flag;
+	t_list			*redir_param;
 }					t_cmd_line;
 
 void				message_and_exit(char *message, bool built_in_error);
-t_cmd_line			*get_command_line(char **line_ptr,  char *quot_flag);
-t_list				*get_command_lines(char *line);
+t_cmd_line			*get_command_line(char **line_ptr,  char *quot_flag, t_list *env);
+t_list				*get_command_lines(char *line, t_list *env);
 char				*get_param(char *start);
 void				excute(t_cmd_line *cmd_line, char *envp[]);
 void				echo(t_cmd_line *cmd_line, char *envp[]);

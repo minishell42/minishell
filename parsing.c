@@ -148,6 +148,35 @@ void		check_chacter_in_line(char *line, int *index, char *quot_flag, int (*func)
 // 	}
 // }
 
+void		set_env(char **str, t_list *env)
+{
+	char	*key;
+	char	*value;
+	char	**key_value;
+
+	if (!str || !str[0] || !ft_strchr(*str, '$'))
+		return ;
+	str++;
+	while (env)
+	{
+		key_value = ft_split((char *)env->content, "=");
+		key = key_value[0];
+		value = key_value[1];
+		if (are_equal(str, key))
+		{
+			free(key);
+			free(key_value);
+			free(*str);
+			*str = value;
+			return ;
+		}
+		env = env->next;
+	}
+	free(key_value);
+	free(key);
+	free(value);
+}
+
 // 문자열 끝에 | 와 ;을 구분하기 힘듬
 // -> pipe flag를 통해서 문자열 마지막에 |가 있으면 오류가 발생하게 만들 수 있다.
 int			is_separator(int c)
@@ -224,7 +253,16 @@ int		check_redirection(t_cmd_line *cmd_line)
 	}
 	return (1);
 }
+// 지금 만들고자 하는 것
+// redir param에 관련된 llist
+// command_param을 추출하고 남은 부분을
+// 공백을 기준으로 나누는거고
+// but 공백은 따옴표 안에 들어있지 않은 공백이어야 함
 
+t_list		*set_redirection_param_list()
+{
+
+}
 void		set_redirection_param(t_cmd_line *cmd_line)
 {
 	char	*param;
@@ -233,8 +271,14 @@ void		set_redirection_param(t_cmd_line *cmd_line)
 	int		len;
 	char	flag;
 	
+	char	*redir_param;
+	char	flag2;
+	t_list	*list;
+	
 	flag = 0;
 	i = 0;
+	// 123 > 456 "789 999"
+	//cmd param 123
 	param = cmd_line->param;
 	check_chacter_in_line(param, &i, &flag, is_redirection);
 	value = ft_calloc(sizeof(char), i + 1);
@@ -242,23 +286,126 @@ void		set_redirection_param(t_cmd_line *cmd_line)
 	remove_quotation(value);
 	cmd_line->param = ft_strtrim(value, " ");
 	free(value);
-	len = ft_strlen(param) - i + 1;
-	value = ft_calloc(sizeof(char), len);
+	
 	if (cmd_line->redir_flag == OUT_ENDLINE)
 		i++;
-	ft_strlcpy(value, param + i + 1, len - 1);
-	remove_quotation(value);
-	cmd_line->redir_file = ft_strtrim(value, " ");
-	free(value);
+	i++;
+	while (ft_isspace(param[i]))
+		i++;
+	redir_param = param + i;
+	i = 0;
+	char *start = redir_param;
+	list = 0;
+	char *tmp;
+	while (redir_param[i])
+	{
+		check_chacter_in_line(redir_param, &i, &flag2, ft_isspace);
+		len = (redir_param + i) - start;
+		if (!redir_param[i + 1])
+			len++;
+		tmp = ft_calloc(sizeof(char), len + 1);
+		ft_strlcpy(tmp, start, len + 1);
+		remove_quotation(tmp);
+		value = ft_strtrim(tmp, " ");
+		free(tmp);
+		if (list)
+			ft_lstadd_back(&list, ft_lstnew(value));
+		else
+			list = ft_lstnew(value);
+		i++;
+		start = redir_param + i;
+	}
+	cmd_line->redir_param = list;
+	// redir param
+	// 456 - 789
+	// file명 저장은 연결리스트로 변경
+	// out_override인 경우는 첫번째 값만 파일 명으로 인식되고 나머지는 명령어에 대한 param으로 인식
+	// redir_in인 경우에는
+	// len = ft_strlen(param) - i + 1;
+	// value = ft_calloc(sizeof(char), len);
+	// if (cmd_line->redir_flag == OUT_ENDLINE)
+	// 	i++;
+	// ft_strlcpy(value, param + i + 1, len - 1);
+	// remove_quotation(value);
+	// cmd_line->redir_file = ft_strtrim(value, " ");
+	// free(value);
 }
 
-bool		parse_cmd_line(t_cmd_line *cmd_line, char *start, int len)
+// $ 표시가 있는가?, 변수로 저장이 되어 있는 값인가?
+// echo 123 456
+// $echo / 123 / 456
+// void		set_env(char **str, t_list *env)
+// {
+// 	char	*key;
+// 	char	*value;
+// 	char	**key_value;
+
+// 	if (!str || !str[0] || str[0] != '$')
+// 		return (0);
+// 	str++;
+// 	while (env)
+// 	{
+// 		key_value = ft_split((char *)env->content, "=");
+// 		key = key_value[0];
+// 		value = key_value[1];
+// 		if (are_equal(str, key))
+// 		{
+// 			free(key);
+// 			free(key_value);
+// 			free(*str);
+// 			*str = value;
+// 			return ;
+// 		}
+// 		env = env->next;
+// 	}
+// 	free(key_value);
+// 	free(key);
+// 	free(value);
+// }
+// char		*is_env(char *str, t_list *env)
+// {
+// 	char	*key;
+// 	char	*value;
+// 	char	**key_value;
+
+// 	if (!str || !str[0] || str[0] != '$')
+// 		return (0);
+// 	else
+// 		str++;
+// 	while (env)
+// 	{
+// 		key_value = ft_split((char *)env->content, "=");
+// 		key = key_value[0];
+// 		value = key_value[1];
+// 		if (are_equal(str, key))
+// 		{
+// 			free(key);
+// 			free(key_value);
+// 			return (value);
+// 		}
+// 		env = env->next;
+// 	}
+// 	free(key_value);
+// 	free(key);
+// 	free(value);
+// 	return (0);
+// }
+
+bool		parse_cmd_line(t_cmd_line *cmd_line, char *start, int len, t_list *env)
 {
 	char	*value;
+	char	*env_value;
 
 	value = ft_calloc(sizeof(char), len + 1);
 	ft_strlcpy(value, start, len + 1);
+	set_env(value, env);
 	remove_quotation(value);
+	// ft_function for check in env valuable name
+	// if ((env_value = is_env(value, env)))
+	// {
+	// 	free(value);
+	// 	value = env_value;
+	// }
 	if (!cmd_line->command)
 	{
 		cmd_line->command = value;
@@ -295,7 +442,7 @@ void		check_quotation_in_line(char *line, int *index, char *quot_flag)
 	}
 }
 
-t_cmd_line	*get_command_line(char **line_ptr, char *quot_flag)
+t_cmd_line	*get_command_line(char **line_ptr, char *quot_flag, t_list *env)
 {	
 	t_cmd_line		*command_line;
 	int				index;
@@ -304,7 +451,7 @@ t_cmd_line	*get_command_line(char **line_ptr, char *quot_flag)
 	int				len;
 
 //  echo ";"; echo 123
-	line = ft_strtrim(*line_ptr, " ");
+	line = ft_strtrim(*line_ptr, " ");  // 메모리 누수 가능성 
 	command_line = ft_calloc(sizeof(t_cmd_line), 1);
 	index = 0;
 	start = line;
@@ -322,7 +469,7 @@ t_cmd_line	*get_command_line(char **line_ptr, char *quot_flag)
 		// printf("i")
 		if (!line[index + 1])
 			len++;
-		if (!parse_cmd_line(command_line, start, len))
+		if (!parse_cmd_line(command_line, start, len, env))
 			break;
 		while (line[index] == ' ' && line[index + 1] == ' ')
 			index++;
@@ -339,14 +486,15 @@ t_cmd_line	*get_command_line(char **line_ptr, char *quot_flag)
 	else
 	{
 		// command_line->param free해야 함
+		set_env()
 		remove_quotation(command_line->param);
-		command_line->param = ft_strtrim(command_line->param, " ");
+		command_line->param = ft_strtrim(command_line->param, " "); // 메모리 누수 가능성
 	}
 	*line_ptr = line + index;
 	return (command_line);
 }
 
-t_list	*get_command_lines(char *line)
+t_list	*get_command_lines(char *line, t_list *env)
 {
 	t_list			*list;
 	t_cmd_line		*command_line;
@@ -358,7 +506,7 @@ t_list	*get_command_lines(char *line)
 	// tmp = ft_calloc(sizeof(char), ft_strlen(line));
 	while (line)
 	{
-		if (!(command_line = get_command_line(&line, &quot_flag)))
+		if (!(command_line = get_command_line(&line, &quot_flag, env)))
 		{
 			if (quot_flag)
 				write(1, "quotation mark is not pair\n", 28);
@@ -366,8 +514,10 @@ t_list	*get_command_lines(char *line)
 		}
 		// 일단 ; 상관없이 command_line이 하나만 있다고 생각.
 		// command_line = set_command_line(line);
-
-		// ft_lstadd_back(&list, command_line);
+		if (!list)
+			list = ft_lstnew(command_line);
+		else
+			ft_lstadd_back(&list, ft_lstnew(command_line));
 	}
 	return (list);
 }
