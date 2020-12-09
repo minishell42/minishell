@@ -8,7 +8,7 @@ bool	are_equal(char *s1, char *s2)
 	if (!s1 && !s2)
 		return (true);
 	if (!s1 || !s2)
-		exit(EXIT_FAILURE);
+		return (false);
 	s1_len = ft_strlen(s1);
 	s2_len = ft_strlen(s2);
 	if (s1_len == s2_len && ft_strncmp(s1, s2, ft_strlen(s1)) == 0)
