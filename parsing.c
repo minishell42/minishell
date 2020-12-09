@@ -49,10 +49,6 @@ void		excute(t_cmd_line *cmd_line, char *envp[])
 		echo(cmd_line, envp);
 }
 
-// char		*get_str_in_quotation_set(char *str)
-// {
-	
-// }
 void		remove_quotation(char *value)
 {
 	char	quot_flag;
@@ -133,21 +129,6 @@ void		check_chacter_in_line(char *line, int *index, char *quot_flag, int (*func)
 	}
 }
 
-// void		check_semi_in_line(char *line, int *index, char *quot_flag)
-// {
-// 	while (line[*index] && !(is_semicolon(line[*index]) && *quot_flag == 0))
-// 	{
-// 		if (line[*index] == '\'' || line[*index] == '"')
-// 		{
-// 			if (*quot_flag == line[*index])
-// 				*quot_flag = 0;
-// 			else if (*quot_flag == 0)
-// 				*quot_flag = line[*index];
-// 		}
-// 		(*index)++;
-// 	}
-// }
-
 void		set_env(char **str, t_list *env)
 {
 	char	*key;
@@ -156,17 +137,17 @@ void		set_env(char **str, t_list *env)
 
 	if (!str || !str[0] || !ft_strchr(*str, '$'))
 		return ;
-	str++;
+	(*str)++;
 	while (env)
 	{
-		key_value = ft_split((char *)env->content, "=");
+		key_value = ft_split((char *)env->content, '=');
 		key = key_value[0];
 		value = key_value[1];
-		if (are_equal(str, key))
+		if (are_equal(*str, key))
 		{
 			free(key);
 			free(key_value);
-			free(*str);
+			// free(*str);
 			*str = value;
 			return ;
 		}
@@ -398,7 +379,9 @@ bool		parse_cmd_line(t_cmd_line *cmd_line, char *start, int len, t_list *env)
 
 	value = ft_calloc(sizeof(char), len + 1);
 	ft_strlcpy(value, start, len + 1);
-	set_env(value, env);
+	printf("before set env\n");
+	set_env(&value, env);
+	printf("after set env\n");
 	remove_quotation(value);
 	// ft_function for check in env valuable name
 	// if ((env_value = is_env(value, env)))
@@ -442,6 +425,83 @@ void		check_quotation_in_line(char *line, int *index, char *quot_flag)
 	}
 }
 
+char *get_env_value(char *target_key, t_list *env)
+{
+	char	*key;
+	char	*value;
+	char	**key_value;
+
+	while (env)
+	{
+		key_value = ft_split((char *)env->content, '=');
+		key = key_value[0];
+		value = key_value[1];
+		if (are_equal(target_key, key))
+		{
+			free(key);
+			free(key_value);
+			return (value);
+		}
+		env = env->next;
+	}
+	free(key);
+	free(key_value);
+	value[0] = 0;
+	return (value);
+}
+
+void join_env_value(char **ret, char *str, int *i, t_list *env)
+{
+	char	*env_key;
+	char	*env_value;
+	char	*temp;
+	char	seperator;
+
+	(*i)++;
+	env_key = str + *i;
+	if (str[*i] && str[*i] != ' ' && str[*i] != '\\')
+		(*i)++;
+	seperator = str[*i];
+	str[*i] = 0;
+	env_value = get_env_value(env_key, env);
+	temp = *ret;
+	*ret = ft_strjoin(*ret, env_value);
+	str[*i] = seperator;
+	free(env_value);
+	free(temp);
+}
+
+char	*set_multi_env(char *str, t_list *env)
+{
+	// 스트링 안에 들어있는 $로 시작하는 문자열을 모두 환경변수로 대체한다
+	// $로 시작하는 문자열이 환경변수로 등록되어 있지 않다면 빈문자열로 대체한다.
+
+	char	*ret;
+	char	*temp;
+	int		i;
+	char	*start;
+	char	seperator;
+
+	i = 0;
+	ret = ft_calloc(1, sizeof(char));
+	start = str;
+	while (str[i])
+	{
+		if (str[i] && str[i] != '$')
+			i++;
+		seperator = str[i];
+		str[i] = 0;
+		temp = ret;
+		ret = ft_strjoin(ret, start);
+		free(temp);
+		if (seperator == '$')
+			join_env_value(&ret, str, &i, env);
+		if (str[i])
+			i++;
+	}
+	return (ret);
+}
+
 t_cmd_line	*get_command_line(char **line_ptr, char *quot_flag, t_list *env)
 {	
 	t_cmd_line		*command_line;
@@ -451,6 +511,7 @@ t_cmd_line	*get_command_line(char **line_ptr, char *quot_flag, t_list *env)
 	int				len;
 
 //  echo ";"; echo 123
+	printf("start get cmd line\n");
 	line = ft_strtrim(*line_ptr, " ");  // 메모리 누수 가능성 
 	command_line = ft_calloc(sizeof(t_cmd_line), 1);
 	index = 0;
@@ -478,15 +539,22 @@ t_cmd_line	*get_command_line(char **line_ptr, char *quot_flag, t_list *env)
 		// printf("end of while\n");
 	}
 	// " " flag가 서지 않는 상태에서 ;를 만나면 ;을 널문자로 변경시키고 그 전까지의 값을 param으로 입력하고, line의 주소값을 ;다음의 주소값으로 민다.
+
+	printf("before set param\n");
 	set_param(command_line, start);
+	printf("after set param\n");
 	index += ft_strlen(command_line->param);
+	printf("before check redir\n");
 	check_redirection(command_line);
+	printf("after check redir\n");
 	if (command_line->redir_flag)
 		set_redirection_param(command_line);
 	else
 	{
 		// command_line->param free해야 함
-		set_env()
+		printf("1\n");
+		set_multi_env(line, env);
+		printf("2\n");
 		remove_quotation(command_line->param);
 		command_line->param = ft_strtrim(command_line->param, " "); // 메모리 누수 가능성
 	}

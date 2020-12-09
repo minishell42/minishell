@@ -33,5 +33,7 @@ void				excute(t_cmd_line *cmd_line, char *envp[]);
 void				echo(t_cmd_line *cmd_line, char *envp[]);
 bool				set_option(t_cmd_line *cmd_line, char **splited_line);
 int 				get_command_num(char *command);
+t_list				*get_env_llist(char *envp[]);
+
 
 #endif

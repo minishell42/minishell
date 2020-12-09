@@ -79,7 +79,7 @@ void check_command_line(t_cmd_line expect, t_cmd_line result)
 	// }
 }
 
-void test_get_command_line()
+void test_get_command_line(t_list *env)
 {
 
 	t_cmd_line *cmd_line;
@@ -87,63 +87,63 @@ void test_get_command_line()
 
 	char *case1= "echo -n 1234"; 
 	t_cmd_line _case1 = {"echo", "-n", "1234", 1, 0, 0, 0};
-	cmd_line = get_command_line(&case1, &flag);
+	cmd_line = get_command_line(&case1, &flag, env);
 	check_command_line(_case1, *cmd_line);
 	printf("====================  Case 1 OK  ==========================\n");
 
 	char *case2= "echo 1234"; 
 	t_cmd_line _case2 = {"echo", 0, "1234", 1, 0, 0, 0};
 	flag = 0;
-	cmd_line = get_command_line(&case2, &flag);
+	cmd_line = get_command_line(&case2, &flag, env);
 	check_command_line(_case2, *cmd_line);
 	printf("====================  Case 2 OK  ==========================\n");
 
 	char *case3= "echo -n"; 
 	t_cmd_line _case3 = {"echo", "-n", "\0", 1, 0, 0, 0};
 	flag = 0;
-	cmd_line = get_command_line(&case3, &flag);
+	cmd_line = get_command_line(&case3, &flag, env);
 	check_command_line(_case3, *cmd_line);
 	printf("====================  Case 3 OK  ==========================\n");
 
 	char *case4= "echo -n 1234 1234"; 
 	t_cmd_line _case4 = {"echo", "-n", "1234 1234", 1, 0, 0, 0};
 	flag = 0;
-	cmd_line = get_command_line(&case4, &flag);
+	cmd_line = get_command_line(&case4, &flag, env);
 	check_command_line(_case4, *cmd_line);
 	printf("====================  Case 4 OK  ==========================\n");
 
 	char *case5= "\"echo\" -n 1234 1234"; 
 	t_cmd_line _case5 = {"echo", "-n", "1234 1234", 1, 0, 0, 0};
 	flag = 0;
-	cmd_line = get_command_line(&case5, &flag);
+	cmd_line = get_command_line(&case5, &flag, env);
 	check_command_line(_case5, *cmd_line);
 	printf("====================  Case 5 OK  ==========================\n");
 	
 	char *case6= "e\"cho\" -n 1234 1234"; 
 	t_cmd_line _case6 = {"echo", "-n", "1234 1234", 1, 0, 0, 0};
 	flag = 0;
-	cmd_line = get_command_line(&case6, &flag);
+	cmd_line = get_command_line(&case6, &flag, env);
 	check_command_line(_case6, *cmd_line);
 	printf("====================  Case 6 OK  ==========================\n");
 
 	char *case7= "echo -\"n\" 1234 1234"; 
 	t_cmd_line _case7 = {"echo", "-n", "1234 1234", 1, 0, 0, 0};
 	flag = 0;
-	cmd_line = get_command_line(&case7, &flag);
+	cmd_line = get_command_line(&case7, &flag, env);
 	check_command_line(_case7, *cmd_line);
 	printf("====================  Case 7 OK  ==========================\n");
 	
 	char *case8= "echo -n 1\"234\"; 1234"; 
 	t_cmd_line _case8 = {"echo", "-n", "1234", 1, 0, 0, 0};
 	flag = 0;
-	cmd_line = get_command_line(&case8, &flag);
+	cmd_line = get_command_line(&case8, &flag, env);
 	check_command_line(_case8, *cmd_line);
 	printf("====================  case8 OK  ==========================\n");
 
 	char *case9= "echo -n 1234| echo 125"; 
 	t_cmd_line _case9 = {"echo", "-n", "1234", 1, 1, 0, 0};
 	flag = 0;
-	cmd_line = get_command_line(&case9, &flag);
+	cmd_line = get_command_line(&case9, &flag, env);
 	check_command_line(_case9, *cmd_line);
 	printf("====================  case9 OK  ==========================\n");
 
@@ -151,7 +151,7 @@ void test_get_command_line()
 	t_list	*expect = ft_lstnew("file");
 	t_cmd_line _case10 = {"echo", 0, "1234", 1, 0, 1, expect};
 	flag = 0;
-	cmd_line = get_command_line(&case10, &flag);
+	cmd_line = get_command_line(&case10, &flag, env);
 	check_command_line(_case10, *cmd_line);
 	printf("====================  case10 OK  ==========================\n");
 
@@ -164,15 +164,23 @@ void test_get_command_line()
 	ft_lstadd_back(&expect, expect4);
 	t_cmd_line _case11 = {"echo", 0, "1234", 1, 0, 1, expect};
 	flag = 0;
-	cmd_line = get_command_line(&case11, &flag);
+	cmd_line = get_command_line(&case11, &flag, env);
 	check_command_line(_case11, *cmd_line);
 	printf("====================  case11 OK  ==========================\n");
 
 	char *case12= "echo 1234 > f\"ile\" name is 42";
 	t_cmd_line _case12 = {"echo", 0, "1234", 1, 0, 1, expect};
 	flag = 0;
-	cmd_line = get_command_line(&case12, &flag);
+	cmd_line = get_command_line(&case12, &flag, env);
 	check_command_line(_case12, *cmd_line);
 	printf("====================  case12 OK  ==========================\n");
 
+	char *case13= "echo $ENV_TEST";
+	t_cmd_line _case13 = {"echo", 0, "1234", 1, 0, 0, 0};
+	ft_lstadd_back(&env, ft_lstnew("ENV_TEST=1234"));
+	flag = 0;
+	cmd_line = get_command_line(&case13, &flag, env);
+	printf("5\n");
+	check_command_line(_case13, *cmd_line);
+	printf("====================  case13 OK  ==========================\n");
 }

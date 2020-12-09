@@ -4,7 +4,8 @@ LIBFTFLAG = -L./libft -lft
 FILES =	get_next_line/get_next_line.c \
 	get_next_line/get_next_line_utils.c \
 	parsing.c \
-	error.c
+	error.c \
+	env_llist.c
 SRC = main.c
 SRC += $(FILES)
 

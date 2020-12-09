@@ -1,23 +1,7 @@
 #include "minishell.h"
 
 
-t_list 		*get_env_llist(char *envp[])
-{
-	int			i;
-	t_list		*env;
 
-	i = 0;
-	env = 0;
-	while (envp[i])
-	{
-		if (env)
-			ft_lstadd_back(&env, ft_lstnew(envp[i]));
-		else
-			env = ft_lstnew(envp[i]);		
-		i++;
-	}
-	return (env);
-}
 
 // void		test_env_llist()
 // {
@@ -42,7 +26,7 @@ int			main(int argc, char **argv, char *envp[])
 	t_list		*command_lines;
 	t_list		*env;
 
-	env = get_env_list(envp);
+	env = get_env_llist(envp);
 	// test_env_llist();
 	while (true)
 	{
