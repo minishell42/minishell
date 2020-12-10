@@ -10,13 +10,6 @@ int			get_command_num(char *command)
 	return (0);
 }
 
-
-// bool		is_option(char *str)
-// {
-	
-
-// }
-
 bool		set_option(t_cmd_line *cmd_line, char **splited_line)
 {
 	int			count;
@@ -25,7 +18,6 @@ bool		set_option(t_cmd_line *cmd_line, char **splited_line)
 	count = 0;
 	while (splited_line[count])
 		count++;
-	// is_option(splited_line[1]);
 	return (true);
 }
 
@@ -128,34 +120,34 @@ void		check_chacter_in_line(char *line, int *index, char *quot_flag, int (*func)
 	}
 }
 
-void		set_env(char **str, t_list *env)
-{
-	char	*key;
-	char	*value;
-	char	**key_value;
+// void		set_env(char **str, t_list *env)
+// {
+// 	char	*key;
+// 	char	*value;
+// 	char	**key_value;
+// 	char	*tmp;
 
-	if (!str || !str[0] || !ft_strchr(*str, '$'))
-		return ;
-	(*str)++;
-	while (env)
-	{
-		key_value = ft_split((char *)env->content, '=');
-		key = key_value[0];
-		value = key_value[1];
-		if (are_equal(*str, key))
-		{
-			free(key);
-			free(key_value);
-			// free(*str);
-			*str = value;
-			return ;
-		}
-		env = env->next;
-	}
-	free(key_value);
-	free(key);
-	free(value);
-}
+// 	if (!str || !str[0] || !(tmp = ft_strchr(*str, '$')))
+// 		return ;
+// 	while (env)
+// 	{
+// 		key_value = ft_split((char *)env->content, '=');
+// 		key = key_value[0];
+// 		value = key_value[1];
+// 		if (are_equal(tmp, key))
+// 		{
+// 			free(key);
+// 			free(key_value);
+// 			free(*str);
+// 			*str = value;
+// 			return ;
+// 		}
+// 		env = env->next;
+// 	}
+// 	free(key_value);
+// 	free(key);
+// 	free(value);
+// }
 
 // 문자열 끝에 | 와 ;을 구분하기 힘듬
 // -> pipe flag를 통해서 문자열 마지막에 |가 있으면 오류가 발생하게 만들 수 있다.
@@ -371,14 +363,96 @@ void		set_redirection_param(t_cmd_line *cmd_line)
 // 	return (0);
 // }
 
+char *get_env_value(char *target_key, t_list *env)
+{
+	char	*key;
+	char	*value;
+	char	**key_value;
+
+	while (env)
+	{
+		key_value = ft_split((char *)env->content, '=');
+		key = key_value[0];
+		value = key_value[1];
+		if (are_equal(target_key, key))
+		{
+			free(key);
+			free(key_value);
+			return (value);
+		}
+		env = env->next;
+	}
+	free(key);
+	free(key_value);
+	value[0] = 0;
+	return (value);
+}
+void join_env_value(char **ret, char *str, int *i, t_list *env)
+{
+	char	*env_key;
+	char	*env_value;
+	char	*temp;
+	char	seperator;
+
+	(*i)++; // i = 1;
+	env_key = str + *i; // E -> env_key 시작점 env_key = ENV_TEST$123
+	while (str[*i] && str[*i] != ' ' && str[*i] != '\\' && str[*i] != '$') // i = 8
+		(*i)++;
+	seperator = str[*i];	// \0
+	str[*i] = 0;			// \0
+	env_value = get_env_value(env_key, env); // env_key = ENV_TEST , env -> env_key = 1234
+	temp = *ret;	// tmp = ""
+	*ret = ft_strjoin(*ret, env_value); // ret = "" + 1234 
+	str[*i] = seperator;	// str[8] = sep; i-> ' '
+	free(env_value);
+	free(temp);
+}
+
+char	*set_multi_env(char *str, t_list *env)
+{
+	// 스트링 안에 들어있는 $로 시작하는 문자열을 모두 환경변수로 대체한다
+	// $로 시작하는 문자열이 환경변수로 등록되어 있지 않다면 빈문자열로 대체한다.
+
+	char	*ret;
+	char	*temp;
+	int		i;
+	char	*start;
+	char	seperator;
+
+	i = 0;
+	ret = ft_calloc(1, sizeof(char));
+	start = str;
+	printf("param : %s\n", str);
+	while (str[i])
+	{
+		// $ENV_TEST$123
+		while (str[i] && str[i] != '$')
+			i++;
+		seperator = str[i]; // i = 0
+		str[i] = 0;  // str[0] = \0 str = ""
+		temp = ret; // temp = ""
+		ret = ft_strjoin(ret, start); // ret = ""
+		free(temp);
+		if (seperator == '$')
+			join_env_value(&ret, str, &i, env); // ret = "", str = "", i = 0, env -> i
+		// if (str[i])
+		// 	i++;
+		start = str + i;
+	}
+	return (ret);
+}
+
 bool		parse_cmd_line(t_cmd_line *cmd_line, char *start, int len, t_list *env)
 {
 	char	*value;
 	char	*env_value;
 
+	// start = 한줄 len -> value
+	// value = $EC$HO
 	value = ft_calloc(sizeof(char), len + 1);
 	ft_strlcpy(value, start, len + 1);
-	set_env(&value, env);
+	// set_env(&value, env);
+	value = set_multi_env(value, env);
 	remove_quotation(value);
 	// ft_function for check in env valuable name
 	// if ((env_value = is_env(value, env)))
@@ -422,82 +496,10 @@ void		check_quotation_in_line(char *line, int *index, char *quot_flag)
 	}
 }
 
-char *get_env_value(char *target_key, t_list *env)
-{
-	char	*key;
-	char	*value;
-	char	**key_value;
+// 
+// $ENV_TEST
+// ret = "", str = "", i = 0, env
 
-	while (env)
-	{
-		key_value = ft_split((char *)env->content, '=');
-		key = key_value[0];
-		value = key_value[1];
-		if (are_equal(target_key, key))
-		{
-			free(key);
-			free(key_value);
-			return (value);
-		}
-		env = env->next;
-	}
-	free(key);
-	free(key_value);
-	value[0] = 0;
-	return (value);
-}
-
-void join_env_value(char **ret, char *str, int *i, t_list *env)
-{
-	char	*env_key;
-	char	*env_value;
-	char	*temp;
-	char	seperator;
-
-	(*i)++;
-	env_key = str + *i;
-	if (str[*i] && str[*i] != ' ' && str[*i] != '\\')
-		(*i)++;
-	seperator = str[*i];
-	str[*i] = 0;
-	env_value = get_env_value(env_key, env);
-	temp = *ret;
-	*ret = ft_strjoin(*ret, env_value);
-	str[*i] = seperator;
-	free(env_value);
-	free(temp);
-}
-
-char	*set_multi_env(char *str, t_list *env)
-{
-	// 스트링 안에 들어있는 $로 시작하는 문자열을 모두 환경변수로 대체한다
-	// $로 시작하는 문자열이 환경변수로 등록되어 있지 않다면 빈문자열로 대체한다.
-
-	char	*ret;
-	char	*temp;
-	int		i;
-	char	*start;
-	char	seperator;
-
-	i = 0;
-	ret = ft_calloc(1, sizeof(char));
-	start = str;
-	while (str[i])
-	{
-		if (str[i] && str[i] != '$')
-			i++;
-		seperator = str[i];
-		str[i] = 0;
-		temp = ret;
-		ret = ft_strjoin(ret, start);
-		free(temp);
-		if (seperator == '$')
-			join_env_value(&ret, str, &i, env);
-		if (str[i])
-			i++;
-	}
-	return (ret);
-}
 
 t_cmd_line	*get_command_line(char **line_ptr, char *quot_flag, t_list *env)
 {	
@@ -536,15 +538,18 @@ t_cmd_line	*get_command_line(char **line_ptr, char *quot_flag, t_list *env)
 	}
 	// " " flag가 서지 않는 상태에서 ;를 만나면 ;을 널문자로 변경시키고 그 전까지의 값을 param으로 입력하고, line의 주소값을 ;다음의 주소값으로 민다.
 
+	printf("before set_param\n");
 	set_param(command_line, start);
 	index += ft_strlen(command_line->param);
 	check_redirection(command_line);
+	printf("param = %s\n", command_line->param);
 	if (command_line->redir_flag)
 		set_redirection_param(command_line);
 	else
 	{
 		// command_line->param free해야 함
-		set_multi_env(line, env);
+		printf("before set_multi_env\n");
+		command_line->param = set_multi_env(command_line->param, env); // 메모리 누수 가능성 : parameter : command_line
 		remove_quotation(command_line->param);
 		command_line->param = ft_strtrim(command_line->param, " "); // 메모리 누수 가능성
 	}
