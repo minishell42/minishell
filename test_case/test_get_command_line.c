@@ -217,4 +217,73 @@ void test_get_command_line(t_list *env)
 	cmd_line = get_command_line(&case17, &flag, env);
 	check_command_line(_case17, *cmd_line);
 	printf("====================  case17 OK  ==========================\n");
+
+	// char *case18= "$EC$HO $M$N ~/cwork";
+	// t_cmd_line _case18 = {"echo", "-n", "/home/dokang/cwork", 1, 0, 0, 0};
+	// flag = 0;
+	// cmd_line = get_command_line(&case18, &flag, env);
+	// check_command_line(_case18, *cmd_line);
+	// printf("====================  case18 OK  ==========================\n");
+
+	// char *case19= "$EC$HO $M$N ./cwork";
+	// t_cmd_line _case19 = {"echo", "-n", "/home/dokang/cwork/team/cwork", 1, 0, 0, 0};
+	// flag = 0;
+	// cmd_line = get_command_line(&case19, &flag, env);
+	// check_command_line(_case19, *cmd_line);
+	// printf("====================  case19 OK  ==========================\n");
+
+	// char *case20= "$EC$HO $M$N ../cwork";
+	// t_cmd_line _case20 = {"echo", "-n", "/home/dokang/cwork/cwork", 1, 0, 0, 0};
+	// flag = 0;
+	// cmd_line = get_command_line(&case20, &flag, env);
+	// check_command_line(_case20, *cmd_line);
+	// printf("====================  case20 OK  ==========================\n");
+
+	// char *case21= "$EC$HO $M$N ../";
+	// t_cmd_line _case21 = {"echo", "-n", "/home/dokang/cwork/", 1, 0, 0, 0};
+	// flag = 0;
+	// cmd_line = get_command_line(&case21, &flag, env);
+	// check_command_line(_case21, *cmd_line);
+	// printf("====================  case21 OK  ==========================\n");
+
+	// char *case22= "$EC$HO $M$N $c";
+	// t_cmd_line _case22 = {"echo", "-n", "/home/dokang/cwork", 1, 0, 0, 0};
+	// ft_lstadd_back(&env, ft_lstnew("c=~/cwork"));
+	// flag = 0;
+	// cmd_line = get_command_line(&case22, &flag, env);
+	// check_command_line(_case22, *cmd_line);
+	// printf("====================  case22 OK  ==========================\n");
+
+	// char *case23= "$EC$HO $M$N $d";
+	// t_cmd_line _case23 = {"echo", "-n", "/home/dokang/cwork/cwork", 1, 0, 0, 0};
+	// ft_lstadd_back(&env, ft_lstnew("d=../cwork"));
+	// flag = 0;
+	// cmd_line = get_command_line(&case23, &flag, env);
+	// check_command_line(_case23, *cmd_line);
+	// printf("====================  case23 OK  ==========================\n");
+
+	// char *case24= "$EC$HO $M$N $e";
+	// t_cmd_line _case24 = {"echo", "-n", "/home/dokang/cwork/team/cwork", 1, 0, 0, 0};
+	// ft_lstadd_back(&env, ft_lstnew("e=./cwork"));
+	// flag = 0;
+	// cmd_line = get_command_line(&case24, &flag, env);
+	// check_command_line(_case24, *cmd_line);
+	// printf("====================  case24 OK  ==========================\n");
+
+	// char *case25= "$EC$HO $M$N $f";
+	// t_cmd_line _case25 = {"echo", "-n", "/home/dokang/cwork/", 1, 0, 0, 0};
+	// ft_lstadd_back(&env, ft_lstnew("f=../"));
+	// flag = 0;
+	// cmd_line = get_command_line(&case25, &flag, env);
+	// check_command_line(_case25, *cmd_line);
+	// printf("====================  case25 OK  ==========================\n");
+
+	// char *case26= "$EC$HO $M$N $g";
+	// t_cmd_line _case26 = {"echo", "-n", "/home/dokang/cwork", 1, 0, 0, 0};
+	// ft_lstadd_back(&env, ft_lstnew("g=.."));
+	// flag = 0;
+	// cmd_line = get_command_line(&case26, &flag, env);
+	// check_command_line(_case26, *cmd_line);
+	// printf("====================  case26 OK  ==========================\n");
+	
 }
