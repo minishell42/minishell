@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "utils.h"
 
 void	message_and_exit(char *message, bool built_in_error)
 {

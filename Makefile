@@ -1,25 +1,50 @@
-CC=gcc
-CFLAGS=-I./include
-LIBFTFLAG = -L./libft -lft
-FILES =	get_next_line/get_next_line.c \
-	get_next_line/get_next_line_utils.c \
-	parsing.c \
-	error.c \
-	env_llist.c
-SRC = main.c
-SRC += $(FILES)
+CC			=gcc
 
-OBJS = $(SRC:.c=.o)
-NAME = minishell 
+INCLUDE		= include/
 
-TEST = test
-TEST_DIR = test_case/
-TEST_FILES = test.c \
+CFLAGS		=-I$(INCLUDE) -Wall -Wextra -Werror
+
+LIB			= libft/
+
+LIBFTFLAG	= -L$(LIB) -lft
+
+GNL_DIR		= get_next_line/
+GNL_SRCS	= get_next_line.c \
+				get_next_line_utils.c
+GNL			= $(addprefix $(GNL_DIR), $(GNL_SRCS))
+
+PARSE_DIR	= parsing/
+PARSE_SRCS	= check_value.c \
+				get_command_lines.c \
+				parse_cmd_line.c \
+				set_env_value.c \
+				set_redirection_value.c
+PARSE		= $(addprefix $(PARSE_DIR), $(PARSE_SRCS))
+
+UTILS_DIR	= utils/
+UTILS_SRCS	= error.c \
+				string_util.c
+UTILS		= $(addprefix $(UTILS_DIR), $(UTILS_SRCS))
+
+FILES		= env_llist.c
+FILES		+= $(GNL)
+FILES		+= $(PARSE)
+FILES		+= $(UTILS)
+
+SRC			= main.c
+SRC			+= $(FILES)
+
+OBJS		= $(SRC:.c=.o)
+NAME		= minishell 
+
+TEST		= test
+TEST_DIR	= test_case/
+TEST_FILES	= test.c \
 				test_get_command_line.c
-TEST_SRC = $(addprefix $(TEST_DIR), $(TEST_FILES))
-TEST_SRC += $(FILES)
+TEST_SRC 	= $(addprefix $(TEST_DIR), $(TEST_FILES))
+TEST_SRC	+= $(FILES)
 
-TEST_OBJS = $(TEST_SRC:.c=.o)
+TEST_OBJS	= $(TEST_SRC:.c=.o)
 
 all: 
 	make -C libft
