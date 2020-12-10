@@ -182,4 +182,39 @@ void test_get_command_line(t_list *env)
 	cmd_line = get_command_line(&case13, &flag, env);
 	check_command_line(_case13, *cmd_line);
 	printf("====================  case13 OK  ==========================\n");
+
+	char *case14= "echo $ENV_TEST $ENV_TEST";
+	t_cmd_line _case14 = {"echo", 0, "1234 1234", 1, 0, 0, 0};
+	ft_lstadd_back(&env, ft_lstnew("ENV_TEST=1234"));
+	flag = 0;
+	cmd_line = get_command_line(&case14, &flag, env);
+	check_command_line(_case14, *cmd_line);
+	printf("====================  case14 OK  ==========================\n");
+
+	char *case15= "echo $ENV_TEST$ENV_TEST $ENV_TEST";
+	t_cmd_line _case15 = {"echo", 0, "12341234 1234", 1, 0, 0, 0};
+	ft_lstadd_back(&env, ft_lstnew("ENV_TEST=1234"));
+	flag = 0;
+	cmd_line = get_command_line(&case15, &flag, env);
+	check_command_line(_case15, *cmd_line);
+	printf("====================  case15 OK  ==========================\n");
+
+	char *case16= "$EC$HO $ENV_TEST$ENV_TEST $ENV_TEST";
+	t_cmd_line _case16 = {"echo", 0, "12341234 1234", 1, 0, 0, 0};
+	ft_lstadd_back(&env, ft_lstnew("EC=ec"));
+	ft_lstadd_back(&env, ft_lstnew("HO=ho"));
+	ft_lstadd_back(&env, ft_lstnew("ENV_TEST=1234"));
+	flag = 0;
+	cmd_line = get_command_line(&case16, &flag, env);
+	check_command_line(_case16, *cmd_line);
+	printf("====================  case16 OK  ==========================\n");
+
+	char *case17= "$EC$HO $M$N $ENV_TEST$ENV_TEST $ENV_TEST";
+	t_cmd_line _case17 = {"echo", "-n", "12341234 1234", 1, 0, 0, 0};
+	ft_lstadd_back(&env, ft_lstnew("M=-"));
+	ft_lstadd_back(&env, ft_lstnew("N=n"));
+	flag = 0;
+	cmd_line = get_command_line(&case17, &flag, env);
+	check_command_line(_case17, *cmd_line);
+	printf("====================  case17 OK  ==========================\n");
 }
