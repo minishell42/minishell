@@ -23,7 +23,8 @@ int			is_semicolon(int c)
 	return (false);
 }
 
-void		check_chacter_in_line(char *line, int *index, char *quot_flag, int (*func)())
+void		check_chacter_in_line(char *line, 
+					int *index, char *quot_flag, int (*func)())
 {
 	while (line[*index] && !(func(line[*index]) && *quot_flag == 0))
 	{

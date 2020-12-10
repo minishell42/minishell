@@ -7,6 +7,7 @@
 # define OUT_OVERRIDE 1
 # define REDIR_IN 2
 # define OUT_ENDLINE 3
+# define QUOT_IS_NOT_PAIR -1
 
 typedef struct		s_command_line
 {
@@ -36,19 +37,24 @@ t_list		*get_command_lines(char *line, t_list *env);
 ** parse_cmd_line.c
 */
 int			get_command_num(char *command);
-void		set_param(t_cmd_line *command_line, char *start);
-bool		parse_cmd_line(t_cmd_line *cmd_line, char *start, int len, t_list *env);
+void		set_param(t_cmd_line *command_line, char *start, t_list *env);
+bool		parse_command(t_cmd_line *cmd_line, char *start, int len, t_list *env);
+void		change_param_value(t_cmd_line *cmd_line, t_list *env);
+char		*convert_to_valid_value(char *start, int len, t_list *env);
 /*
 ** set_env_value.c
 */
 char 		*get_env_value(char *target_key, t_list *env);
 void 		join_env_value(char **ret, char *str, int *i, t_list *env);
 char		*set_multi_env(char *str, t_list *env);
+
+char		*change_to_absolute_path(char *value, t_list *env);
+
 /*
 ** set_redirection_value.c
 */
 void		set_redirection_flag(t_cmd_line *cmd_line, int *i);
-void		set_redirection_param(t_cmd_line *cmd_line);
+void		set_redirection_param(t_cmd_line *cmd_line, t_list *env);
 
 
 #endif

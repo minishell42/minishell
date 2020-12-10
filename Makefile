@@ -2,7 +2,7 @@ CC			=gcc
 
 INCLUDE		= include/
 
-CFLAGS		=-I$(INCLUDE) -Wall -Wextra -Werror
+CFLAGS		=-I$(INCLUDE)
 
 LIB			= libft/
 
@@ -52,7 +52,7 @@ all:
 	./$(NAME)
 
 $(NAME) : $(OBJS)
-	$(CC) -o $(NAME) $(OBJS) $(LIBFTFLAG)
+	$(CC) -fsanitize=address -lasan -o $(NAME) $(OBJS) $(LIBFTFLAG)
 
 clean :
 	rm -f $(OBJS)
@@ -73,4 +73,17 @@ t:
 	make -C libft
 	make $(TEST)
 	./$(TEST)
-	
+
+tclear:
+	clear
+
+rt: tclear
+	make -C libft
+	make $(TEST)
+	rm -f $(OBJS)
+	rm -rf $(TEST_OBJS)
+	make clean -C libft
+	rm -f $(NAME)
+	make fclean -C libft
+	./$(TEST)
+	rm -rf $(TEST)

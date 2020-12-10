@@ -1,43 +1,46 @@
 #include "parsing.h"
 
-t_cmd_line	*get_command_line(char **line_ptr, char *quot_flag, t_list *env)
-{	
-	t_cmd_line		*command_line;
-	int				index;
+static int	set_command_line(t_cmd_line *cmd_line, char *line, char *quot_flag, t_list *env)
+{
 	char			*start;
-	char			*line;
 	int				len;
-
-	line = ft_strtrim(*line_ptr, " ");  // 메모리 누수 가능성 
-	command_line = ft_calloc(sizeof(t_cmd_line), 1);
+	int				index;
+	
 	index = 0;
 	start = line;
 	while (line[index])
 	{
 		check_chacter_in_line(line, &index, quot_flag, ft_isspace);
 		if (*quot_flag)
-			return (NULL);
+			return (QUOT_IS_NOT_PAIR);
 		len = (line + index) - start;
 		if (!line[index + 1])
 			len++;
-		if (!parse_cmd_line(command_line, start, len, env))
+		if (!parse_command(cmd_line, start, len, env))
 			break;
 		while (line[index] == ' ' && line[index + 1] == ' ')
 			index++;
 		index++;
 		start = line + index;
 	}
-	set_param(command_line, start);
-	index += ft_strlen(command_line->param);
+	set_param(cmd_line, start, env);
+	index += ft_strlen(cmd_line->param);
+	return (index);
+}
+
+t_cmd_line	*get_command_line(char **line_ptr, char *quot_flag, t_list *env)
+{	
+	t_cmd_line		*command_line;
+	int				index;
+	char			*line;
+
+	line = ft_strtrim(*line_ptr, " ");  // 메모리 누수 가능성
+	command_line = ft_calloc(sizeof(t_cmd_line), 1);
+	index = set_command_line(command_line, line, quot_flag, env);
+	if (index < 0)
+		return (NULL);
 	check_redirection(command_line);
-	if (command_line->redir_flag)
-		set_redirection_param(command_line);
-	else
-	{
-		command_line->param = set_multi_env(command_line->param, env); // 메모리 누수 가능성 : parameter : command_line
-		remove_quotation(command_line->param);
-		command_line->param = ft_strtrim(command_line->param, " "); // 메모리 누수 가능성
-	}
+	change_param_value(command_line, env);
 	*line_ptr = line + index;
 	return (command_line);
 }
