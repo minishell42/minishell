@@ -38,11 +38,9 @@ void		set_redirection_param(t_cmd_line *cmd_line)
 	char	*redir_param;
 	char	flag2;
 	t_list	*list;
-	
+
 	flag = 0;
 	i = 0;
-	// 123 > 456 "789 999"
-	//cmd param 123
 	param = cmd_line->param;
 	check_chacter_in_line(param, &i, &flag, is_redirection);
 	value = ft_calloc(sizeof(char), i + 1);
@@ -50,7 +48,6 @@ void		set_redirection_param(t_cmd_line *cmd_line)
 	remove_quotation(value);
 	cmd_line->param = ft_strtrim(value, " ");
 	free(value);
-	
 	if (cmd_line->redir_flag == OUT_ENDLINE)
 		i++;
 	i++;
@@ -80,17 +77,4 @@ void		set_redirection_param(t_cmd_line *cmd_line)
 		start = redir_param + i;
 	}
 	cmd_line->redir_param = list;
-	// redir param
-	// 456 - 789
-	// file명 저장은 연결리스트로 변경
-	// out_override인 경우는 첫번째 값만 파일 명으로 인식되고 나머지는 명령어에 대한 param으로 인식
-	// redir_in인 경우에는
-	// len = ft_strlen(param) - i + 1;
-	// value = ft_calloc(sizeof(char), len);
-	// if (cmd_line->redir_flag == OUT_ENDLINE)
-	// 	i++;
-	// ft_strlcpy(value, param + i + 1, len - 1);
-	// remove_quotation(value);
-	// cmd_line->redir_file = ft_strtrim(value, " ");
-	// free(value);
 }

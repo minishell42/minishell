@@ -6,7 +6,6 @@ int			get_command_num(char *command)
 	{
 		return (ECHO);
 	}
-	// exit?
 	return (0);
 }
 
@@ -32,21 +31,11 @@ void		set_param(t_cmd_line *command_line, char *start)
 bool		parse_cmd_line(t_cmd_line *cmd_line, char *start, int len, t_list *env)
 {
 	char	*value;
-	char	*env_value;
 
-	// start = 한줄 len -> value
-	// value = $EC$HO
 	value = ft_calloc(sizeof(char), len + 1);
 	ft_strlcpy(value, start, len + 1);
-	// set_env(&value, env);
 	value = set_multi_env(value, env);
 	remove_quotation(value);
-	// ft_function for check in env valuable name
-	// if ((env_value = is_env(value, env)))
-	// {
-	// 	free(value);
-	// 	value = env_value;
-	// }
 	if (!cmd_line->command)
 	{
 		cmd_line->command = value;

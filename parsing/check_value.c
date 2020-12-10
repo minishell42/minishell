@@ -43,13 +43,11 @@ int			check_redirection(t_cmd_line *cmd_line)
 	char	*param;
 	int		i;
 	char	flag;
-	int		tmp;
 	
 	flag = 0;
 	i = 0;
 	param = cmd_line->param;
 	check_chacter_in_line(param, &i, &flag, is_redirection);
-	tmp = i;
 	set_redirection_flag(cmd_line, &i);
 	check_chacter_in_line(param, &i, &flag, is_redirection);
 	if (param[i] != '\0')
