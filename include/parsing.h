@@ -7,7 +7,9 @@
 # define OUT_OVERRIDE 1
 # define REDIR_IN 2
 # define OUT_ENDLINE 3
-# define QUOT_IS_NOT_PAIR -1
+# define MALLOC_ERROR -1
+# define QUOT_IS_NOT_PAIR -2
+# define INVALID_COMMAND -3
 
 typedef struct		s_command_line
 {
@@ -37,8 +39,9 @@ t_list		*get_command_lines(char *line, t_list *env);
 ** parse_cmd_line.c
 */
 int			get_command_num(char *command);
-void		set_param(t_cmd_line *command_line, char *start, t_list *env);
-bool		parse_command(t_cmd_line *cmd_line, char *start, int len, t_list *env);
+int			set_param(t_cmd_line *command_line, char *start, t_list *env);
+int			parse_command(t_cmd_line *cmd_line, char *start, int len, t_list *env);
+// bool		parse_command(t_cmd_line *cmd_line, char *start, int len, t_list *env);
 void		change_param_value(t_cmd_line *cmd_line, t_list *env);
 char		*convert_to_valid_value(char *start, int len, t_list *env);
 /*

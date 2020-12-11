@@ -35,7 +35,7 @@ char		*convert_to_valid_value(char *start, int len, t_list *env)
 	return (result);
 }
 
-void		set_param(t_cmd_line *command_line, char *start, t_list *env)
+int			set_param(t_cmd_line *command_line, char *start, t_list *env)
 {
 	char	*param;
 	int		param_len;
@@ -48,9 +48,10 @@ void		set_param(t_cmd_line *command_line, char *start, t_list *env)
 	if (start[i] == '|')
 		command_line->pipe_flag = true;
 	command_line->param = convert_to_valid_value(start, i, env);
+	return (i + 1);
 }
 
-bool		parse_command(t_cmd_line *cmd_line, char *start, int len, t_list *env)
+int			parse_command(t_cmd_line *cmd_line, char *start, int len, t_list *env)
 {
 	char	*value;
 
@@ -59,6 +60,8 @@ bool		parse_command(t_cmd_line *cmd_line, char *start, int len, t_list *env)
 	{
 		cmd_line->command = value;
 		cmd_line->command_num = get_command_num(cmd_line->command);
+		if (!cmd_line->command_num)
+			return (INVALID_COMMAND);
 		// !cmd_line->command_num 에러처리
 		return (true);
 	}
