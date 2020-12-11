@@ -7,8 +7,10 @@ int main(int argc, char **argv, char *envp[])
 	if (argc != 1)
 		return (0);
 	argv[1] = 0;
+	printf("123\n");
 	env = get_env_llist(envp);
-	test_get_command_line(env);
+	// test_get_command_line(env);
+	test_command_lines(env);
 
 	return (0);
 }
