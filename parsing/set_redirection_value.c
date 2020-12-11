@@ -37,7 +37,8 @@ static char	*set_param_before_redir(t_cmd_line *cmd_line, t_list *env)
 	flag = 0;
 	i = 0;
 	param = cmd_line->param;
-	check_chacter_in_line(param, &i, &flag, is_redirection);
+	if (!check_character_in_line(param, &i, is_redirection))
+		return (NULL);
 	cmd_line->param = convert_to_valid_value(param, i, env);
 	if (cmd_line->redir_flag == OUT_ENDLINE)
 		i++;
@@ -47,7 +48,7 @@ static char	*set_param_before_redir(t_cmd_line *cmd_line, t_list *env)
 	return (param + i);
 }
 
-void	get_redirection_param(char *str, t_list *env, t_list **list)
+static bool	get_redirection_param(char *str, t_list *env, t_list **list)
 {
 	char	*start;
 	int		i;
@@ -59,7 +60,8 @@ void	get_redirection_param(char *str, t_list *env, t_list **list)
 	i = 0;
 	while (str[i])
 	{
-		check_chacter_in_line(str, &i, &flag, ft_isspace);
+		if (!check_character_in_line(str, &i, ft_isspace))
+			return (false);
 		len = (str + i) - start;
 		if (!str[i + 1])
 			len++;
@@ -71,15 +73,19 @@ void	get_redirection_param(char *str, t_list *env, t_list **list)
 		i++;
 		start = str + i;
 	}
+	return (true);
 }
 
-void	set_redirection_param(t_cmd_line *cmd_line, t_list *env)
+bool	set_redirection_param(t_cmd_line *cmd_line, t_list *env)
 {
 	char	*redir_param;
 	t_list	*list;
 
-	redir_param = set_param_before_redir(cmd_line, env);
+	if (!(redir_param = set_param_before_redir(cmd_line, env)))
+		return (false);
 	list = 0;
-	get_redirection_param(redir_param, env, &list);
+	if (!get_redirection_param(redir_param, env, &list))
+		return (false);
 	cmd_line->redir_param = list;
+	return (true);
 }

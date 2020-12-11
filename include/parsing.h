@@ -2,14 +2,12 @@
 # define PARSING_H
 
 # include "utils.h"
+# include "get_next_line.h"
 
 # define ECHO 1
 # define OUT_OVERRIDE 1
 # define REDIR_IN 2
 # define OUT_ENDLINE 3
-# define MALLOC_ERROR -1
-# define QUOT_IS_NOT_PAIR -2
-# define INVALID_COMMAND -3
 
 typedef struct		s_command_line
 {
@@ -28,21 +26,24 @@ typedef struct		s_command_line
 int			is_separator(int c);
 int			is_redirection(int c);
 int			is_semicolon(int c);
-void		check_chacter_in_line(char *line, int *index, char *quot_flag, int (*func)());
-int			check_redirection(t_cmd_line *cmd_line);
+bool		check_character_in_line(char *line, int *index, int (*func)());
+// void		check_chacter_in_line(char *line, int *index, char *quot_flag, int (*func)());
+bool		check_redirection(t_cmd_line *cmd_line);
+// int			check_redirection(t_cmd_line *cmd_line);
 /*
 ** get_command_lines.c
 */
-t_cmd_line	*get_command_line(char **line_ptr, char *quot_flag, t_list *env);
+t_cmd_line	*get_command_line(char **line_ptr, t_list *env);
+// t_cmd_line	*get_command_line(char **line_ptr, char *quot_flag, t_list *env);
 t_list		*get_command_lines(char *line, t_list *env);
 /*
 ** parse_cmd_line.c
 */
 int			get_command_num(char *command);
 int			set_param(t_cmd_line *command_line, char *start, t_list *env);
-int			parse_command(t_cmd_line *cmd_line, char *start, int len, t_list *env);
+bool		parse_command(t_cmd_line *cmd_line, char *start, int len, t_list *env);
 // bool		parse_command(t_cmd_line *cmd_line, char *start, int len, t_list *env);
-void		change_param_value(t_cmd_line *cmd_line, t_list *env);
+bool		change_param_value(t_cmd_line *cmd_line, t_list *env);
 char		*convert_to_valid_value(char *start, int len, t_list *env);
 /*
 ** set_env_value.c
@@ -57,7 +58,8 @@ char		*change_to_absolute_path(char *value, t_list *env);
 ** set_redirection_value.c
 */
 void		set_redirection_flag(t_cmd_line *cmd_line, int *i);
-void		set_redirection_param(t_cmd_line *cmd_line, t_list *env);
+bool		set_redirection_param(t_cmd_line *cmd_line, t_list *env);
+// char		*set_redirection_param(t_cmd_line *cmd_line, t_list *env);
 
 
 #endif

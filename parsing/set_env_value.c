@@ -74,25 +74,6 @@ char		*change_to_absolute_path(char *value, t_list *env)
 		result = ft_strjoin(tmp, value + i);
 		free(tmp);
 	}
-	// if (i != 0 && value[i - 1] == '.')
-	// {
-	// 	tmp = getcwd(NULL, 0);
-	// 	if (i != 1 && value[i - 2] == '.')
-	// 	{
-	// 		curr_len = ft_strlen(tmp) - 1;
-	// 		while (curr_len >= 0 && tmp[curr_len] != '/')
-	// 		{
-	// 			tmp[curr_len] = '\0';
-	// 			curr_len--;
-	// 		}
-	// 		if (tmp[curr_len] == '/')
-	// 			tmp[curr_len] = '\0';
-	// 	}
-	// }
-	// else if (i != 0 && value[i - 1] == '~')
-	// 	tmp = get_env_value("HOME", env);
-	// if (tmp != NULL)
-	// 	result = ft_strjoin(tmp, value + i);
 	return (result);
 }
 

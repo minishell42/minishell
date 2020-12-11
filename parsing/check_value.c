@@ -23,23 +23,43 @@ int			is_semicolon(int c)
 	return (false);
 }
 
-void		check_chacter_in_line(char *line, 
-					int *index, char *quot_flag, int (*func)())
+static void	set_quot_err(char quot_flag)
 {
-	while (line[*index] && !(func(line[*index]) && *quot_flag == 0))
+	if (!(g_err.err_value = ft_calloc(sizeof(char), 2)))
+		g_err.err_number = ALLOC_ERROR;
+	else
 	{
-		if (line[*index] == '\'' || line[*index] == '"')
-		{
-			if (*quot_flag == line[*index])
-				*quot_flag = 0;
-			else if (*quot_flag == 0)
-				*quot_flag = line[*index];
-		}
-		(*index)++;
+		g_err.err_value[0] = quot_flag;
+		g_err.err_number = QUOT_IS_NOT_PAIR;
 	}
 }
 
-int			check_redirection(t_cmd_line *cmd_line)
+bool		check_character_in_line(char *line, 
+					int *index, int (*func)())
+{
+	char	quot_flag;
+
+	quot_flag = 0;
+	while (line[*index] && !(func(line[*index]) && quot_flag == 0))
+	{
+		if (line[*index] == '\'' || line[*index] == '"')
+		{
+			if (quot_flag == line[*index])
+				quot_flag = 0;
+			else if (quot_flag == 0)
+				quot_flag = line[*index];
+		}
+		(*index)++;
+	}
+	if (quot_flag)
+	{
+		set_quot_err(quot_flag);
+		return (false);
+	}
+	return (true);
+}
+
+bool		check_redirection(t_cmd_line *cmd_line)
 {
 	char	*param;
 	int		i;
@@ -48,13 +68,16 @@ int			check_redirection(t_cmd_line *cmd_line)
 	flag = 0;
 	i = 0;
 	param = cmd_line->param;
-	check_chacter_in_line(param, &i, &flag, is_redirection);
+	if (!check_character_in_line(param, &i, is_redirection))
+		return (false);
 	set_redirection_flag(cmd_line, &i);
-	check_chacter_in_line(param, &i, &flag, is_redirection);
+	if (!check_character_in_line(param, &i, is_redirection))
+		return (false);
 	if (param[i] != '\0')
-	{
+	{ 
+		g_err.err_number = TOO_MANY_REDIR;
 		cmd_line->redir_flag = 0;
-		return (0);
+		return (false);
 	}
-	return (1);
+	return (true);
 }
