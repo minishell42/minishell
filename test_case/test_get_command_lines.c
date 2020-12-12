@@ -8,9 +8,9 @@ void	check_command_lines(t_list *cmd)
 	char		*redir_param;
 
 	index = 1;
-	while (cmd)
+	tmp = (cmd->content);
+	while (cmd && tmp)
 	{
-		tmp = (cmd->content);
 		printf("+++++++ while start +++++++++\n");
 		printf("struct index : %d\n", index);
 		printf("command : %s\n", tmp->command);
@@ -30,6 +30,8 @@ void	check_command_lines(t_list *cmd)
 		}
 		index++;
 		cmd = cmd->next;
+		if (cmd)
+			tmp = cmd->content;
 		printf("+++++++ while end +++++++++\n");
 	}
 }
@@ -38,47 +40,114 @@ void	test_command_lines(t_list *env)
 {
 	// count
 	t_list *cmd_lines;
+	t_list	*tmp;
 	int expect_size;
-	
+	t_list *start;
+
 	char *case1= "echo -n 1234 ; echo -n 1234"; 
-	// expect_size = 2;
+	expect_size = 2;
 	cmd_lines = get_command_lines(case1, env);
-	// if (expect_size != ft_lstsize(cmd_lines))
+	start = cmd_lines;
+	if (expect_size != ft_lstsize(cmd_lines))
 		check_command_lines(cmd_lines);
+	while(start)
+	{
+		t_list *start2 = start;
+		tmp = start->content;
+		free_cmd_struct(start->content);
+		start = start->next;
+		free(start2);
+		free(tmp);
+	}
 	printf("====================  Case 1 OK  ==========================\n");
 
 	char *case2= "echo -n 1234 | echo -n 1234"; 
 	// expect_size = 2;
 	cmd_lines = get_command_lines(case2, env);
+	start = cmd_lines;
 	// if (expect_size != ft_lstsize(cmd_lines))
 		check_command_lines(cmd_lines);
+	// free(cmd_lines);
+	while(start)
+	{
+		t_list *start2 = start;
+		tmp = start->content;
+		free_cmd_struct(start->content);
+		start = start->next;
+		free(start2);
+		free(tmp);
+	}
 	printf("====================  case2 OK  ==========================\n");
 
-	char *case3= "echo -n 1234| echo -n 1234 | echo -n 1234"; 
-	// expect_size = 2;
-	cmd_lines = get_command_lines(case3, env);
-	// if (expect_size != ft_lstsize(cmd_lines))
-		check_command_lines(cmd_lines);
-	printf("====================  case3 OK  ==========================\n");
+	// char *case3= "echo -n 1234| echo -n 1234 | echo -n 1234"; 
+	// // expect_size = 2;
+	// cmd_lines = get_command_lines(case3, env);
+	// start = cmd_lines;
+	// // if (expect_size != ft_lstsize(cmd_lines))
+	// 	check_command_lines(cmd_lines);
+	// // free(cmd_lines);
+	// while(start)
+	// {
+	// 	t_list *start2 = start;
+	// 	tmp = start->content;
+	// 	free_cmd_struct(start->content);
+	// 	free(start2);
+	// 	start = start->next;
+	// 	free(tmp);
+	// }
+	// printf("====================  case3 OK  ==========================\n");
 
-	char *case4= "cma -n 1234| echo -n 1234 ; echo -n 1234"; 
-	// expect_size = 2;
-	cmd_lines = get_command_lines(case4, env);
-	// if (expect_size != ft_lstsize(cmd_lines))
-		check_command_lines(cmd_lines);
-	printf("====================  case4 OK  ==========================\n");
+	// char *case4= "cma -n 1234| echo -n 1234 ; echo -n 1234"; 
+	// // expect_size = 2;
+	// cmd_lines = get_command_lines(case4, env);
+	// start = cmd_lines;
+	// // if (expect_size != ft_lstsize(cmd_lines))
+	// 	check_command_lines(cmd_lines);
+	// // free(cmd_lines);
+	// while(start)
+	// {
+	// 	t_list *start2 = start;
+	// 	tmp = start->content;
+	// 	free_cmd_struct(start->content);
+	// 	free(start2);
+	// 	start = start->next;
+	// 	free(tmp);
+	// }
+	// printf("====================  case4 OK  ==========================\n");
 
-	char *case5= "cd -n 1234| echo -n 1234 | an -n 1234"; 
-	// expect_size = 2;
-	cmd_lines = get_command_lines(case5, env);
-	// if (expect_size != ft_lstsize(cmd_lines))
-		check_command_lines(cmd_lines);
-	printf("====================  case5 OK  ==========================\n");
+	// char *case5= "cd -n 1234 | an -n 1234 | echo -n 1234"; 
+	// // expect_size = 2;
+	// cmd_lines = get_command_lines(case5, env);
+	// start = cmd_lines;
+	// // if (expect_size != ft_lstsize(cmd_lines))
+	// 	check_command_lines(cmd_lines);
+	// // free(cmd_lines);
+	// while(start)
+	// {
+	// 	t_list *start2 = start;
+	// 	tmp = start->content;
+	// 	free_cmd_struct(start->content);
+	// 	free(start2);
+	// 	start = start->next;
+	// 	free(tmp);
+	// }
+	// printf("====================  case5 OK  ==========================\n");
 
-	char *case6= "cd -n 1234| export -n 1234 | eee -n 1234"; 
-	// expect_size = 2;
-	cmd_lines = get_command_lines(case6, env);
-	// if (expect_size != ft_lstsize(cmd_lines))
-		check_command_lines(cmd_lines);
-	printf("====================  case6 OK  ==========================\n");
+	// char *case6= "cd -n 1234| export -n 1234 | eee -n 1234"; 
+	// // expect_size = 2;
+	// cmd_lines = get_command_lines(case6, env);
+	// start = cmd_lines;
+	// // if (expect_size != ft_lstsize(cmd_lines))
+	// 	check_command_lines(cmd_lines);
+	// // free(cmd_lines);
+	// while(start)
+	// {
+	// 	t_list *start2 = start;
+	// 	tmp = start->content;
+	// 	free_cmd_struct(start->content);
+	// 	free(start2);
+	// 	start = start->next;
+	// 	free(tmp);
+	// }
+	// printf("====================  case6 OK  ==========================\n");
 }

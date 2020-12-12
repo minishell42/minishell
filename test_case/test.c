@@ -11,6 +11,7 @@ int main(int argc, char **argv, char *envp[])
 	env = get_env_llist(envp);
 	// test_get_command_line(env);
 	test_command_lines(env);
+	ft_lstclear(&env, free);
 
 	return (0);
 }
