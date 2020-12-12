@@ -1,10 +1,17 @@
 #ifndef UTILS_H
 # define UTILS_H
 
-# include "error.h"
+# include "ft_error.h"
 
+/*
+** string_util.c
+*/
 void		remove_quotation(char *value);
-// void		message_and_exit(char *message, bool built_in_error);
-// void		print_err_msg(char error_flag);
+/*
+** check_character.c
+*/
+int			is_separator(int c);
+int			is_redirection(int c);
+int			is_semicolon(int c);
 
 #endif

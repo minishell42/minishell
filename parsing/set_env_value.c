@@ -4,25 +4,25 @@ char 		*get_env_value(char *target_key, t_list *env)
 {
 	char	*key;
 	char	*value;
-	char	**key_value;
+	int		i;
 
 	while (env)
 	{
-		key_value = ft_split((char *)env->content, '=');
-		key = key_value[0];
-		value = key_value[1];
+		i = 0;
+		while (((char *)env->content)[i] != '=')
+			i++;
+		key = ft_substr(env->content, 0, i);
+		value = ft_substr(env->content, i + 1, ft_strlen(env->content) - i);
 		if (are_equal(target_key, key))
 		{
 			free(key);
-			free(key_value);
 			return (value);
 		}
+		free(key);
+		free(value);
 		env = env->next;
 	}
-	free(key);
-	free(key_value);
-	value[0] = 0;
-	return (value);
+	return (ft_calloc(sizeof(char), 1));
 }
 
 static char	*get_absolute_path(char *value, t_list *env, int index)
@@ -92,7 +92,7 @@ void 		join_env_value(char **ret, char *str, int *i, t_list *env)
 	str[*i] = 0;
 	env_value = get_env_value(env_key, env);
 	temp = *ret;
-	*ret = ft_strjoin(*ret, env_value);
+	*ret = ft_strjoin(temp, env_value);
 	str[*i] = seperator;
 	free(env_value);
 	free(temp);
@@ -116,7 +116,7 @@ char		*set_multi_env(char *str, t_list *env)
 		seperator = str[i];
 		str[i] = 0;
 		temp = ret;
-		ret = ft_strjoin(ret, start);
+		ret = ft_strjoin(temp, start);
 		free(temp);
 		if (seperator == '$')
 			join_env_value(&ret, str, &i, env);

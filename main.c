@@ -19,6 +19,7 @@ int			main(int argc, char **argv, char *envp[])
 		// 	ft_free(command_lines);
 		// 	return (0);
 		// }
+		free(line);
 	}
 	return (0);
 }

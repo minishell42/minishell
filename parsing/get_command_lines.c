@@ -56,43 +56,85 @@ t_cmd_line	*get_command_line(char **line_ptr, t_list *env)
 	int				index;
 	char			*line;
 
-	line = ft_strtrim(*line_ptr, " ");
+	index = 0;
+	while (ft_isspace((*line_ptr)[index]) && (*line_ptr)[index])
+		index++;
+	line = *line_ptr + index;
 	if (!(command_line = ft_calloc(sizeof(t_cmd_line), 1)))
 	{
 		g_err.err_number = ALLOC_ERROR;
 		return (NULL);
 	}
 	index = set_command_line(command_line, line, env);
-	if (index < 0)
+	if (index < 0 || !check_redirection(command_line) || !change_param_value(command_line, env))
+	{
+		free_cmd_struct(command_line);
+		free(command_line);
 		return (NULL);
-	if (!check_redirection(command_line))
-		return (NULL);
-	if (!change_param_value(command_line, env))
-		return (NULL);
+	}
 	*line_ptr = line + index;
 	return (command_line);
+}
+
+void	free_cmd_struct(t_cmd_line *cmd)
+{
+	t_list	*tmp;
+
+	if (cmd->command)
+		free(cmd->command);
+	if (cmd->option)
+		free(cmd->option);
+	if (cmd->param != NULL)
+		free(cmd->param);
+	while (cmd->redir_param)
+	{
+		tmp = cmd->redir_param;
+		if (tmp->content)
+			free(tmp->content);
+		cmd->redir_param = cmd->redir_param->next;
+		free(tmp);
+	}
 }
 
 t_list	*get_command_lines(char *line, t_list *env)
 {
 	t_list			*list;
 	t_cmd_line		*command_line;
+	// char			*start;
+	// int				flag;
 
-	list = 0;
+	list = NULL;
 	g_err.err_number = 0;
 	g_err.err_value = 0;
+	// echo 
+	// void *res;
+	// start = line;
 	while (line && *line)
 	{
+		printf("loop\n");
 		if (!(command_line = get_command_line(&line, env)))
 		{
 			if (g_err.err_number)
-				print_err_msg(g_err.err_number);
-			return (NULL);
+				print_err_msg();
+			break;
+			// return (NULL);
 		}
+		// flag -> pipe 있다는 것이고 -> 다음 command_line 이용해서 --- run 
+		// res = run(command_line, res, env);
+		// execve()
+		// command_line.pipe_flag가 있으면 -> flag on
 		if (!list)
 			list = ft_lstnew(command_line);
 		else
 			ft_lstadd_back(&list, ft_lstnew(command_line));
+		printf("line = %s\n", line);
+		// if (!command_line)
+		// 	return (list);
 	}
+	// if (!command_line)
+	// 	free_cmd_struct(command_line);
+	// free_cmd_struct(command_line);
+	// free(start);
+	// echo -n 123; echo 456
 	return (list);
 }

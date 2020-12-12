@@ -16,7 +16,8 @@ GNL			= $(addprefix $(GNL_DIR), $(GNL_SRCS))
 PARSE_DIR	= parsing/
 PARSE_SRCS	= check_value.c \
 				get_command_lines.c \
-				parse_cmd_line.c \
+				parse_command.c \
+				parse_param.c \
 				set_env_value.c \
 				set_redirection_value.c
 PARSE		= $(addprefix $(PARSE_DIR), $(PARSE_SRCS))
@@ -28,15 +29,20 @@ COMMAND_SRCS	= echo.c \
 COMMAND			= $(addprefix $(COMMAND_DIR), $(COMMAND_SRCS))
 
 UTILS_DIR	= utils/
-UTILS_SRCS	= error.c \
-				string_util.c
+UTILS_SRCS	= string_util.c \
+				check_character.c
 UTILS		= $(addprefix $(UTILS_DIR), $(UTILS_SRCS))
+
+ERROR_DIR	= error/
+ERROR_SRCS	= error.c
+ERROR		= $(addprefix $(ERROR_DIR), $(ERROR_SRCS))
 
 FILES		= env_llist.c
 FILES		+= $(GNL)
 FILES		+= $(PARSE)
 FILES		+= $(COMMAND)
 FILES		+= $(UTILS)
+FILES		+= $(ERROR)
 
 SRC			= main.c
 SRC			+= $(FILES)
@@ -75,7 +81,7 @@ fclean: clean
 re: fclean all
 
 $(TEST) : $(TEST_OBJS)
-	$(CC) $(CFLAGS) -o $(TEST) $(TEST_OBJS) $(LIBFTFLAG)
+	$(CC) -fsanitize=address -lasan $(CFLAGS) -o $(TEST) $(TEST_OBJS) $(LIBFTFLAG)
 
 t:
 	make -C libft

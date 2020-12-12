@@ -10,9 +10,9 @@ t_list 		*get_env_llist(char *envp[])
 	while (envp[i])
 	{
 		if (env)
-			ft_lstadd_back(&env, ft_lstnew(envp[i]));
+			ft_lstadd_back(&env, ft_lstnew(ft_strdup(envp[i])));
 		else
-			env = ft_lstnew(envp[i]);		
+			env = ft_lstnew(ft_strdup(envp[i]));
 		i++;
 	}
 	return (env);

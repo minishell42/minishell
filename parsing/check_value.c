@@ -1,39 +1,5 @@
 #include "parsing.h"
 
-int			is_separator(int c)
-{
-	if (c == ';' || c == '|')
-		return (true);
-	return (false);
-}
-
-int			is_redirection(int c)
-{
-	if (c == '<' || c == '>')
-		return (true);
-	return (false);
-}
-
-int			is_semicolon(int c)
-{
-	if (c == ';')
-	{
-		return (true);
-	}
-	return (false);
-}
-
-static void	set_quot_err(char quot_flag)
-{
-	if (!(g_err.err_value = ft_calloc(sizeof(char), 2)))
-		g_err.err_number = ALLOC_ERROR;
-	else
-	{
-		g_err.err_value[0] = quot_flag;
-		g_err.err_number = QUOT_IS_NOT_PAIR;
-	}
-}
-
 bool		check_character_in_line(char *line, 
 					int *index, int (*func)())
 {
