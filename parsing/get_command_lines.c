@@ -100,15 +100,10 @@ t_list	*get_command_lines(char *line, t_list *env)
 {
 	t_list			*list;
 	t_cmd_line		*command_line;
-	// char			*start;
-	// int				flag;
 
 	list = NULL;
 	g_err.err_number = 0;
 	g_err.err_value = 0;
-	// echo 
-	// void *res;
-	// start = line;
 	while (line && *line)
 	{
 		printf("loop\n");
@@ -117,7 +112,6 @@ t_list	*get_command_lines(char *line, t_list *env)
 			if (g_err.err_number)
 				print_err_msg();
 			break;
-			// return (NULL);
 		}
 		// flag -> pipe 있다는 것이고 -> 다음 command_line 이용해서 --- run 
 		// res = run(command_line, res, env);
@@ -127,14 +121,6 @@ t_list	*get_command_lines(char *line, t_list *env)
 			list = ft_lstnew(command_line);
 		else
 			ft_lstadd_back(&list, ft_lstnew(command_line));
-		printf("line = %s\n", line);
-		// if (!command_line)
-		// 	return (list);
 	}
-	// if (!command_line)
-	// 	free_cmd_struct(command_line);
-	// free_cmd_struct(command_line);
-	// free(start);
-	// echo -n 123; echo 456
 	return (list);
 }

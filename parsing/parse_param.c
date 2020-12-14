@@ -49,5 +49,7 @@ int			set_param(t_cmd_line *command_line, char *start, t_list *env)
 	if (start[i] == '|')
 		command_line->pipe_flag = true;
 	command_line->param = convert_to_valid_value(start, i, env);
-	return (i + 1);
+	if (start[i])
+		i++;
+	return (i);
 }
