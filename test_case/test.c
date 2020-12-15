@@ -8,7 +8,8 @@ int main(int argc, char **argv, char *envp[])
 		return (0);
 	argv[1] = 0;
 	env = get_env_llist(envp);
-	test_get_command_line(env);
+	// test_get_command_line(env);
+	test_cd(env);
 	// test_command_lines(env);
 	ft_lstclear(&env, free);
 

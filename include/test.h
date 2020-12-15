@@ -8,4 +8,7 @@ void	test_get_command_line(t_list *env);
 void	test_command_lines(t_list *env);
 
 
+void	test_cd(t_list *env);
+
+
 #endif
