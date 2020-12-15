@@ -35,6 +35,8 @@ void	print_err_msg(void)
 		free(g_err.err_value);
 		free(msg);
 	}
+	g_err.err_value = 0;
+	g_err.err_number = 0;
 }
 
 bool	parsing_err_value(int error_number, char *error_point)

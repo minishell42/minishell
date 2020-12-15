@@ -12,6 +12,7 @@
 # define QUOT_IS_NOT_PAIR 2
 # define INVALID_COMMAND 3
 # define TOO_MANY_REDIR 4
+# define SYNTAX_ERROR 5
 
 typedef struct	s_error 
 {
