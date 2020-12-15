@@ -120,7 +120,7 @@ char	*set_dir(t_cmd_line *cmd_line, t_list *env)
 
 	if (cmd_line->param[0] == '-' && ft_strlen(cmd_line->param) == 1)
 	{
-		dir = get_env_value( "OLDPWD", env);
+		dir = get_env_value("OLDPWD", env);
 		// 환경 변수값에  oldpwd가 있는지 확인 -> 없다면 오류 발생
 		if (*dir == '\0')
 		{
@@ -128,7 +128,7 @@ char	*set_dir(t_cmd_line *cmd_line, t_list *env)
 			return (false);
 		}
 	}
-	else if (cmd_line->param[0] == '~')
+	else if (cmd_line->param[0] == '~' && are_equal(cmd_line->param, "--"))
 	{
 		home = get_env_value( "HOME", env);
 		if (*home == '\0')
@@ -137,7 +137,7 @@ char	*set_dir(t_cmd_line *cmd_line, t_list *env)
 			return (false);
 		}
 		// printf("home : %s\n", home);
-		if (ft_strlen(cmd_line->param) != 1)
+		if (ft_strlen(cmd_line->param) != 1 && !are_equal(cmd_line->param, "--"))
 		{
 			tmp = ft_substr(cmd_line->param, 1, ft_strlen(cmd_line->param));
 			dir = ft_strjoin(home, tmp);
