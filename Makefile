@@ -54,7 +54,8 @@ TEST		= test
 TEST_DIR	= test_case/
 TEST_FILES	= test.c \
 				test_get_command_line.c \
-				test_get_command_lines.c
+				test_get_command_lines.c \
+				test_cd.c
 TEST_SRC 	= $(addprefix $(TEST_DIR), $(TEST_FILES))
 TEST_SRC	+= $(FILES)
 
