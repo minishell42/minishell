@@ -23,6 +23,8 @@ char	*run_command(t_cmd_line *cmd_line, t_list *env)
 		result = echo(cmd_line, env, pipe_input);
 	else if (cmd_line->command_num == CD)
 		result = cd(cmd_line, env, pipe_input);
+	else if (cmd_line->command_num == PWD)
+		result = pwd(cmd_line, &pipe_input);
 	if (cmd_line->pipe_flag)
 	{
 		free_pipe_input(&pipe_input);

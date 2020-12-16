@@ -28,7 +28,8 @@ COMMAND_SRCS	= echo.c \
 					export.c \
 					redirection.c \
 					run_command.c \
-					cd.c
+					cd.c \
+					pwd.c
 COMMAND			= $(addprefix $(COMMAND_DIR), $(COMMAND_SRCS))
 
 UTILS_DIR	= utils/
