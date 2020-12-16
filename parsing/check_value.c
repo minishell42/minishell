@@ -1,6 +1,6 @@
 #include "parsing.h"
 
-bool		check_character_in_line(char *line, 
+bool			check_character_in_line(char *line, 
 					int *index, int (*func)())
 {
 	char	quot_flag;
@@ -25,7 +25,7 @@ bool		check_character_in_line(char *line,
 	return (true);
 }
 
-bool		check_redirection(t_cmd_line *cmd_line)
+bool			check_redirection(t_cmd_line *cmd_line)
 {
 	char	*param;
 	int		i;
@@ -44,6 +44,20 @@ bool		check_redirection(t_cmd_line *cmd_line)
 		g_err.err_number = TOO_MANY_REDIR;
 		cmd_line->redir_flag = 0;
 		return (false);
+	}
+	return (true);
+}
+
+bool			check_cmd_num(t_cmd_line *cmd_line)
+{
+	if (!cmd_line->command_num)
+	{
+		if ((!cmd_line->redir_flag)
+			|| (*cmd_line->command && cmd_line->redir_flag))
+		{
+			parsing_err_value(INVALID_COMMAND, cmd_line->command);
+			return (false);
+		}
 	}
 	return (true);
 }

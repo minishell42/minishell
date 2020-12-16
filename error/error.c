@@ -27,6 +27,12 @@ void	print_err_msg(void)
 		err_msg = " invalid command entered\n";
 	else if (err_number == TOO_MANY_REDIR)
 		err_msg = " too many redirects exist\n";
+	else if (err_number == SYNTAX_ERROR)
+		err_msg = " syntax error near unexpected token\n";
+	else if (err_number == PARAM_IS_NEWLINE)
+		err_msg = " syntax error near unexpected token `newline'\n";
+	else
+		err_msg = NULL;
 	if (!(msg = ft_strjoin(g_err.err_value, err_msg)))
 		msg = err_msg;
 	write(1, msg, ft_strlen(msg));
@@ -55,4 +61,16 @@ void	set_quot_err(char quot_flag)
 		g_err.err_value[0] = quot_flag;
 		g_err.err_number = QUOT_IS_NOT_PAIR;
 	}
+}
+
+int		set_syntax_err(char *line, int i)
+{
+	char	*err_value;
+	err_value = ft_calloc(sizeof(char), 3);
+	err_value[0] = line[i];
+	if (line[i] == line[i - 1] || line[i] == line[i + 1])
+		err_value[1] = line[i];
+	parsing_err_value(SYNTAX_ERROR, err_value);
+	free(err_value);
+	return (0);
 }

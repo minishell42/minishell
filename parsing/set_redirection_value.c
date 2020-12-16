@@ -68,6 +68,28 @@ static bool	get_redirection_param(char *str, t_list *env, t_list **list)
 	return (true);
 }
 
+static void	integrate_param(t_cmd_line *cmd_line)
+{
+	char	*ret;
+	char	*tmp;
+	t_list	*head;
+
+	ret = ft_strdup(cmd_line->param);
+	free(cmd_line->param);
+	head = cmd_line->redir_param->next;
+	while (head)
+	{
+		tmp = ft_strjoin(ret, " ");
+		free(ret);
+		ret = ft_strjoin(tmp, (char*)head->content);
+		free(tmp);
+		head = head->next;
+	}
+	cmd_line->param = ret;
+	ft_lstclear(&(cmd_line->redir_param->next), free);
+	cmd_line->redir_param->next = NULL;
+}
+
 bool	set_redirection_param(t_cmd_line *cmd_line, t_list *env)
 {
 	char	*redir_param;
@@ -75,8 +97,12 @@ bool	set_redirection_param(t_cmd_line *cmd_line, t_list *env)
 	t_list	*list;
 
 	start = cmd_line->param;
-	if (!(redir_param = set_param_before_redir(cmd_line, env, start)))
-		return (false);
+	if (!(redir_param = set_param_before_redir(cmd_line, env, start))
+		|| !(*redir_param))
+		{
+			free(start);
+			return (false);
+		}
 	list = 0;
 	if (!get_redirection_param(redir_param, env, &list))
 	{
@@ -84,6 +110,7 @@ bool	set_redirection_param(t_cmd_line *cmd_line, t_list *env)
 		return (false);
 	}
 	cmd_line->redir_param = list;
+	integrate_param(cmd_line);
 	free(start);
 	return (true);
 }

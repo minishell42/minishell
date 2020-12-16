@@ -13,6 +13,7 @@
 # define INVALID_COMMAND 3
 # define TOO_MANY_REDIR 4
 # define SYNTAX_ERROR 5
+# define PARAM_IS_NEWLINE 6
 
 typedef struct	s_error 
 {
@@ -20,11 +21,13 @@ typedef struct	s_error
 	char	*err_value;
 }				t_error;
 
-t_error		g_err;
+t_error			g_err;
 
-void		message_and_exit(char *message, bool built_in_error);
-void		print_err_msg(void);
-bool		parsing_err_value(int error_number, char *error_point);
-void		set_quot_err(char quot_flag);
+void			message_and_exit(char *message, bool built_in_error);
+void			print_err_msg(void);
+bool			parsing_err_value(int error_number, char *error_point);
+void			set_quot_err(char quot_flag);
+int				set_syntax_err(char *line, int i);
+
 
 # endif

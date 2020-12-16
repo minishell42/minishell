@@ -1,6 +1,6 @@
 #include "parsing.h"
 
-static int	get_command_num(char *command, t_list *env)
+int	get_command_num(char *command, t_list *env)
 {
     if (are_equal(command, "echo"))
 		return (ECHO);
@@ -32,8 +32,7 @@ static bool	parse_cmd(t_cmd_line *cmd_line, char *value, t_list *env)
 	else
 		cmd_line->command = value;
 	if (!cmd_line->command_num)
-		if(!(cmd_line->command_num = get_command_num(cmd_line->command, env)))
-			return (parsing_err_value(INVALID_COMMAND, value));
+		cmd_line->command_num = get_command_num(cmd_line->command, env);
 	return (true);
 }
 
@@ -43,7 +42,15 @@ bool		parse_command(t_cmd_line *cmd_line, char *start, int len, t_list *env)
 
 	value = convert_to_valid_value(start, len, env);
 	if (!cmd_line->command)
+	{
+		if (value[0] ==  '>' || value[0] == '<')
+		{
+			value[0] = 0;
+			cmd_line->command = value;
+			return (false);
+		}
 		return (parse_cmd(cmd_line, value, env));
+	}
 	else if (cmd_line->command_num == ECHO && are_equal(value, "-n"))
 	{
 		if (!cmd_line->option)

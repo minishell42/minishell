@@ -16,6 +16,7 @@ static bool	set_command(t_cmd_line *cmd_line, char *line, int *index, t_list *en
 	if (!parse_command(cmd_line, start, len, env))
 	{
 		*index = tmp_index;
+		tmp_index = 0;
 		return (false);
 	}
 	while (line[*index] == ' ' && line[*index + 1] == ' ')
@@ -84,7 +85,7 @@ void	free_cmd_struct(t_cmd_line *cmd)
 		free(cmd->command);
 	if (cmd->option)
 		free(cmd->option);
-	if (cmd->param != NULL)
+	if (cmd->param)
 		free(cmd->param);
 	while (cmd->redir_param)
 	{
@@ -94,33 +95,4 @@ void	free_cmd_struct(t_cmd_line *cmd)
 		cmd->redir_param = cmd->redir_param->next;
 		free(tmp);
 	}
-}
-
-t_list	*get_command_lines(char *line, t_list *env)
-{
-	t_list			*list;
-	t_cmd_line		*command_line;
-
-	list = NULL;
-	g_err.err_number = 0;
-	g_err.err_value = 0;
-	while (line && *line)
-	{
-		printf("loop\n");
-		if (!(command_line = get_command_line(&line, env)))
-		{
-			if (g_err.err_number)
-				print_err_msg();
-			break;
-		}
-		// flag -> pipe 있다는 것이고 -> 다음 command_line 이용해서 --- run 
-		// res = run(command_line, res, env);
-		// execve()
-		// command_line.pipe_flag가 있으면 -> flag on
-		if (!list)
-			list = ft_lstnew(command_line);
-		else
-			ft_lstadd_back(&list, ft_lstnew(command_line));
-	}
-	return (list);
 }
