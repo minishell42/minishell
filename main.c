@@ -11,7 +11,8 @@ int			main(int argc, char **argv, char *envp[])
 	{
 		write(1, "minishell$ ", 12);
 		get_next_line(0, &line);
-		command_lines = get_command_lines(line, env);
+		minishell(line, env);
+		// command_lines = get_command_lines(line, env);
 
 		// if (!run_command(command_lines, env))
 		// {
