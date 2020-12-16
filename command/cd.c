@@ -177,7 +177,7 @@ char	*cd(t_cmd_line *cmd_line, t_list *env, char *pipe_flag)
 	char		*pwd;
 	char		*p_tmp;
 
-	if (pipe_flag)
+	if (pipe_flag || cmd_line->pipe_flag)
 		return (NULL);
 	if (!(dir = set_dir(cmd_line, env)))
 		return (NULL);
