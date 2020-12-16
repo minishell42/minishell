@@ -4,7 +4,10 @@
 # include "command.h"
 
 void				excute(t_cmd_line *cmd_line, char *envp[]);
-void				echo(t_cmd_line *cmd_line, char *envp[]);
 t_list 				*get_env_llist(char *envp[]);
+/*
+** minishell.c
+*/
+void				minishell(char *line, t_list *env);
 
 #endif

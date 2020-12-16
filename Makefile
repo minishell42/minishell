@@ -19,13 +19,15 @@ PARSE_SRCS	= check_value.c \
 				parse_command.c \
 				parse_param.c \
 				set_env_value.c \
-				set_redirection_value.c
+				set_redirection_value.c \
+				validate_line.c
 PARSE		= $(addprefix $(PARSE_DIR), $(PARSE_SRCS))
 
 COMMAND_DIR		= command/
 COMMAND_SRCS	= echo.c \
-					cd.c \
-					export.c
+					export.c \
+					redirection.c \
+					run_command.c
 COMMAND			= $(addprefix $(COMMAND_DIR), $(COMMAND_SRCS))
 
 UTILS_DIR	= utils/
@@ -37,7 +39,8 @@ ERROR_DIR	= error/
 ERROR_SRCS	= error.c
 ERROR		= $(addprefix $(ERROR_DIR), $(ERROR_SRCS))
 
-FILES		= env_llist.c
+FILES		= env_llist.c \
+				minishell.c
 FILES		+= $(GNL)
 FILES		+= $(PARSE)
 FILES		+= $(COMMAND)
@@ -54,7 +57,9 @@ TEST		= test
 TEST_DIR	= test_case/
 TEST_FILES	= test.c \
 				test_get_command_line.c \
-				test_get_command_lines.c
+				test_get_command_lines.c \
+				test_validate_line.c \
+				test_redirection.c
 TEST_SRC 	= $(addprefix $(TEST_DIR), $(TEST_FILES))
 TEST_SRC	+= $(FILES)
 
