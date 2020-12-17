@@ -31,6 +31,8 @@ void	print_err_msg(void)
 		err_msg = " syntax error near unexpected token\n";
 	else if (err_number == PARAM_IS_NEWLINE)
 		err_msg = " syntax error near unexpected token `newline'\n";
+	else if (err_number == INVALID_EXPORT_PARAM)
+		err_msg = " is invalid export param\n";
 	else
 		err_msg = NULL;
 	if (!(msg = ft_strjoin(g_err.err_value, err_msg)))

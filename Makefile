@@ -25,9 +25,11 @@ PARSE		= $(addprefix $(PARSE_DIR), $(PARSE_SRCS))
 
 COMMAND_DIR		= command/
 COMMAND_SRCS	= echo.c \
-					export.c \
 					redirection.c \
-					run_command.c
+					run_command.c \
+					export.c \
+					cd.c \
+					
 COMMAND			= $(addprefix $(COMMAND_DIR), $(COMMAND_SRCS))
 
 UTILS_DIR	= utils/
@@ -57,9 +59,10 @@ TEST		= test
 TEST_DIR	= test_case/
 TEST_FILES	= test.c \
 				test_get_command_line.c \
-				test_get_command_lines.c \
 				test_validate_line.c \
-				test_redirection.c
+				test_redirection.c \
+				test_export.c \
+				
 TEST_SRC 	= $(addprefix $(TEST_DIR), $(TEST_FILES))
 TEST_SRC	+= $(FILES)
 
