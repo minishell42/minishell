@@ -28,8 +28,11 @@ typedef struct		s_command_line
 	t_list			*redir_param;
 }					t_cmd_line;
 
-
+/*
+** free_struct.c
+*/
 void				free_cmd_struct(t_cmd_line *cmd);
+void				free_env_list(t_list **env);
 
 /*
 ** check_value.c

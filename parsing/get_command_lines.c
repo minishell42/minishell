@@ -76,23 +76,3 @@ t_cmd_line	*get_command_line(char **line_ptr, t_list *env)
 	*line_ptr = line + index;
 	return (command_line);
 }
-
-void	free_cmd_struct(t_cmd_line *cmd)
-{
-	t_list	*tmp;
-
-	if (cmd->command)
-		free(cmd->command);
-	if (cmd->option)
-		free(cmd->option);
-	if (cmd->param)
-		free(cmd->param);
-	while (cmd->redir_param)
-	{
-		tmp = cmd->redir_param;
-		if (tmp->content)
-			free(tmp->content);
-		cmd->redir_param = cmd->redir_param->next;
-		free(tmp);
-	}
-}
