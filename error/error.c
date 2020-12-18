@@ -47,6 +47,8 @@ void	print_err_msg(void)
 
 bool	parsing_err_value(int error_number, char *error_point)
 {
+	if (!error_point)
+		return (false);
 	g_err.err_number = error_number;
 	g_err.err_value = ft_strdup(error_point);
 	return (false);
