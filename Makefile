@@ -20,7 +20,8 @@ PARSE_SRCS	= check_value.c \
 				parse_param.c \
 				set_env_value.c \
 				set_redirection_value.c \
-				validate_line.c
+				validate_line.c \
+				free_struct.c
 PARSE		= $(addprefix $(PARSE_DIR), $(PARSE_SRCS))
 
 COMMAND_DIR		= command/
@@ -29,8 +30,13 @@ COMMAND_SRCS	= echo.c \
 					run_command.c \
 					cd.c \
 					pwd.c \
-					export.c 
+					export.c \
+					ft_exit.c
 COMMAND			= $(addprefix $(COMMAND_DIR), $(COMMAND_SRCS))
+
+SIGNAL_DIR		= signal/
+SIGNAL_SRCS		= signal_handler.c
+SIGNAL			= $(addprefix $(SIGNAL_DIR), $(SIGNAL_SRCS))
 
 UTILS_DIR	= utils/
 UTILS_SRCS	= string_util.c \
@@ -48,6 +54,7 @@ FILES		+= $(PARSE)
 FILES		+= $(COMMAND)
 FILES		+= $(UTILS)
 FILES		+= $(ERROR)
+FILES		+= $(SIGNAL)
 
 SRC			= main.c
 SRC			+= $(FILES)

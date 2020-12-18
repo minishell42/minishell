@@ -27,6 +27,8 @@ char	*run_command(t_cmd_line *cmd_line, t_list *env)
 		result = pwd(cmd_line, &pipe_input);
 	else if (cmd_line->command_num == EXPORT)
 		result = export(cmd_line, env, pipe_input);
+	else if (cmd_line->command_num == EXIT)
+		result = ft_exit(cmd_line, env, &pipe_input);
 	if (cmd_line->pipe_flag)
 	{
 		free_pipe_input(&pipe_input);

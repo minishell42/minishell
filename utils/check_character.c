@@ -29,3 +29,17 @@ bool		is_delimitor(int c)
 		return (true);
 	return (false);
 }
+
+bool	is_empty_line(char *line)
+{
+	int		i;
+
+	if (!line)
+		return (true);
+	i = 0;
+	while (ft_isspace(line[i]))
+		i++;
+	if (line[i] == '\n' && !line[i + 1] || !line[i])
+		return (true);
+	return (false);
+}
