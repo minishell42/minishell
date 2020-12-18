@@ -12,8 +12,9 @@ int main(int argc, char **argv, char *envp[])
 	test_cd(env);
 	 // test_command_lines(env);
 	// test_redirection(env);
-
 	// test_validate_line();
+
+	test_export(env);
 	ft_lstclear(&env, free);
 
 	return (0);

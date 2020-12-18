@@ -14,6 +14,7 @@
 # define TOO_MANY_REDIR 4
 # define SYNTAX_ERROR 5
 # define PARAM_IS_NEWLINE 6
+# define INVALID_EXPORT_PARAM 7
 
 typedef struct	s_error 
 {
