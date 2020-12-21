@@ -8,7 +8,7 @@ static bool	set_command(t_cmd_line *cmd_line, char *line, int *index, t_list *en
 
 	start = line + *index;
 	if (!check_character_in_line(line, index, ft_isspace))
-		return (-1);
+		return (false);
 	len = (line + *index) - start;
 	if (!line[*index + 1])
 		len++;

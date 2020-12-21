@@ -19,10 +19,6 @@ char	*echo(t_cmd_line *cmd_line, t_list *env, char *pipe_input)
 
 	ret = ft_strdup(cmd_line->param);
 	apply_echo_option(cmd_line, &ret);
-	if (cmd_line->redir_flag == OUT_ENDLINE
-		|| cmd_line->redir_flag == OUT_OVERRIDE
-		|| cmd_line->pipe_flag)
-		return ret;
 	write(1, ret, ft_strlen(ret));
 	free(ret);
 	return (NULL);

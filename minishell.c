@@ -1,17 +1,64 @@
 #include "minishell.h"
 
+static void	set_pipe_flag(t_cmd_line *cmd_line, bool *flag,
+							int *pipe_fd, char *buf)
+{
+	if (*flag)
+	{
+		read(pipe_fd[0], buf, BUFFER_SIZE);
+		*flag = 0;
+	}
+	if (cmd_line->pipe_flag 
+		|| cmd_line->redir_flag == OUT_ENDLINE
+		|| cmd_line->redir_flag == OUT_OVERRIDE)
+	{
+		dup2(pipe_fd[1], 1);
+		*flag = 1;
+	}
+}
+
+static void	run(t_cmd_line *cmd_line, t_list *env, int *pipe_fd)
+{
+	bool	flag;
+	char	*buf;
+	char	*errmsg;
+	int		status;
+	pid_t	pid;
+	
+	buf = ft_calloc(sizeof(char), BUFFER_SIZE);
+	flag = false;
+	pid = fork();
+	if (pid > 0)
+	{
+		waitpid(pid, &status, 0);
+		check_and_set_redir_out(cmd_line, env, buf, pipe_fd);
+	}
+	else if (pid == 0)
+	{
+		set_pipe_flag(cmd_line, &flag, pipe_fd, buf);
+		check_and_set_redir_in(cmd_line, env, buf);
+		run_command(cmd_line, env, buf);
+		free(buf);
+		exit(0);
+	}
+	free(buf);
+}
+
 void	minishell(char *line, t_list *env)
 {
 	t_cmd_line		*command_line;
-	char			*res;
+	pid_t			pid;
+	int				status;
+	int 			pipe_fd[2];
 
+	pipe(pipe_fd);
 	g_err.err_number = 0;
 	g_err.err_value = 0;
-	signal(SIGINT, child_exit);
-	signal(SIGQUIT, child_exit);
+	// signal(SIGINT, child_exit);
+	// signal(SIGQUIT, child_exit);
 	if (!validate_line(line))
 	{
-		printf("errnum = %d\n", g_err.err_number);
+		// printf("errnum = %d\n", g_err.err_number);
 		if (g_err.err_number)
 			print_err_msg();
 		return ;
@@ -25,55 +72,8 @@ void	minishell(char *line, t_list *env)
 				print_err_msg();
 			return ;
 		}
-		// if (are_equal(command_line->command, "a"))
-		// {
-		// 	while (42)
-		// 		printf("err\n");
-		// }
-		res = run_command(command_line, env);
-		redirection(command_line, env, res); // bool type
-		free(res);
+		run(command_line, env, pipe_fd);
 		free_cmd_struct(command_line);
 		free(command_line);
-		// run_redirection(res, command_line, env);
-		// if (g_err.err_number)
-			// print_err_msg();
-		// flag -> pipe 있다는 것이고 -> 다음 command_line 이용해서 --- run 
-		// res = run(command_line, res, env);
-		// execve()
-		// command_line.pipe_flag가 있으면 -> flag on
-		// if (!list)
-		// 	list = ft_lstnew(command_line);
-		// else
-		// 	ft_lstadd_back(&list, ft_lstnew(command_line));
 	}
 }
-
-// t_list	*get_command_lines(char *line, t_list *env)
-// {
-// 	t_list			*list;
-// 	t_cmd_line		*command_line;
-
-// 	list = NULL;
-// 	g_err.err_number = 0;
-// 	g_err.err_value = 0;
-// 	while (line && *line)
-// 	{
-// 		printf("loop\n");
-// 		if (!(command_line = get_command_line(&line, env)))
-// 		{
-// 			if (g_err.err_number)
-// 				print_err_msg();
-// 			break;
-// 		}
-// 		// flag -> pipe 있다는 것이고 -> 다음 command_line 이용해서 --- run 
-// 		// res = run(command_line, res, env);
-// 		// execve()
-// 		// command_line.pipe_flag가 있으면 -> flag on
-// 		if (!list)
-// 			list = ft_lstnew(command_line);
-// 		else
-// 			ft_lstadd_back(&list, ft_lstnew(command_line));
-// 	}
-// 	return (list);
-// }
