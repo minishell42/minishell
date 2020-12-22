@@ -7,8 +7,7 @@
 /*
 ** redirection.c
 */
-void	check_and_set_redir_out(t_cmd_line *cmd_line, t_list *env, char *buf, int *pipe_fd);
-void	check_and_set_redir_in(t_cmd_line *cmd_line, t_list *env, char *buf);
+int			find_file_fd(t_cmd_line *cmd_line, t_list *env);
 /*
 ** cd.c
 */
@@ -18,7 +17,8 @@ void	set_env_target(t_list *env, char *target, char *value);
 /*
 ** echo.c
 */
-char	*echo(t_cmd_line *cmd_line, t_list *env, char *pipe_input);
+// char	*echo(t_cmd_line *cmd_line, t_list *env, char *pipe_input);
+bool	echo(t_cmd_line *cmd_line, t_list *env, char *pipe_input);
 /*
 ** export.c
 */
@@ -26,7 +26,8 @@ char	*export(t_cmd_line *cmd_line, t_list *env, char* pipe_input);
 /*
 ** run_command.c
 */
-char	*run_command(t_cmd_line *cmd_line, t_list *env, char *pipe_input);
+// char	*run_command(t_cmd_line *cmd_line, t_list *env, char *pipe_input);
+bool	run_command(t_cmd_line *cmd_line, t_list *env, char *pipe_input);
 /*
 ** pwd.c
 */

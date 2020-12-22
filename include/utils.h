@@ -7,6 +7,10 @@
 ** string_util.c
 */
 void		remove_quotation(char *value);
+void		free_str_array(char **strs);
+bool		is_contained(char c, char *str);
+
+
 /*
 ** check_character.c
 */
