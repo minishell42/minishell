@@ -40,7 +40,6 @@ static bool	run_binary(t_cmd_line *cmd_line, t_list *env)
 		return (false);
 	envp = convert_to_array_env_list(env);
 	args = make_exec_args(cmd_line);
-	printf("start grep\n");
 	if (execve(file_path, args, envp) == -1)
 		return (false);
 	return (true);

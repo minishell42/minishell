@@ -1,32 +1,27 @@
 #include "minishell.h"
 
-static void	set_pipe_flag(t_cmd_line *cmd_line, t_list *env, bool flag,
-							int *pipe_fd)
+# define READ 0
+# define WRITE 1
+
+int		get_write_fd(t_pipes *pipes)
 {
-	// flag 확인 
-	// flag에 맞는 fd 받아오기
-	// flag에 맞는 fd dup하기
-	// grep 1 < 456 | grep 13 => 1333
+	if (pipes->old[WRITE] == -1)
+		return (pipes->new[WRITE]);
+	return (pipes->old[WRITE]);
+}
 
+int		get_read_fd(t_pipes *pipes)
+{
+	if (pipes->old[READ] == -1)
+		return (pipes->new[READ]);
+	return (pipes->old[READ]);
+}
+
+static void	set_pipe_flag(t_cmd_line *cmd_line, t_list *env, bool flag,
+							t_pipes *pipes)
+{
 	if (flag)
-	{
-		printf("in ? \n");
-		dup2(pipe_fd[0], 0);
-		// 0 ---> pipe_fd[0]
-		// 1 ---> pipe_fd[1]
-		// grep 13 --> 1 --> pipe_fd[1] ---> pipe_fd[0] ---> 0 ---> grep // 무한 
-
-		// 부모 프로세스
-		// pipe()
-		// fork()
-
-		// 자식 프로세스
-		// 부모꺼랑 똑같은 pipe()
-		// dup2()
-		// kill
-
-	}
-	printf("blcok test\n");
+		dup2(get_read_fd(pipes), 0);
 	if (cmd_line->redir_flag)
 	{
 		int file_fd = find_file_fd(cmd_line, env);
@@ -37,12 +32,7 @@ static void	set_pipe_flag(t_cmd_line *cmd_line, t_list *env, bool flag,
 			dup2(file_fd, 0);
 			if (cmd_line->pipe_flag)
 			{
-				dup2(pipe_fd[1], 1);
-				// read(pipe_fd[0], buf, BUFFER_SIZE);
-				// printf("pipe buffer = %s\n", buf);
-				// grep 1 < 456 | grep 13
-				// < 456 == dup2(file_fd, 0) // 0 ---> file_fd
-				// grep 1 --> pipe_fd[1] // 1 ---> pipe_fd[1]
+				dup2(get_write_fd(pipes), 1);
 			}
 		}
 		else
@@ -50,30 +40,33 @@ static void	set_pipe_flag(t_cmd_line *cmd_line, t_list *env, bool flag,
 	}
 	else if (cmd_line->pipe_flag)
 	{
-		dup2(pipe_fd[1], 1);
+		dup2(get_write_fd(pipes), 1);
 
 	}
 }
 
-static void	run(t_cmd_line *cmd_line, t_list *env, int *pipe_fd, bool *pipe_flag)
+static void	run(t_cmd_line *cmd_line, t_list *env, t_pipes *pipes, bool *pipe_flag)
 {
 	char	*buf;
 	char	*errmsg;
 	int		status;
 	pid_t	pid;
 	
-	printf("start run\n");
 	buf = ft_calloc(sizeof(char), BUFFER_SIZE);
 	pid = fork();
 	if (pid > 0)
 	{
 		waitpid(pid, &status, 0);
-		printf("end child\n");
+		if (*pipe_flag)
+		{
+			close(get_read_fd(pipes));
+			pipes->old[READ] = -1;
+		}
 		// out과 pipe가 둘 다 있을 경우 후처리?
 	}
 	else if (pid == 0)
 	{
-		set_pipe_flag(cmd_line, env, *pipe_flag, pipe_fd);
+		set_pipe_flag(cmd_line, env, *pipe_flag, pipes);
 		if (!run_command(cmd_line, env, buf))
 			built_in_error();
 		free(buf);
@@ -83,19 +76,56 @@ static void	run(t_cmd_line *cmd_line, t_list *env, int *pipe_fd, bool *pipe_flag
 		*pipe_flag = true;
 	else
 		*pipe_flag = false;
-	printf("end run\n");
 	free(buf);
 }
+
+
+void	init_pipe(t_pipes *pipes)
+{
+	pipe(pipes->old);
+	pipe(pipes->new);
+}
+
+void	close_write_fd(t_pipes *pipes)
+{
+	if (pipes->old[WRITE] != -1)
+	{
+		close(pipes->old[WRITE]);
+		pipes->old[WRITE] = -1;
+	}
+	else
+	{
+		close(pipes->new[WRITE]);
+		pipes->new[WRITE] = -1;
+	}
+}
+
+void	swap_pipe(t_pipes *pipes)
+{
+	if (pipes->old[READ] == -1 && pipes->old[WRITE] == -1)
+	{
+		pipes->old[READ] = pipes->new[READ];
+		pipes->old[WRITE] = pipes->new[WRITE];
+		pipe(pipes->new);
+	}
+}
+
+
+// void	printf_pipes(t_pipes *pipes)
+// {
+// 	printf("old read = %d\n old write = %d\n new read = %d\n new write = %d\n",
+// 			pipes->old[READ], pipes->old[WRITE], pipes->new[READ], pipes->new[WRITE]);
+// }
 
 void	minishell(char *line, t_list *env)
 {
 	t_cmd_line		*command_line;
 	pid_t			pid;
 	int				status;
-	int 			pipe_fd[2];
 	bool			pipe_flag;
+	t_pipes 		pipes;
 
-	pipe(pipe_fd);
+	init_pipe(&pipes);
 	g_err.err_number = 0;
 	g_err.err_value = 0;
 	pipe_flag = false;
@@ -116,8 +146,9 @@ void	minishell(char *line, t_list *env)
 				print_err_msg();
 			return ;
 		}
-		run(command_line, env, pipe_fd, &pipe_flag);
-		close(pipe_fd[1]);
+		run(command_line, env, &pipes, &pipe_flag);
+		close_write_fd(&pipes);
+		swap_pipe(&pipes);
 		free_cmd_struct(command_line);
 		free(command_line);
 	}
