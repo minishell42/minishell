@@ -51,6 +51,36 @@ static int	set_command_line(t_cmd_line *cmd_line, char *line, t_list *env)
 	return (index);
 }
 
+// =====================  before  =========================
+// t_cmd_line	*get_command_line(char **line_ptr, t_list *env)
+// {	
+// 	t_cmd_line		*command_line;
+// 	int				index;
+// 	char			*line;
+
+// 	index = 0;
+// 	while (ft_isspace((*line_ptr)[index]) && (*line_ptr)[index])
+// 		index++;
+// 	line = *line_ptr + index;
+// 	if (!(command_line = ft_calloc(sizeof(t_cmd_line), 1)))
+// 	{
+// 		g_err.err_number = ALLOC_ERROR;
+// 		return (NULL);
+// 	}
+// 	index = set_command_line(command_line, line, env);
+// 	if (index < 0 || !check_redirection(command_line) || !change_param_value(command_line, env))
+// 	{
+// 		free_cmd_struct(command_line);
+// 		free(command_line);
+// 		return (NULL);
+// 	}
+// 	*line_ptr = line + index;
+// 	return (command_line);
+// }
+
+// =====================  after  =========================
+// delete check_redirection and change_param_value
+// add set_redirection_param
 t_cmd_line	*get_command_line(char **line_ptr, t_list *env)
 {	
 	t_cmd_line		*command_line;
@@ -67,12 +97,13 @@ t_cmd_line	*get_command_line(char **line_ptr, t_list *env)
 		return (NULL);
 	}
 	index = set_command_line(command_line, line, env);
-	if (index < 0 || !check_redirection(command_line) || !change_param_value(command_line, env))
+	if (index < 0 || !set_redirection_param(command_line, env))
 	{
 		free_cmd_struct(command_line);
 		free(command_line);
 		return (NULL);
 	}
+	printf("end?\n");
 	*line_ptr = line + index;
 	return (command_line);
 }
