@@ -1,4 +1,4 @@
-#include "test.h"
+#include "command.h"
 
 char	**get_path_arr(t_list *env)
 {
@@ -83,29 +83,3 @@ char	*search_file(char *file_name, t_list *env)
 	free_str_array(path_arr);
 	return (NULL);
 }
-
-int main(int argc, char **argv, char *envp[])
-{
-	t_list *env;
-
-	if (argc != 1)
-		return (0);
-	argv[1] = 0;
-	env = get_env_llist(envp);
-	// test_get_command_line(env);
-	// test_cd(env);
-	//  test_command_lines(env);
-	// test_redirection(env);
-	// test_validate_line();
-
-	// test_export(env);
-
-	char	*res;
-	res = search_file("echo", env);
-	printf("full path = %s\n", res);
-	free(res);
-	ft_lstclear(&env, free);
-
-	return (0);
-}
-

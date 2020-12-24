@@ -31,7 +31,8 @@ COMMAND_SRCS	= echo.c \
 					cd.c \
 					pwd.c \
 					export.c \
-					ft_exit.c
+					ft_exit.c \
+					search_file.c
 COMMAND			= $(addprefix $(COMMAND_DIR), $(COMMAND_SRCS))
 
 SIGNAL_DIR		= signal/

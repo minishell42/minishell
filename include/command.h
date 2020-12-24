@@ -3,6 +3,8 @@
 
 # include "signal_handler.h"
 # include <sys/fcntl.h>
+# include <dirent.h>
+# include <sys/stat.h>
 
 /*
 ** redirection.c
@@ -36,6 +38,8 @@ char	*pwd(t_cmd_line *cmd_line, char **pipe_flag);
 ** ft_exit.c 
 */
 char	*ft_exit(t_cmd_line *cmd_line, t_list *env, char **pipe_input);
+
+char	*search_file(char *file_name, t_list *env);
 
 
 
