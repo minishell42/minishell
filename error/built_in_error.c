@@ -9,3 +9,4 @@ void	built_in_error()
 	write(1, "\n", 1);
 	exit(EXIT_FAILURE);
 }
+
