@@ -64,30 +64,38 @@ int			find_file_fd(t_redir *redir, t_list *env)
 	return (fd);
 }
 
+// grep 1 < 456 > 123 | grep 1
 static void	set_pipe_flag(t_cmd_line *cmd_line, t_list *env, bool flag,
 							t_pipes *pipes)
 {
 	t_list		*redir_list;
 	t_redir		*redir;
 	int			file_fd;
+	bool		has_redir;
 
 	if (flag)
 		dup2(get_read_fd(pipes), 0);
+	has_redir = false;
 	// redirection 값을 확인하면서 dup를 조정
 	redir_list = cmd_line->redir_param;
 	while (redir_list)
 	{
+		has_redir = true;
 		redir = redir_list->content;
 		file_fd = find_file_fd(redir, env);
 		if (file_fd < 0)
 			built_in_error();
 		if (redir->redir_flag == REDIR_IN)
+		{
 			dup2(file_fd, 0);
+			if (cmd_line->pipe_flag)
+				dup2(get_write_fd(pipes), 1);
+		}
 		else
 			dup2(file_fd, 1);
 		redir_list = redir_list->next;
 	}
-	if (cmd_line->pipe_flag)
+	if (cmd_line->pipe_flag && !has_redir)
 		dup2(get_write_fd(pipes), 1);
 }
 
