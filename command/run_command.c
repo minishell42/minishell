@@ -35,14 +35,6 @@ static bool	run_binary(t_cmd_line *cmd_line, t_list *env)
 	char	**envp;
 	char	**args;
 
-	// readdir로 커맨드명 체크
-	// root = "/bin/";
-	// if(!(file_path = ft_strjoin(root, cmd_line->command)))
-	// 	return (false);
-
-	if(!(file_path = search_file(cmd_line->command, env)))
-		return (false);
-
 	envp = convert_to_array_env_list(env);
 	args = make_exec_args(cmd_line);
 	if (execve(file_path, args, envp) == -1)
@@ -52,15 +44,8 @@ static bool	run_binary(t_cmd_line *cmd_line, t_list *env)
 
 bool		run_command(t_cmd_line *cmd_line, t_list *env, char *pipe_input)
 {
-	char		*result;
+	char		*file_path;
 
-	// result = NULL;
-	// if (!check_cmd_num(cmd_line))
-	// {
-	// 	print_err_msg();
-	// 	// free_pipe_input(&pipe_input);
-	// 	return (NULL);
-	// }
 	if (cmd_line->command_num == ECHO)
 		return (echo(cmd_line, env, pipe_input));
 	// else if (cmd_line->command_num == CD)
@@ -71,7 +56,9 @@ bool		run_command(t_cmd_line *cmd_line, t_list *env, char *pipe_input)
 	// 	export(cmd_line, env, pipe_input);
 	// else if (cmd_line->command_num == EXIT)
 	// 	ft_exit(cmd_line, env, &pipe_input);
-	else
+	if((file_path = search_file(cmd_line->command, env)))
 		return (run_binary(cmd_line, env));
+	else if (!check_cmd_num(cmd_line))
+		return (false);
 	return (true);
 }

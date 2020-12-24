@@ -40,22 +40,18 @@ char	*get_file(char *path, DIR *dir_ptr, char *file_name)
 			}
 			free(full_file_name);
 			close(fd);
+			return (NULL);
 		}
 	}
 	return (NULL);
 }
-
 
 void free_dir_and_path(DIR *dir, char *path)
 {
 	free(path);
 	closedir(dir);
 }
-	// 환경변수중에 PATH를 찾는다.
-	// PATH를 구분자로 쪼갠다 (:)
-	// 쪼갠 path의 디렉터리에 파일네임이 존재하는지 확인한다.
-	// readdir, stat
-	// 존재한다면 path + filename을 리턴.
+
 char	*search_file(char *file_name, t_list *env)
 {
 	char			**path_arr;
