@@ -7,7 +7,7 @@
 /*
 ** redirection.c
 */
-int			find_file_fd(t_cmd_line *cmd_line, t_list *env);
+// int			find_file_fd(t_cmd_line *cmd_line, t_list *env);
 /*
 ** cd.c
 */
