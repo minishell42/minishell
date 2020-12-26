@@ -42,20 +42,41 @@ static bool	run_binary(t_cmd_line *cmd_line, t_list *env)
 	return (true);
 }
 
-bool		run_command(t_cmd_line *cmd_line, t_list *env, char *pipe_input)
+// bool		run_command(t_cmd_line *cmd_line, t_list *env, char *pipe_input)
+// {
+// 	char		*file_path;
+
+// 	if (cmd_line->command_num == ECHO)
+// 		return (echo(cmd_line, env, pipe_input));
+// 	// else if (cmd_line->command_num == CD)
+// 	// 	cd(cmd_line, env, pipe_input);
+// 	// else if (cmd_line->command_num == PWD)
+// 	// 	pwd(cmd_line, &pipe_input);
+// 	// else if (cmd_line->command_num == EXPORT)
+// 	// 	export(cmd_line, env, pipe_input);
+// 	// else if (cmd_line->command_num == EXIT)
+// 	// 	ft_exit(cmd_line, env, &pipe_input);
+// 	if((file_path = search_file(cmd_line->command, env)))
+// 		return (run_binary(cmd_line, env));
+// 	else if (!check_cmd_num(cmd_line))
+// 		return (false);
+// 	return (true);
+// }
+
+bool		run_command(t_cmd_line *cmd_line, t_list *env)
 {
 	char		*file_path;
 
 	if (cmd_line->command_num == ECHO)
-		return (echo(cmd_line, env, pipe_input));
+		return (echo(cmd_line, env));
 	// else if (cmd_line->command_num == CD)
-	// 	cd(cmd_line, env, pipe_input);
+	// 	cd(cmd_line, env);
 	// else if (cmd_line->command_num == PWD)
-	// 	pwd(cmd_line, &pipe_input);
+	// 	pwd(cmd_line);
 	// else if (cmd_line->command_num == EXPORT)
-	// 	export(cmd_line, env, pipe_input);
+	// 	export(cmd_line, env);
 	// else if (cmd_line->command_num == EXIT)
-	// 	ft_exit(cmd_line, env, &pipe_input);
+	// 	ft_exit(cmd_line, env);
 	if((file_path = search_file(cmd_line->command, env)))
 		return (run_binary(cmd_line, env));
 	else if (!check_cmd_num(cmd_line))
