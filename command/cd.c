@@ -132,6 +132,7 @@ static bool	set_chdir(t_cmd_line *cmd_line, char *dir)
 
 	if (chdir(dir) < 0)
 	{
+		make_err_msg(NO_FILE_OR_DIRECTORY, "bash", "cd", "No such file or directory\n");
 		free(dir);
 		return (false);
 	}
