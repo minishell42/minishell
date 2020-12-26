@@ -25,35 +25,14 @@ bool			check_character_in_line(char *line,
 	return (true);
 }
 
-bool			check_redirection(t_cmd_line *cmd_line)
-{
-	char	*param;
-	int		i;
-	char	flag;
-	
-	flag = 0;
-	i = 0;
-	param = cmd_line->param;
-	if (!check_character_in_line(param, &i, is_redirection))
-		return (false);
-	set_redirection_flag(cmd_line, &i);
-	if (!check_character_in_line(param, &i, is_redirection))
-		return (false);
-	if (param[i] != '\0')
-	{ 
-		g_err.err_number = TOO_MANY_REDIR;
-		cmd_line->redir_flag = 0;
-		return (false);
-	}
-	return (true);
-}
-
 bool			check_cmd_num(t_cmd_line *cmd_line)
 {
+	t_list	*redir;
+
+	redir = cmd_line->redir_param;
 	if (!cmd_line->command_num)
 	{
-		if ((!cmd_line->redir_flag)
-			|| (*cmd_line->command && cmd_line->redir_flag))
+		if (!redir || *cmd_line->command)
 		{
 			parsing_err_value(INVALID_COMMAND, cmd_line->command);
 			return (false);

@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "include/minishell.h"
 
 int			main(int argc, char **argv, char *envp[])
 {
@@ -7,20 +7,20 @@ int			main(int argc, char **argv, char *envp[])
 	t_list		*env;
 
 	env = get_env_llist(envp);
+	set_signal();
 	while (true)
 	{
-		write(1, "minishell$ ", 12);
-		get_next_line(0, &line);
+		prompt();
+		if (!get_next_line(0, &line))
+			process_exit(1);
+		else if (is_empty_line(line))
+		{
+			free(line);
+			continue ;
+		}
 		minishell(line, env);
-		// command_lines = get_command_lines(line, env);
-
-		// if (!run_command(command_lines, env))
-		// {
-		// 	ft_free(env);
-		// 	ft_free(command_lines);
-		// 	return (0);
-		// }
 		free(line);
 	}
+	free_env_list(&env);
 	return (0);
 }

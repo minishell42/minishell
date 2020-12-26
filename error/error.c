@@ -8,7 +8,7 @@ void	message_and_exit(char *message, bool built_in_error)
 	if (built_in_error)
 		perror(error_msg);
 	else
-		write(1, error_msg, strlen(error_msg));
+		write(2, error_msg, strlen(error_msg));
 	exit(1);
 }
 
@@ -31,11 +31,13 @@ void	print_err_msg(void)
 		err_msg = " syntax error near unexpected token\n";
 	else if (err_number == PARAM_IS_NEWLINE)
 		err_msg = " syntax error near unexpected token `newline'\n";
+	else if (err_number == INVALID_EXPORT_PARAM)
+		err_msg = " is invalid export param\n";
 	else
 		err_msg = NULL;
 	if (!(msg = ft_strjoin(g_err.err_value, err_msg)))
 		msg = err_msg;
-	write(1, msg, ft_strlen(msg));
+	write(2, msg, ft_strlen(msg));
 	if (g_err.err_value)
 	{
 		free(g_err.err_value);
@@ -47,6 +49,8 @@ void	print_err_msg(void)
 
 bool	parsing_err_value(int error_number, char *error_point)
 {
+	if (!error_point)
+		return (false);
 	g_err.err_number = error_number;
 	g_err.err_value = ft_strdup(error_point);
 	return (false);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.h                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sangpark <sangpark@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: park <park@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2020/05/09 19:19:10 by sangpark          #+#    #+#             */
-/*   Updated: 2020/05/09 19:25:53 by sangpark         ###   ########.fr       */
+/*   Updated: 2020/12/21 16:52:32 by park             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # define READ_LINE 1
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 32
+#  define BUFFER_SIZE 1024
 # endif
 
 int		get_next_line(int fd, char **line);

@@ -5,6 +5,8 @@
 # include <stdio.h>
 # include <stdbool.h>
 # include <sys/wait.h>
+# include <errno.h>
+
 
 # include "libft.h"
 
@@ -14,6 +16,7 @@
 # define TOO_MANY_REDIR 4
 # define SYNTAX_ERROR 5
 # define PARAM_IS_NEWLINE 6
+# define INVALID_EXPORT_PARAM 7
 
 typedef struct	s_error 
 {
@@ -23,11 +26,20 @@ typedef struct	s_error
 
 t_error			g_err;
 
+/*
+** error.c
+*/
 void			message_and_exit(char *message, bool built_in_error);
 void			print_err_msg(void);
 bool			parsing_err_value(int error_number, char *error_point);
 void			set_quot_err(char quot_flag);
 int				set_syntax_err(char *line, int i);
+
+/*
+** built_in_error.c
+*/
+void			built_in_error(void);
+
 
 
 # endif
