@@ -162,26 +162,9 @@ void	minishell(char *line, t_list *env)
 			built_in_error();
 			return ;
 		}
-<<<<<<< HEAD
-		// cmd_line = echo 123 > 123
-		// if pipe flag on -> 2 fork -> parent ->wait
-		// 2 fork child -> check redirection
-		if (are_equal(command_line->command, "a"))
-		{
-			while (42)
-				printf("err\n");
-		}
-		// if redirection 3 fork ex) echo 123 > 123; 3 fork parent -> run command
-		// 3 fork child -> redirection
-		// pipe 3 fork parent child combine
-		res = run_command(command_line, env);
-		redirection(command_line, env, res); // bool type
-		free(res);
-=======
 		run(command_line, env, &pipes, &pipe_flag);
 		close_write_fd(&pipes);
 		swap_pipe(&pipes);
->>>>>>> fix_redirection_function
 		free_cmd_struct(command_line);
 		free(command_line);
 	}
