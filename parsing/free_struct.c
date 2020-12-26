@@ -12,28 +12,6 @@ void	free_env_list(t_list **env)
 	}
 }
 
-// ------------------------ before ------------------------------------
-// void	free_cmd_struct(t_cmd_line *cmd)
-// {
-// 	t_list	*tmp;
-
-// 	if (cmd->command)
-// 		free(cmd->command);
-// 	if (cmd->option)
-// 		free(cmd->option);
-// 	if (cmd->param)
-// 		free(cmd->param);
-// 	while (cmd->redir_param)
-// 	{
-// 		tmp = cmd->redir_param;
-// 		if (tmp->content)
-// 			free(tmp->content);
-// 		cmd->redir_param = cmd->redir_param->next;
-// 		free(tmp);
-// 	}
-// }
-// ------------------------ after ------------------------------------
-// add free_redir_struct
 void	free_redir_struct(t_redir *redir)
 {
 	if (redir->redir_flag)
@@ -54,11 +32,9 @@ void	free_cmd_struct(t_cmd_line *cmd)
 		free(cmd->option);
 	if (cmd->param)
 		free(cmd->param);
-	printf("free\n");
 	tmp2 = cmd->redir_param;
 	while (tmp2)
 	{
-		printf("while in\n");
 		r = tmp2->content;
 		if (r)
 		{

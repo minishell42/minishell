@@ -17,54 +17,6 @@ int		get_read_fd(t_pipes *pipes)
 	return (pipes->old[READ]);
 }
 
-// =====================  before  =========================
-// static void	set_pipe_flag(t_cmd_line *cmd_line, t_list *env, bool flag,
-// 							t_pipes *pipes)
-// {
-// 	if (flag)
-// 		dup2(get_read_fd(pipes), 0);
-// 	if (cmd_line->redir_flag)
-// 	{
-// 		int file_fd = find_file_fd(cmd_line, env);
-// 		if (file_fd < 0)
-// 			built_in_error();
-// 		if (cmd_line->redir_flag == REDIR_IN)
-// 		{
-// 			dup2(file_fd, 0);
-// 			if (cmd_line->pipe_flag)
-// 			{
-// 				dup2(get_write_fd(pipes), 1);
-// 			}
-// 		}
-// 		else
-// 			dup2(file_fd, 1);
-// 	}
-// 	else if (cmd_line->pipe_flag)
-// 	{
-// 		dup2(get_write_fd(pipes), 1);
-
-// 	}
-// }
-// =====================  after  =========================
-// change function for redirection
-int			find_file_fd(t_redir *redir, t_list *env)
-{
-	char	*file_name;
-	int		fd;
-
-	file_name = change_to_absolute_path(redir->redir_param, env);
-	if (!file_name)
-		file_name = redir->redir_param;
-	if (redir->redir_flag == OUT_ENDLINE)
-		fd = open(file_name, O_WRONLY | O_CREAT | O_APPEND, 0644);
-	else if (redir->redir_flag == OUT_OVERRIDE)
-		fd = open(file_name, O_WRONLY | O_CREAT | O_TRUNC , 0644);
-	else if (redir->redir_flag == REDIR_IN)
-		fd = open(file_name, O_RDONLY);
-	return (fd);
-}
-
-// grep 1 < 456 > 123 | grep 1
 static void	set_pipe_flag(t_cmd_line *cmd_line, t_list *env, bool flag,
 							t_pipes *pipes)
 {
@@ -76,7 +28,6 @@ static void	set_pipe_flag(t_cmd_line *cmd_line, t_list *env, bool flag,
 	if (flag)
 		dup2(get_read_fd(pipes), 0);
 	has_redir = false;
-	// redirection 값을 확인하면서 dup를 조정
 	redir_list = cmd_line->redir_param;
 	while (redir_list)
 	{
@@ -171,46 +122,6 @@ void	swap_pipe(t_pipes *pipes)
 // 			pipes->old[READ], pipes->old[WRITE], pipes->new[READ], pipes->new[WRITE]);
 // }
 
-// =====================  before  =========================
-// void	minishell(char *line, t_list *env)
-// {
-// 	t_cmd_line		*command_line;
-// 	pid_t			pid;
-// 	int				status;
-// 	bool			pipe_flag;
-// 	t_pipes 		pipes;
-
-// 	init_pipe(&pipes);
-// 	g_err.err_number = 0;
-// 	g_err.err_value = 0;
-// 	pipe_flag = false;
-// 	// signal(SIGINT, child_exit);
-// 	// signal(SIGQUIT, child_exit);
-// 	if (!validate_line(line))
-// 	{
-// 		if (g_err.err_number)
-// 			print_err_msg();
-// 		return ;
-// 	}
-// 	while (line && *line)
-// 	{
-// 		if (!(command_line = get_command_line(&line, env)))
-// 		{
-// 			// 따옴표 에러
-// 			if (g_err.err_number)
-// 				print_err_msg();
-// 			return ;
-// 		}
-// 		run(command_line, env, &pipes, &pipe_flag);
-// 		close_write_fd(&pipes);
-// 		swap_pipe(&pipes);
-// 		free_cmd_struct(command_line);
-// 		free(command_line);
-// 	}
-// }
-
-// =====================  after  =========================
-// change 에러 처리 print_err_msg -> built_in_error()
 void	minishell(char *line, t_list *env)
 {
 	t_cmd_line		*command_line;
