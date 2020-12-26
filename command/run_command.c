@@ -50,8 +50,8 @@ bool		run_command(t_cmd_line *cmd_line, t_list *env, char *pipe_input)
 		return (echo(cmd_line, env, pipe_input));
 	// else if (cmd_line->command_num == CD)
 	// 	cd(cmd_line, env, pipe_input);
-	// else if (cmd_line->command_num == PWD)
-	// 	pwd(cmd_line, &pipe_input);
+	else if (cmd_line->command_num == PWD)
+		return (pwd(cmd_line, &pipe_input));
 	// else if (cmd_line->command_num == EXPORT)
 	// 	export(cmd_line, env, pipe_input);
 	// else if (cmd_line->command_num == EXIT)
