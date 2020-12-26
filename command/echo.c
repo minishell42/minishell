@@ -13,7 +13,7 @@ void	apply_echo_option(t_cmd_line *cmd_line, char **ret)
 }
 
 // pipe, redir flag가 있는 경우 리턴해줘야 한다.
-bool	echo(t_cmd_line *cmd_line, t_list *env, char *pipe_input)
+bool	echo(t_cmd_line *cmd_line, t_list *env)
 {
 	char *ret;
 
