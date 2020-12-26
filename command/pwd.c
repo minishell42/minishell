@@ -1,6 +1,6 @@
 #include "command.h"
 
-bool	pwd(t_cmd_line *cmd_line, char **pipe_flag)
+bool	pwd(t_cmd_line *cmd_line)
 {
 	char	*dir;
 	char	*tmp;

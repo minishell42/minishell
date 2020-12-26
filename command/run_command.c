@@ -69,15 +69,15 @@ bool		run_command(t_cmd_line *cmd_line, t_list *env)
 
 	if (cmd_line->command_num == ECHO)
 		return (echo(cmd_line, env));
-	// else if (cmd_line->command_num == CD)
-	// 	cd(cmd_line, env);
 	else if (cmd_line->command_num == PWD)
 		pwd(cmd_line);
+	// else if (cmd_line->command_num == CD)
+	// 	cd(cmd_line, env);
 	// else if (cmd_line->command_num == EXPORT)
 	// 	export(cmd_line, env);
 	// else if (cmd_line->command_num == EXIT)
 	// 	ft_exit(cmd_line, env);
-	if((file_path = search_file(cmd_line->command, env)))
+	else if((file_path = search_file(cmd_line->command, env)))
 		return (run_binary(cmd_line, env));
 	else if (!check_cmd_num(cmd_line))
 		return (false);

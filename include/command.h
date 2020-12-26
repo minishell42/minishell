@@ -31,7 +31,7 @@ bool	run_command(t_cmd_line *cmd_line, t_list *env);
 /*
 ** pwd.c
 */
-char	*pwd(t_cmd_line *cmd_line);
+bool	pwd(t_cmd_line *cmd_line);
 /*
 ** ft_exit.c 
 */
