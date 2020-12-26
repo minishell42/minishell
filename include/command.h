@@ -13,7 +13,7 @@ int			find_file_fd(t_redir *redir, t_list *env);
 /*
 ** cd.c
 */
-char	*cd(t_cmd_line *cmd_line, t_list *env);
+bool	cd(t_cmd_line *cmd_line, t_list *env);
 t_list	*find_env_target_list(t_list *env, char *target);
 void	set_env_target(t_list *env, char *target, char *value);
 /*
