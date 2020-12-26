@@ -6,5 +6,5 @@ char	*ft_exit(t_cmd_line *cmd_line, t_list *env, char **pipe_input)
 	free(*pipe_input);
 	free_env_list(&env);
 	free(cmd_line);
-	process_exit(0);
+	process_exit(EXIT);
 }

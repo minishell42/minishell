@@ -8,7 +8,7 @@ void	message_and_exit(char *message, bool built_in_error)
 	if (built_in_error)
 		perror(error_msg);
 	else
-		write(1, error_msg, strlen(error_msg));
+		write(2, error_msg, strlen(error_msg));
 	exit(1);
 }
 
@@ -37,7 +37,7 @@ void	print_err_msg(void)
 		err_msg = NULL;
 	if (!(msg = ft_strjoin(g_err.err_value, err_msg)))
 		msg = err_msg;
-	write(1, msg, ft_strlen(msg));
+	write(2, msg, ft_strlen(msg));
 	if (g_err.err_value)
 	{
 		free(g_err.err_value);

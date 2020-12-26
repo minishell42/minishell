@@ -3,18 +3,43 @@
 
 # include "signal_handler.h"
 # include <sys/fcntl.h>
+# include <dirent.h>
+# include <sys/stat.h>
 
-bool	redirection(t_cmd_line *cmd_line, t_list *env, char *res);
-char	*echo(t_cmd_line *cmd_line, t_list *env, char *pipe_input);
-char	*run_command(t_cmd_line *cmd_line, t_list *env);
-char	*export(t_cmd_line *cmd_line, t_list *env, char* pipe_input);
-t_list	*find_env_target_list(t_list *env, char *target);
-
+/*
+** redirection.c
+*/
+int			find_file_fd(t_redir *redir, t_list *env);
+/*
+** cd.c
+*/
 char	*cd(t_cmd_line *cmd_line, t_list *env, char *pipe_flag);
+t_list	*find_env_target_list(t_list *env, char *target);
 void	set_env_target(t_list *env, char *target, char *value);
+/*
+** echo.c
+*/
+bool	echo(t_cmd_line *cmd_line, t_list *env, char *pipe_input);
+/*
+** export.c
+*/
+char	*export(t_cmd_line *cmd_line, t_list *env, char* pipe_input);
+/*
+** run_command.c
+*/
+bool	run_command(t_cmd_line *cmd_line, t_list *env, char *pipe_input);
+/*
+** pwd.c
+*/
 char	*pwd(t_cmd_line *cmd_line, char **pipe_flag);
-
-
+/*
+** ft_exit.c 
+*/
 char	*ft_exit(t_cmd_line *cmd_line, t_list *env, char **pipe_input);
+
+char	*search_file(char *file_name, t_list *env);
+
+
+
 
 #endif

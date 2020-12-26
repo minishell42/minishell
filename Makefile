@@ -31,7 +31,8 @@ COMMAND_SRCS	= echo.c \
 					cd.c \
 					pwd.c \
 					export.c \
-					ft_exit.c
+					ft_exit.c \
+					search_file.c
 COMMAND			= $(addprefix $(COMMAND_DIR), $(COMMAND_SRCS))
 
 SIGNAL_DIR		= signal/
@@ -40,15 +41,16 @@ SIGNAL			= $(addprefix $(SIGNAL_DIR), $(SIGNAL_SRCS))
 
 UTILS_DIR	= utils/
 UTILS_SRCS	= string_util.c \
-				check_character.c
+				check_character.c \
+				env_llist.c 
 UTILS		= $(addprefix $(UTILS_DIR), $(UTILS_SRCS))
 
 ERROR_DIR	= error/
-ERROR_SRCS	= error.c
+ERROR_SRCS	= error.c \
+				built_in_error.c
 ERROR		= $(addprefix $(ERROR_DIR), $(ERROR_SRCS))
 
-FILES		= env_llist.c \
-				minishell.c
+FILES		= minishell.c
 FILES		+= $(GNL)
 FILES		+= $(PARSE)
 FILES		+= $(COMMAND)
@@ -66,8 +68,8 @@ TEST		= test
 TEST_DIR	= test_case/
 TEST_FILES	= test.c \
 				test_get_command_line.c \
+				test_get_command_lines.c \
 				test_validate_line.c \
-				test_redirection.c \
 				test_export.c 
 				
 TEST_SRC 	= $(addprefix $(TEST_DIR), $(TEST_FILES))

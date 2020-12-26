@@ -17,6 +17,26 @@
 # define REDIR_IN 2
 # define OUT_ENDLINE 3
 
+// =====================  before  =========================
+// typedef struct		s_command_line
+// {
+// 	char			*command;
+// 	char			*option;
+// 	char			*param;
+// 	int				command_num;
+// 	bool			pipe_flag;
+// 	int				redir_flag;
+// 	t_list			*redir_param;
+// }					t_cmd_line;
+
+// =====================  after  =========================
+// add s_redir
+typedef struct		s_redir
+{
+	int				redir_flag;
+	char			*redir_param;
+}					t_redir;
+
 typedef struct		s_command_line
 {
 	char			*command;
@@ -24,7 +44,6 @@ typedef struct		s_command_line
 	char			*param;
 	int				command_num;
 	bool			pipe_flag;
-	int				redir_flag;
 	t_list			*redir_param;
 }					t_cmd_line;
 
