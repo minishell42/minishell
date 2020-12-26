@@ -1,11 +1,4 @@
 #include "command.h"
-#include <sys/fcntl.h>
-
-#define WRONG_DIRECTORY 7
-#define TOO_MANY_REDIR_PARAM 8
-#define NO_OLDPWD 9
-#define NO_HOME 10
-#define NOT_OPEN 11
 
 // //pipe flag가 있으면 실행 안되고 현 위치를 나타내야 한다. ; 콜론으로 구분된 것들만 동작
 // // ex> cd .. | cd.. ; cd .. == cd ..
@@ -62,31 +55,9 @@ void	set_env_target(t_list *env, char *target, char *value)
 		tmp = target_env->content;
 		target_tmp = ft_strjoin(target, "=");
 		target_env->content = ft_strjoin(target_tmp, value);
-		// printf("target_env ? '%s'\n", (char*)target_env->content);
 		free(target_tmp);
 		free(tmp);
 	}
-}
-
-static void	make_err_msg(char *cmd, char *value, char *msg)
-{
-	char	*tmp;
-	char	*str;
-	char	*cmd_tmp;
-	char	*val_tmp;
-	char	*result;
-
-	tmp = ft_strdup(msg);
-	cmd_tmp = ft_strjoin(cmd, ": ");
-	val_tmp = ft_strjoin(value, ": ");
-	str = ft_strjoin(cmd_tmp, val_tmp);
-	result = ft_strjoin(str, tmp);
-	free(tmp);
-	free(cmd_tmp);
-	free(val_tmp);
-	free(str);
-	parsing_err_value(TOO_MANY_REDIR_PARAM, result);
-	free(result);
 }
 
 static char	*set_home_dir(t_cmd_line *cmd_line, t_list *env)
@@ -96,10 +67,9 @@ static char	*set_home_dir(t_cmd_line *cmd_line, t_list *env)
 	char	*tmp;
 
 	home = get_env_value("HOME", env);
-	// printf("home dir ? '%s'\n", home);
 	if (*home == '\0')
 	{
-		parsing_err_value(NO_HOME, "HOME");
+		make_err_msg(NO_HOME, "bash", "cd", "HOME not set\n");
 		free(home);
 		return (NULL);
 	}
@@ -125,7 +95,7 @@ static char	*set_dir_param(t_cmd_line *cmd_line)
 	check_character_in_line(dir, &index, ft_isspace);
 	if (dir[index])
 	{
-		make_err_msg("bash", "cd", "인수가 너무 많습니다.\n");
+		make_err_msg(TOO_MANY_REDIR_PARAM, "bash", "cd", "too many arguments\n");
 		free(dir);
 		return (NULL);
 	}
@@ -142,10 +112,9 @@ static char	*set_dir(t_cmd_line *cmd_line, t_list *env)
 	if (cmd_line->param[0] == '-' && ft_strlen(cmd_line->param) == 1)
 	{
 		dir = get_env_value("OLDPWD", env);
-		// printf("dir ? %s\n", dir);
 		if (*dir == '\0')
 		{
-			parsing_err_value(NO_OLDPWD, "OLDPWD\n");
+			make_err_msg(NO_OLDPWD, "bash", "cd", "OLDPWD not set\n");
 			free(dir);
 			return (NULL);
 		}
@@ -199,13 +168,5 @@ bool	cd(t_cmd_line *cmd_line, t_list *env)
 	set_env_target(env, "PWD", pwd);
 	free(pwd);
 	free(dir);
-
-	// if (!(pwd = getcwd(NULL, 0)))
-	// {
-	// 	free(dir);
-	// 	return (false);
-	// }
-	// printf("pwd ? %s\n", pwd);
-	// free(pwd);
 	return (true);	
 }
