@@ -52,12 +52,12 @@ static void	set_pipe_flag(t_cmd_line *cmd_line, t_list *env, bool flag,
 
 static void	run(t_cmd_line *cmd_line, t_list *env, t_pipes *pipes, bool *pipe_flag)
 {
-	char	*buf;
+	// char	*buf;
 	char	*errmsg;
 	int		status;
 	pid_t	pid;
 	
-	buf = ft_calloc(sizeof(char), BUFFER_SIZE);
+	// buf = ft_calloc(sizeof(char), BUFFER_SIZE);
 	pid = fork();
 	if (pid > 0)
 	{
@@ -72,16 +72,18 @@ static void	run(t_cmd_line *cmd_line, t_list *env, t_pipes *pipes, bool *pipe_fl
 	else if (pid == 0)
 	{
 		set_pipe_flag(cmd_line, env, *pipe_flag, pipes);
-		if (!run_command(cmd_line, env, buf))
+		if (!run_command(cmd_line, env))
 			built_in_error();
-		free(buf);
+		// if (!run_command(cmd_line, env, buf))
+		// 	built_in_error();
+		// free(buf);
 		exit(0);
 	}
 	if (cmd_line->pipe_flag)
 		*pipe_flag = true;
 	else
 		*pipe_flag = false;
-	free(buf);
+	// free(buf);
 }
 
 
@@ -114,13 +116,6 @@ void	swap_pipe(t_pipes *pipes)
 		pipe(pipes->new);
 	}
 }
-
-
-// void	printf_pipes(t_pipes *pipes)
-// {
-// 	printf("old read = %d\n old write = %d\n new read = %d\n new write = %d\n",
-// 			pipes->old[READ], pipes->old[WRITE], pipes->new[READ], pipes->new[WRITE]);
-// }
 
 void	minishell(char *line, t_list *env)
 {
