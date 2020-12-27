@@ -18,6 +18,12 @@
 # define PARAM_IS_NEWLINE 6
 # define INVALID_EXPORT_PARAM 7
 
+# define TOO_MANY_REDIR_PARAM 8
+# define NO_FILE_OR_DIRECTORY 9
+# define NO_OLDPWD 10
+# define NO_HOME 11
+# define NOT_OPEN 12
+
 typedef struct	s_error 
 {
 	int		err_number;
@@ -39,6 +45,9 @@ int				set_syntax_err(char *line, int i);
 ** built_in_error.c
 */
 void			built_in_error(void);
+void			make_err_msg(int error_number, char *cmd,
+							char *value, char *msg);
+
 
 
 
