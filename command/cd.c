@@ -60,7 +60,7 @@ void	set_env_target(t_list *env, char *target, char *value)
 	}
 }
 
-static char	*set_home_dir(t_cmd_line *cmd_line, t_list *env)
+static char	*set_home_dir(char *param, t_list *env)
 {
 	char	*home;
 	char	*dir;
@@ -73,9 +73,9 @@ static char	*set_home_dir(t_cmd_line *cmd_line, t_list *env)
 		free(home);
 		return (NULL);
 	}
-	if (ft_strlen(cmd_line->param) != 1 && !are_equal(cmd_line->param, "--"))
+	if (ft_strlen(param) != 1 && !are_equal(param, "--"))
 	{
-		tmp = ft_substr(cmd_line->param, 1, ft_strlen(cmd_line->param));
+		tmp = ft_substr(param, 1, ft_strlen(param));
 		dir = ft_strjoin(home, tmp);
 		free(tmp);
 	}
@@ -85,58 +85,61 @@ static char	*set_home_dir(t_cmd_line *cmd_line, t_list *env)
 	return (dir);
 }
 
-static char	*set_dir_param(t_cmd_line *cmd_line)
+static char	*set_dir_param(char *param)
 {
 	int		index;
 	char	*dir;
 
 	index = 0;
-	dir = ft_strdup(cmd_line->param);
+	dir = ft_strdup(param);
 	check_character_in_line(dir, &index, ft_isspace);
 	if (dir[index])
 	{
-		make_err_msg(TOO_MANY_REDIR_PARAM, "bash", "cd", "too many arguments\n");
+		make_err_msg(TOO_MANY_REDIR_PARAM, 
+					"bash", "cd", "too many arguments\n");
 		free(dir);
 		return (NULL);
 	}
 	return (dir);
 }
 
-static char	*set_dir(t_cmd_line *cmd_line, t_list *env)
+static char	*set_dir(char *param, t_list *env)
 {
 	char	*dir;
 	char	*tmp;
 	char	*home;
 	int		index;
 
-	if (cmd_line->param[0] == '-' && ft_strlen(cmd_line->param) == 1)
+	if (param[0] == '-' && ft_strlen(param) == 1)
 	{
 		dir = get_env_value("OLDPWD", env);
 		if (*dir == '\0')
 		{
 			make_err_msg(NO_OLDPWD, "bash", "cd", "OLDPWD not set\n");
+			free(param);
 			free(dir);
 			return (NULL);
 		}
 	}
-	else if (cmd_line->param[0] == '~' || are_equal(cmd_line->param, "--"))
-		dir = set_home_dir(cmd_line, env);
+	else if (param[0] == '~' || are_equal(param, "--"))
+		dir = set_home_dir(param, env);
 	else
-		dir = set_dir_param(cmd_line);
+		dir = set_dir_param(param);
 	return (dir);
 }
 
-static bool	set_chdir(t_cmd_line *cmd_line, char *dir)
+static bool	set_chdir(char *param, char *dir)
 {
 	char	*tmp;
 
 	if (chdir(dir) < 0)
 	{
-		make_err_msg(NO_FILE_OR_DIRECTORY, "bash", "cd", "No such file or directory\n");
+		make_err_msg(NO_FILE_OR_DIRECTORY, 
+					"bash", "cd", "No such file or directory\n");
 		free(dir);
 		return (false);
 	}
-	if (cmd_line->param[0] == '-' && ft_strlen(cmd_line->param) == 1)
+	if (param[0] == '-' && ft_strlen(param) == 1)
 	{
 		write(1, dir, ft_strlen(dir));
 		write(1, "\n", 1);
@@ -144,30 +147,43 @@ static bool	set_chdir(t_cmd_line *cmd_line, char *dir)
 	return (true);
 }
 
+static bool	set_pwd_to_env(t_list *env, char *env_value, char *param, char *dir)
+{
+	char	*pwd;
+
+	if (!(pwd = getcwd(NULL, 0)))
+	{
+		free(param);
+		free(dir);
+		return (false);
+	}
+	set_env_target(env, env_value, pwd);
+	free(pwd);
+	return (true);
+}
+
 bool	cd(t_cmd_line *cmd_line, t_list *env)
 {
 	char		*dir;
-	char		*pwd;
-	char		*p_tmp;
+	char		*param;
 
-	if (!(dir = set_dir(cmd_line, env)))
-		return (false);
-	if (!(pwd = getcwd(NULL, 0)))
+	param = convert_to_valid_value(cmd_line->param, 
+								ft_strlen(cmd_line->param), env);
+	if (!(dir = set_dir(param, env)))
 	{
-		free(dir);
+		free(param);
 		return (false);
 	}
-	set_env_target(env, "OLDPWD", pwd);
-	free(pwd);
-	if (!set_chdir(cmd_line, dir))
+	if (!set_pwd_to_env(env, "OLDPWD", param, dir))
 		return (false);
-	if (!(pwd = getcwd(NULL, 0)))
+	if (!set_chdir(param, dir))
 	{
-		free(dir);
+		free(param);
 		return (false);
 	}
-	set_env_target(env, "PWD", pwd);
-	free(pwd);
+	if (!set_pwd_to_env(env, "PWD", param, dir))
+		return (false);
 	free(dir);
+	free(param);
 	return (true);	
 }
