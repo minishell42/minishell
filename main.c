@@ -7,7 +7,9 @@ int			main(int argc, char **argv, char *envp[])
 	t_list		*env;
 
 	env = get_env_llist(envp);
-	set_signal();
+	// set_signal();
+	signal(SIGINT, handler_signal);
+	signal(SIGQUIT, handler_signal);
 	while (true)
 	{
 		prompt();
