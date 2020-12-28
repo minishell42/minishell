@@ -181,10 +181,6 @@ bool	export(t_cmd_line *cmd_line, t_list *env, char* pipe_input)
 			return (false);
 		if (!(update_env(env, env_key, end_in_plus, key_values[i])))
 			return (false);
-		// if((target_llist = find_env_target_list(env, env_key)))
-		// 	update_value(end_in_plus, target_llist, key_values[i]);
-		// else
-		// 	add_new_key_value(end_in_plus, key_values[i], env_key, env);
 		i++;
 	}
 	free_str_array(key_values);
