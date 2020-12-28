@@ -24,7 +24,7 @@ bool	echo(t_cmd_line *cmd_line, t_list *env, char *pipe_input);
 /*
 ** export.c
 */
-char	*export(t_cmd_line *cmd_line, t_list *env, char* pipe_input);
+bool	export(t_cmd_line *cmd_line, t_list *env, char* pipe_input);
 /*
 ** run_command.c
 */
