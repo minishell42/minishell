@@ -1,7 +1,5 @@
 #include "test.h"
 
-
-
 int main(int argc, char **argv, char *envp[])
 {
 	t_list *env;
@@ -12,7 +10,7 @@ int main(int argc, char **argv, char *envp[])
 	env = get_env_llist(envp);
 	// test_get_command_line(env);
 	// test_cd(env);
-	//  test_command_lines(env);
+	 test_command_lines(env);
 	// test_redirection(env);
 	// test_validate_line();
 

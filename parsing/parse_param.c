@@ -1,26 +1,5 @@
 #include "parsing.h"
 
-bool	change_param_value(t_cmd_line *cmd_line, t_list *env)
-{
-	char	*tmp;
-	if (cmd_line->redir_flag)
-	{
-		if (!set_redirection_param(cmd_line, env))
-			return (false);
-	}
-	else
-	{
-		tmp = cmd_line->param;
-		cmd_line->param = set_multi_env(tmp, env);
-		free(tmp);
-		remove_quotation(cmd_line->param);
-		tmp = cmd_line->param;
-		cmd_line->param = ft_strtrim(tmp, " ");
-		free(tmp);
-	}
-	return (true);
-}
-
 char		*convert_to_valid_value(char *start, int len, t_list *env)
 {
 	char	*result;
@@ -48,7 +27,7 @@ int			set_param(t_cmd_line *command_line, char *start, t_list *env)
 		return (-1);
 	if (start[i] == '|')
 		command_line->pipe_flag = true;
-	command_line->param = convert_to_valid_value(start, i, env);
+	command_line->param = ft_substr(start, 0, i);
 	if (start[i])
 		i++;
 	return (i);

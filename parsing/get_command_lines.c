@@ -12,7 +12,6 @@ static bool	set_command(t_cmd_line *cmd_line, char *line, int *index, t_list *en
 	len = (line + *index) - start;
 	if (!line[*index + 1])
 		len++;
-	// 밖에서 에러 구조체 초기화 필요
 	if (!parse_command(cmd_line, start, len, env))
 	{
 		*index = tmp_index;
@@ -22,7 +21,10 @@ static bool	set_command(t_cmd_line *cmd_line, char *line, int *index, t_list *en
 	while (line[*index] == ' ' && line[*index + 1] == ' ')
 		(*index)++;
 	(*index)++;
-	tmp_index = *index;
+	if (line[*index])
+		tmp_index = *index;
+	else
+		tmp_index = 0;
 	return (true);
 }
 
@@ -67,7 +69,7 @@ t_cmd_line	*get_command_line(char **line_ptr, t_list *env)
 		return (NULL);
 	}
 	index = set_command_line(command_line, line, env);
-	if (index < 0 || !check_redirection(command_line) || !change_param_value(command_line, env))
+	if (index < 0 || !set_redirection_param(command_line, env))
 	{
 		free_cmd_struct(command_line);
 		free(command_line);

@@ -13,18 +13,21 @@ void	apply_echo_option(t_cmd_line *cmd_line, char **ret)
 }
 
 // pipe, redir flag가 있는 경우 리턴해줘야 한다.
-bool	echo(t_cmd_line *cmd_line, t_list *env, char *pipe_input)
+bool	echo(t_cmd_line *cmd_line, t_list *env)
 {
-	char *ret;
+	char	*ret;
+	char	*param;
 
-	if (!(ret = ft_strdup(cmd_line->param)))
+	param = convert_to_valid_value(cmd_line->param, 
+								ft_strlen(cmd_line->param), env);
+	if (!(param))
 		return (false);
-	apply_echo_option(cmd_line, &ret);
-	if (write(1, ret, ft_strlen(ret)) < 0)
+	apply_echo_option(cmd_line, &param);
+	if (write(1, param, ft_strlen(param)) < 0)
 	{
-		free(ret);
+		free(param);
 		return (false);
 	}
-	free(ret);
+	free(param);
 	return (true);
 }

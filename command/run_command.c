@@ -1,32 +1,60 @@
 #include "command.h"
 
-static char	**make_exec_args(t_cmd_line *cmd_line)
+static char		*make_arg(char *param, int start, int len, t_list *env)
 {
-	char	**args;
-	char	**split_param;
-	char	*param;
-	int		len;
-	int		index;
+	char	*tmp;
+	char	*arg;
 
-	len = 1;
-	index = 0;
-	param = cmd_line->param;
-	while (param[index] && check_character_in_line(param, &index, ft_isspace))
-		len++;
-	args = ft_calloc(sizeof(char *), len + 1);
-	args[0] = ft_strdup(cmd_line->command);
-	index = 0;
-	split_param = ft_split(param, ' ');
-	while (split_param[index])
-	{
-		args[index + 1] = ft_strdup(split_param[index]);
-		index++;
-	}
-	free_str_array(split_param);
-	args[index + 1] = NULL;
-	return (args);
+	tmp = ft_substr(param, start, len);
+	if (!tmp)
+		return (NULL);
+	arg = convert_to_valid_value(tmp, ft_strlen(tmp), env);
+	free(tmp);
+	if (!arg)
+		return (NULL);
+	return (arg);
 }
 
+static t_list	*make_args_list(t_cmd_line *cmd_line, t_list *env)
+{
+	t_list	*args_list;
+	int		start;
+	int		index;
+	char	*param;
+	char	*arg;
+
+	index = 0;
+	start = index;
+	param = cmd_line->param;
+	args_list = NULL;
+	while (param[index] && check_character_in_line(param, &index, ft_isspace))
+	{
+		while (ft_isspace(param[index]))
+			index++;
+		arg = make_arg(param, start, index - start, env);
+		if (!arg)
+			return (NULL);
+		ft_lstadd_back(&args_list, ft_lstnew(arg));
+		if (param[index] && param[index] == ' ')
+			index++;
+		start = index;
+	}
+	arg = ft_strdup(cmd_line->command);
+	ft_lstadd_front(&args_list, ft_lstnew(arg));
+	return (args_list);
+}
+
+static char	**make_exec_args(t_cmd_line *cmd_line, t_list *env)
+{
+	t_list	*args_list;
+	char	**args;
+
+	args_list = make_args_list(cmd_line, env);
+	if (!args_list)
+		return (NULL);
+	args = convert_to_array_env_list(args_list);
+	return (args);
+}
 
 static bool	run_binary(t_cmd_line *cmd_line, t_list *env)
 {
@@ -36,27 +64,29 @@ static bool	run_binary(t_cmd_line *cmd_line, t_list *env)
 	char	**args;
 
 	envp = convert_to_array_env_list(env);
-	args = make_exec_args(cmd_line);
+	args = make_exec_args(cmd_line, env);
 	if (execve(file_path, args, envp) == -1)
 		return (false);
 	return (true);
 }
 
-bool		run_command(t_cmd_line *cmd_line, t_list *env, char *pipe_input)
+bool		run_command(t_cmd_line *cmd_line, t_list *env)
 {
 	char		*file_path;
 
 	if (cmd_line->command_num == ECHO)
-		return (echo(cmd_line, env, pipe_input));
-	// else if (cmd_line->command_num == CD)
-	// 	cd(cmd_line, env, pipe_input);
+		return (echo(cmd_line, env));
+	else if (cmd_line->command_num == PWD)
+		return (pwd(cmd_line));
+	else if (cmd_line->command_num == CD)
+		return (cd(cmd_line, env));
 	// else if (cmd_line->command_num == PWD)
-	// 	pwd(cmd_line, &pipe_input);
+	// 	pwd(cmd_line);
 	// else if (cmd_line->command_num == EXPORT)
-	// 	export(cmd_line, env, pipe_input);
+	// 	export(cmd_line, env);
 	// else if (cmd_line->command_num == EXIT)
-	// 	ft_exit(cmd_line, env, &pipe_input);
-	if((file_path = search_file(cmd_line->command, env)))
+	// 	ft_exit(cmd_line, env);
+	else if((file_path = search_file(cmd_line->command, env)))
 		return (run_binary(cmd_line, env));
 	else if (!check_cmd_num(cmd_line))
 		return (false);

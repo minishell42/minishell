@@ -1,4 +1,5 @@
 #include "signal_handler.h"
+#include <errno.h>
 
 void		prompt(void)
 {
@@ -8,12 +9,29 @@ void		prompt(void)
 	write(1, str, ft_strlen(str));
 }
 
+//----------------- before --------------------
+// void		handler_signal(int signal_no)
+// {
+// 	if (signal_no == SIGINT)
+// 		ft_putstr_fd("\b\b\b\b\n", 1);
+// 	else if (signal_no == SIGQUIT)
+// 		ft_putstr_fd("\b\b\b\b\n", 1);
+// }
+
+//----------------- after --------------------
+// add prompt function
 void		handler_signal(int signal_no)
 {
 	if (signal_no == SIGINT)
+	{
 		ft_putstr_fd("\b\b\b\b\n", 1);
+		prompt();
+	}
 	else if (signal_no == SIGQUIT)
+	{
 		ft_putstr_fd("\b\b\b\b\n", 1);
+		prompt();
+	}
 }
 
 void		process_exit(bool option)
