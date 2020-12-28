@@ -32,6 +32,8 @@ void test_export(t_list *env)
 
 	export(cmd_line1, env, 0);
 	t_list *result1 = find_env_target_list(env, "a");
+	if (!result1)
+		printf("no result\n");
 	if (!are_equal(expect1, (char *)(result1->content)))
 		message_and_exit((char *)(result1->content), false);
 	ft_lstdel_last(env, free);
@@ -84,6 +86,7 @@ void test_export(t_list *env)
 	
 	if (before_last != ft_lstlast(env))
 		exit(1);
+	printf("err value : expect '='  result %s\n", g_err.err_value);
 	print_err_msg();
 
 	free_cmd_struct(cmd_line4);
@@ -102,10 +105,65 @@ void test_export(t_list *env)
 		printf("last content = %s\n", (char *)ft_lstlast(env)->content);
 		exit(1);
 	}
+	printf("err value = %s\n", g_err.err_value);
 	print_err_msg();
 
 	free_cmd_struct(cmd_line5);
 	free(cmd_line5);
 	printf("==============  case5 ok ==============\n");
+
+
+	char		*case6 = "export abc+=3";
+	char		*case6_1 = "export abc=3";
+
+	t_cmd_line	*cmd_line6 = get_command_line(&case6, env);
+	t_cmd_line	*cmd_line6_1 = get_command_line(&case6_1, env);
+
+
+	printf("export 6_1 is %d\n", export(cmd_line6_1, env, 0));
+	printf("export 6 is %d\n", export(cmd_line6, env, 0));
+
+	t_list *result6 = find_env_target_list(env, "abc");
+	if (!result6)
+		printf("no result\n");
+
+	if (!are_equal((char *)(result6->content), "abc=33"))
+	{
+		printf("last content = '%s'\n", (char *)ft_lstlast(env)->content);
+		printf("result content = '%s'\n", (char *)(result6->content));
+		exit(1);
+	}
+
+	ft_lstdel_last(env, free);
+	free_cmd_struct(cmd_line6);
+	free(cmd_line6);
+	free_cmd_struct(cmd_line6_1);
+	free(cmd_line6_1);
+	printf("==============  case6 ok ==============\n");
+
+
+	char		*case7 = "export abc+=3";
+
+	t_cmd_line	*cmd_line7 = get_command_line(&case7, env);
+
+	printf("export 7 is %d\n", export(cmd_line7, env, 0));
+
+	t_list *result7 = find_env_target_list(env, "abc");
+	if (!result7)
+	{
+		perror("no result\n");
+		exit(1);
+	}
+
+	if (!are_equal((char *)(result7->content), "abc=3"))
+	{
+		printf("last content = '%s'\n", (char *)ft_lstlast(env)->content);
+		printf("result content = '%s'\n", (char *)(result7->content));
+		exit(1);
+	}
+
+	free_cmd_struct(cmd_line7);
+	free(cmd_line7);
+	printf("==============  case7 ok ==============\n");
 }
 
