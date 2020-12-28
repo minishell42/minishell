@@ -9,6 +9,7 @@
 void		remove_quotation(char *value);
 void		free_str_array(char **strs);
 bool		is_contained(char c, char *str);
+char		*ft_join_strs(char **strs);
 
 
 /*
