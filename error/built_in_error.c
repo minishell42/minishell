@@ -4,7 +4,7 @@ void	built_in_error()
 {
 	char	*errmsg;
 
-	if (g_err.err_number)
+	if (g_err)
 		print_err_msg();
 	else
 	{

@@ -30,7 +30,7 @@ typedef struct	s_error
 	char	*err_value;
 }				t_error;
 
-t_error			g_err;
+t_list			*g_err;
 
 /*
 ** error.c

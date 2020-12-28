@@ -132,7 +132,7 @@ bool	get_redirection_param(t_cmd_line *cmd_line,
 		if (param[*index] != '\0')
 			(*index)++;
 	}
-	if (g_err.err_number)
+	if (g_err)
 		return (false);
 	return (true);
 }

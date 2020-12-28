@@ -155,8 +155,6 @@ void	minishell(char *line, t_list *env)
 	t_pipes 		pipes;
 
 	init_pipe(&pipes);
-	g_err.err_number = 0;
-	g_err.err_value = 0;
 	pipe_flag = false;
 	// signal(SIGINT, child_exit);
 	// signal(SIGQUIT, child_exit);
