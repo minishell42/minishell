@@ -90,24 +90,6 @@ static char	*set_home_dir(char *param)
 	return (dir);
 }
 
-static char	*set_dir_param(char *param)
-{
-	int		index;
-	char	*dir;
-
-	index = 0;
-	dir = ft_strdup(param);
-	check_character_in_line(dir, &index, ft_isspace);
-	if (dir[index])
-	{
-		make_err_msg(TOO_MANY_REDIR_PARAM, 
-					"bash", "cd", "too many arguments\n");
-		free(dir);
-		return (NULL);
-	}
-	return (dir);
-}
-
 static char	*set_dir(t_list *param_list)
 {
 	char	*dir;
@@ -116,8 +98,12 @@ static char	*set_dir(t_list *param_list)
 	int		index;
 	char	*param;
 
-	if (ft_lstsize(param_list) != 1)
+	if (ft_lstsize(param_list) > 1)
+	{
+		make_err_msg(TOO_MANY_REDIR_PARAM, 
+					"bash", "cd", "too many arguments\n");
 		return (NULL);
+	}
 	param = param_list->content;
 	if (param[0] == '-' && ft_strlen(param) == 1)
 	{
@@ -132,7 +118,7 @@ static char	*set_dir(t_list *param_list)
 	else if (param[0] == '~' || are_equal(param, "--"))
 		dir = set_home_dir(param);
 	else
-		dir = set_dir_param(param);
+		dir = ft_strdup(param);
 	return (dir);
 }
 
@@ -174,18 +160,24 @@ static bool	set_pwd_to_env(char *env_value, char *dir)
 bool	cd(t_cmd_line *cmd_line)
 {
 	char		*dir;
+	char		*old_pwd;
 	t_list		*param_list;
 
 	param_list = cmd_line->param;
 	if (!(dir = set_dir(param_list)))
 		return (false);
-	if (!set_pwd_to_env("OLDPWD", dir))
-		return (false);
-	if (!set_chdir(param_list, dir))
+	if (!(old_pwd = getcwd(NULL, 0)))
 	{
-		free(param_list);
+		free(dir);
 		return (false);
 	}
+	if (!set_chdir(param_list, dir))
+	{
+		free(old_pwd);
+		return (false);
+	}
+	set_env_target("OLDPWD", old_pwd);
+	free(old_pwd);
 	if (!set_pwd_to_env("PWD",dir))
 		return (false);
 	free(dir);
