@@ -11,7 +11,7 @@ void	test_validate_line()
 		sprintf(tmp, "case1 is %s\n", case1);
 		message_and_exit(tmp, false);
 	}
-	if (g_err.err_value)
+	if (g_err)
 		print_err_msg();
 	printf("============ case1 OK =============\n");
 
@@ -22,7 +22,7 @@ void	test_validate_line()
 		sprintf(tmp, "case2 is %s\n", case2);
 		message_and_exit(tmp, false);
 	}
-	if (g_err.err_value)
+	if (g_err)
 		print_err_msg();
 	printf("============ case2 OK =============\n");
 
@@ -33,7 +33,7 @@ void	test_validate_line()
 		sprintf(tmp, "case3 is %s\n", case3);
 		message_and_exit(tmp, false);
 	}
-	if (g_err.err_value)
+	if (g_err)
 	{
 		print_err_msg();
 		printf(" is result.     expect = '%s'\n", ";");
@@ -47,7 +47,7 @@ void	test_validate_line()
 		sprintf(tmp, "case4 is %s\n", case4);
 		message_and_exit(tmp, false);
 	}
-	if (g_err.err_value)
+	if (g_err)
 	{
 		print_err_msg();
 		printf(" is result.     expect = '%s'\n", ";");
@@ -63,7 +63,7 @@ void	test_validate_line()
 		message_and_exit(tmp, false);
 	}
 	// printf("err_value : %s\n", g_err.err_value);
-	if (g_err.err_value)
+	if (g_err)
 	{
 		print_err_msg();
 		printf(" is result.     expect = '%s'\n", ";;");
@@ -77,7 +77,7 @@ void	test_validate_line()
 		sprintf(tmp, "case6 is %s\n", case6);
 		message_and_exit(tmp, false);
 	}
-	if (g_err.err_value)
+	if (g_err)
 	{
 		print_err_msg();
 		printf(" is result.     expect = '%s'\n", "");
@@ -91,7 +91,7 @@ void	test_validate_line()
 		sprintf(tmp, "case7 is '%s'\n", case7);
 		message_and_exit(tmp, false);
 	}
-	if (g_err.err_value)
+	if (g_err)
 	{
 		print_err_msg();
 		printf(" is result.     expect = '%s'\n", ">");
@@ -105,7 +105,7 @@ void	test_validate_line()
 		sprintf(tmp, "case8 is '%s'\n", case8);
 		message_and_exit(tmp, false);
 	}
-	if (g_err.err_value)
+	if (g_err)
 	{
 		print_err_msg();
 		printf(" is result.     expect = '%s'\n", "<");
@@ -120,7 +120,7 @@ void	test_validate_line()
 		sprintf(tmp, "case9 is '%s'\n", case9);
 		message_and_exit(tmp, false);
 	}
-	if (g_err.err_value)
+	if (g_err)
 	{
 		print_err_msg();
 		printf(" is result.     expect = '%s'\n", "<");
@@ -135,7 +135,7 @@ void	test_validate_line()
 		sprintf(tmp, "case10 is '%s'\n", case10);
 		message_and_exit(tmp, false);
 	}
-	if (g_err.err_value)
+	if (g_err)
 	{
 		print_err_msg();
 		printf(" is result.     expect = '%s'\n", "|");
@@ -150,7 +150,7 @@ void	test_validate_line()
 		sprintf(tmp, "case11 is '%s'\n", case11);
 		message_and_exit(tmp, false);
 	}
-	if (g_err.err_value)
+	if (g_err)
 	{
 		print_err_msg();
 		printf(" is result.     expect = '%s'\n", ";");
@@ -165,7 +165,7 @@ void	test_validate_line()
 		sprintf(tmp, "case12 is '%s'\n", case12);
 		message_and_exit(tmp, false);
 	}
-	if (g_err.err_value)
+	if (g_err)
 	{
 		print_err_msg();
 		printf(" is result.     expect = '%s'\n", ";;");
@@ -179,7 +179,7 @@ void	test_validate_line()
 		sprintf(tmp, "case13 is '%s'\n", case13);
 		message_and_exit(tmp, false);
 	}
-	if (g_err.err_value)
+	if (g_err)
 	{
 		print_err_msg();
 		printf(" is result.     expect = '%s'\n", ">>");
