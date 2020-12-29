@@ -1,29 +1,5 @@
 #include "parsing.h"
 
-// ---------------------------  before  ---------------------------------
-// char		*convert_to_valid_value(char *start, int len, t_list *env)
-// {
-// 	char	*result;
-// 	char	*str;
-// 	char	*tmp;
-
-// 	str = ft_calloc(sizeof(char), len + 1);
-// 	ft_strlcpy(str, start, len + 1);
-// 	tmp = set_multi_env(str, env);
-// 	free(str);
-// 	remove_quotation(tmp);
-// 	result = ft_strtrim(tmp, " ");
-// 	free(tmp);
-// 	return (result);
-// }
-
-// ---------------------------  after  ---------------------------------
-// void		find_quote(char *str, int *i)
-// {
-// 	while (str[*i] != '\'' && str[*i] != '\"' && str[*i])
-// 		(*i)++;
-// }
-
 char		*set_value_before_quote(char *str, int start, int end)
 {
 	char	*before_str;
@@ -123,25 +99,7 @@ char		*convert_to_valid_value(char *start, int len)
 	free(str);
 	return (result);
 }
-// ---------------------------  before  ---------------------------------
-// int			set_param(t_cmd_line *command_line, char *start, t_list *env)
-// {
-// 	char	*param;
-// 	int		param_len;
-// 	int		i;
 
-// 	i = 0;
-// 	if (!check_character_in_line(start, &i, is_separator))
-// 		return (-1);
-// 	if (start[i] == '|')
-// 		command_line->pipe_flag = true;
-// 	command_line->param = ft_substr(start, 0, i);
-// 	if (start[i])
-// 		i++;
-// 	return (i);
-// }
-// ---------------------------  after  ---------------------------------
-// param을 param list로 변경하여 저장
 int			set_param(t_cmd_line *command_line, char *start)
 {
 	char	*param;

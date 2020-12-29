@@ -6,6 +6,15 @@
 # include <dirent.h>
 # include <sys/stat.h>
 
+typedef	struct	s_export
+{
+	char		*env_key;
+	char		*env_value;
+	bool		end_in_plus;
+	char		**key_values;
+	char		*key_value;
+}				t_export;
+
 /*
 ** redirection.c
 */
@@ -23,9 +32,9 @@ bool	echo(t_cmd_line *cmd_line);
 /*
 ** export.c
 */
-char	*export(t_cmd_line *cmd_line);
+bool	export(t_cmd_line *cmd_line);
 /*
-** run_command.c
+** run_command.
 */
 bool	run_command(t_cmd_line *cmd_line);
 /*

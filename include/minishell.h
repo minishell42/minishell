@@ -10,7 +10,6 @@ typedef struct	s_pipe_fd
 	int		new[2];
 }				t_pipes;
 
-void				excute(t_cmd_line *cmd_line, char *envp[]);
 t_list 				*get_env_llist(char *envp[]);
 /*
 ** minishell.c

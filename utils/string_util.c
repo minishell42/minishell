@@ -54,3 +54,26 @@ bool	is_contained(char c, char *str)
 	}
 	return (0);
 }
+
+char	*ft_join_strs(char **strs)
+{
+	char	*res;
+	int		res_len;
+	int		i;
+
+	if (!strs)
+		return (NULL);
+	i = 0;	
+	res_len = 0;
+	while (strs[i])
+		res_len += ft_strlen(strs[i++]);
+	if (!(res = ft_calloc(sizeof(char), res_len + 1)))
+		return (NULL);
+	i = 0;
+	while (strs[i])
+	{
+		ft_strlcat(res, strs[i], res_len + 1);
+		i++;
+	}
+	return (res);
+}

@@ -1,49 +1,5 @@
 #include "command.h"
 
-// static char		*make_arg(char *param, int start, int len)
-// {
-// 	char	*tmp;
-// 	char	*arg;
-
-// 	tmp = ft_substr(param, start, len);
-// 	if (!tmp)
-// 		return (NULL);
-// 	arg = convert_to_valid_value(tmp, ft_strlen(tmp));
-// 	free(tmp);
-// 	if (!arg)
-// 		return (NULL);
-// 	return (arg);
-// }
-
-// static t_list	*make_args_list(t_cmd_line *cmd_line)
-// {
-// 	t_list	*args_list;
-// 	int		start;
-// 	int		index;
-// 	char	*param;
-// 	char	*arg;
-
-// 	index = 0;
-// 	start = index;
-// 	param = cmd_line->param;
-// 	args_list = NULL;
-// 	while (param[index] && check_character_in_line(param, &index, ft_isspace))
-// 	{
-// 		while (ft_isspace(param[index]))
-// 			index++;
-// 		arg = make_arg(param, start, index - start);
-// 		if (!arg)
-// 			return (NULL);
-// 		ft_lstadd_back(&args_list, ft_lstnew(arg));
-// 		if (param[index] && param[index] == ' ')
-// 			index++;
-// 		start = index;
-// 	}
-// 	arg = ft_strdup(cmd_line->command);
-// 	ft_lstadd_front(&args_list, ft_lstnew(arg));
-// 	return (args_list);
-// }
-
 static char	**make_exec_args(t_cmd_line *cmd_line)
 {
 	t_list	*args_list;
@@ -83,10 +39,10 @@ bool		run_command(t_cmd_line *cmd_line)
 		return (pwd(cmd_line));
 	else if (cmd_line->command_num == CD)
 		return (cd(cmd_line));
+	else if (cmd_line->command_num == EXPORT)
+		return (export(cmd_line));
 	// else if (cmd_line->command_num == PWD)
 	// 	pwd(cmd_line);
-	// else if (cmd_line->command_num == EXPORT)
-	// 	export(cmd_line);
 	// else if (cmd_line->command_num == EXIT)
 	// 	ft_exit(cmd_line);
 	else if((file_path = search_file(cmd_line->command)))

@@ -30,7 +30,7 @@ typedef struct	s_error
 	char	*err_value;
 }				t_error;
 
-t_error			g_err;
+t_list			*g_err;
 
 /*
 ** error.c
@@ -40,6 +40,8 @@ void			print_err_msg(void);
 bool			parsing_err_value(int error_number, char *error_point);
 void			set_quot_err(char quot_flag);
 int				set_syntax_err(char *line, int i);
+char			*get_err_msg(int	err_number);
+
 
 /*
 ** built_in_error.c

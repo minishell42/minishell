@@ -41,7 +41,7 @@ static int	set_command_line(t_cmd_line *cmd_line, char *line)
 	{
 		if (!set_command(cmd_line, line, &index))
 		{
-			if (g_err.err_number)
+			if (g_err)
 				return (-1);
 			break;
 		}
@@ -64,10 +64,7 @@ t_cmd_line	*get_command_line(char **line_ptr)
 		index++;
 	line = *line_ptr + index;
 	if (!(command_line = ft_calloc(sizeof(t_cmd_line), 1)))
-	{
-		g_err.err_number = ALLOC_ERROR;
 		return (NULL);
-	}
 	index = set_command_line(command_line, line);
 	if (index < 0 || !set_redirection_param(command_line))
 	{

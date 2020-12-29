@@ -62,9 +62,6 @@ void	set_env_target(char *target, char *value)
 	}
 }
 
-
-
-
 static char	*set_home_dir(char *param)
 {
 	char	*home;

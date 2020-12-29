@@ -155,8 +155,6 @@ void	minishell(char *line)
 	t_pipes 		pipes;
 
 	init_pipe(&pipes);
-	g_err.err_number = 0;
-	g_err.err_value = 0;
 	pipe_flag = false;
 	// signal(SIGINT, child_exit);
 	// signal(SIGQUIT, child_exit);
@@ -165,21 +163,8 @@ void	minishell(char *line)
 		built_in_error();
 		return ;
 	}
-	// 1 fork child
 	while (line && *line)
 	{
-		// echo 123 > 123 | echo 345 -> pipe flag, redir flag -> fork 2번
-		// echo 123 > 123 ; echo 345
-		// main basic
-		//		minishell child  	pipe
-		//				child		pipe
-		//					value write pipe
-		//				child exit()
-		//		minishell read pipe
-		//				redir
-		//		minishell
-		//				child
-		//			redir->child
 		if (!(command_line = get_command_line(&line)))
 		{
 			// 따옴표 에러

@@ -140,7 +140,6 @@ bool	can_make_redir_list(t_cmd_line *cmd_line,
 		free(redir);
 		return (false);
 	}
-	// printf("what is content ? '%s'\n", tmp);
 	if (!(set_redir_param(cmd_line, redir, tmp)))
 	{
 		free(redir);
@@ -180,7 +179,7 @@ bool	get_redirection_param(t_cmd_line *cmd_line,
 		if (param[*index] != '\0')
 			(*index)++;
 	}
-	if (g_err.err_number)
+	if (g_err)
 		return (false);
 	return (true);
 }
@@ -191,19 +190,6 @@ bool	get_redirection_param(t_cmd_line *cmd_line,
 // 	char	*tmp;
 // 	int		index;
 
-// 	param = cmd_line->param;
-// 	index = 0;
-// 	if (!set_param_before_redir(cmd_line, env, param, &index))
-// 		return (false);
-// 	if (!get_redirection_param(cmd_line, env, param, &index))
-// 	{
-// 		free(param);
-// 		return (false);
-// 	}
-// 	free(param);
-// 	return (true);
-// }
-// -------------------------  after ---------------------------------
 bool	set_redirection_param(t_cmd_line *cmd_line)
 {
 	char	*param;

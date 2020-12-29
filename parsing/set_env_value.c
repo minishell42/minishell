@@ -5,16 +5,16 @@ char 		*get_env_value(char *target_key)
 	char	*key;
 	char	*value;
 	int		i;
-	t_list	*env_list;
+	t_list	*env;
 
-	env_list = g_env;
-	while (env_list)
+	env = g_env;
+	while (env)
 	{
 		i = 0;
-		while (((char *)env_list->content)[i] != '=')
+		while (((char *)env->content)[i] != '=')
 			i++;
-		key = ft_substr(env_list->content, 0, i);
-		value = ft_substr(env_list->content, i + 1, ft_strlen(env_list->content) - i);
+		key = ft_substr(env->content, 0, i);
+		value = ft_substr(env->content, i + 1, ft_strlen(env->content) - i);
 		if (are_equal(target_key, key))
 		{
 			free(key);
@@ -22,7 +22,7 @@ char 		*get_env_value(char *target_key)
 		}
 		free(key);
 		free(value);
-		env_list = env_list->next;
+		env = env->next;
 	}
 	return (ft_calloc(sizeof(char), 1));
 }
@@ -93,9 +93,7 @@ void 		join_env_value(char **ret, char *str, int *i)
 		(*i)++;
 	seperator = str[*i];
 	str[*i] = 0;
-	// printf("what is env_key after ? '%s'\n", env_key);
 	env_value = get_env_value(env_key);
-	// printf("what is env_value ? '%s'\n", env_value);
 	temp = *ret;
 	*ret = ft_strjoin(temp, env_value);
 	str[*i] = seperator;
@@ -121,46 +119,11 @@ char		*set_multi_env(char *str)
 		seperator = str[i];
 		str[i] = 0;
 		temp = ret;
-		// printf("what is start before? '%s'\n", start);
 		ret = ft_strjoin(temp, start);
-		// printf("what is ret before? '%s'\n", ret);
 		free(temp);
 		if (seperator == '$')
 			join_env_value(&ret, str, &i);
-		// printf("what is ret after? '%s'\n", ret);
 		start = str + i;
-		// printf("what is start after? '%s'\n", start);
 	}
 	return (ret);
 }
-
-// char		*set_multi_env(char *str, t_list *env)
-// {
-// 	char	*ret;
-// 	char	*temp;
-// 	int		i;
-// 	char	*start;
-// 	char	seperator;
-
-// 	i = 0;
-// 	ret = ft_calloc(1, sizeof(char));
-// 	start = str;
-// 	while (str[i])
-// 	{
-// 		while (str[i] && str[i] != '$')
-// 			i++;
-// 		seperator = str[i];
-// 		str[i] = 0;
-// 		temp = ret;
-// 		printf("what is start before? '%s'\n", start);
-// 		ret = ft_strjoin(temp, start);
-// 		printf("what is ret before? '%s'\n", ret);
-// 		free(temp);
-// 		if (seperator == '$')
-// 			join_env_value(&ret, str, &i, env);
-// 		printf("what is ret after? '%s'\n", ret);
-// 		start = str + i;
-// 		printf("what is start after? '%s'\n", start);
-// 	}
-// 	return (ret);
-// }

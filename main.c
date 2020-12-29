@@ -4,7 +4,6 @@ int			main(int argc, char **argv, char *envp[])
 {
 	char		*line;
 	t_list		*command_lines;
-	// t_list		*env;
 
 	g_env = get_env_llist(envp);
 	// set_signal();

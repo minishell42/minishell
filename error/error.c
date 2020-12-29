@@ -12,59 +12,83 @@ void	message_and_exit(char *message, bool built_in_error)
 	exit(1);
 }
 
+char	*get_err_msg(int	err_number)
+{
+	if (err_number == ALLOC_ERROR)
+		return ("malloc error\n");
+	else if (err_number == QUOT_IS_NOT_PAIR)
+		return (" quotation mark is not pair\n");
+	else if (err_number == INVALID_COMMAND)
+		return (" invalid command entered\n");
+	else if (err_number == TOO_MANY_REDIR)
+		return (" too many redirects exist\n");
+	else if (err_number == SYNTAX_ERROR)
+		return (" syntax error near unexpected token\n");
+	else if (err_number == PARAM_IS_NEWLINE)
+		return (" syntax error near unexpected token `newline'\n");
+	else if (err_number == INVALID_EXPORT_PARAM)
+		return (" is invalid export param\n");
+	return (NULL);
+}
+
+void	free_err_info(void *content)
+{
+	t_error *err_info;
+
+	err_info = content;
+	if (err_info->err_value)
+		free(err_info->err_value);
+	free(err_info);
+}
+
 void	print_err_msg(void)
 {
-	int 	err_number;
 	char	*err_msg;
 	char	*msg;
+	t_error	*err_info;
+	t_list	*curr;
 
-	err_number = g_err.err_number;
-	if (err_number == ALLOC_ERROR)
-		err_msg = "malloc error\n";
-	else if (err_number == QUOT_IS_NOT_PAIR)
-		err_msg = " quotation mark is not pair\n";
-	else if (err_number == INVALID_COMMAND)
-		err_msg = " invalid command entered\n";
-	else if (err_number == TOO_MANY_REDIR)
-		err_msg = " too many redirects exist\n";
-	else if (err_number == SYNTAX_ERROR)
-		err_msg = " syntax error near unexpected token\n";
-	else if (err_number == PARAM_IS_NEWLINE)
-		err_msg = " syntax error near unexpected token `newline'\n";
-	else if (err_number == INVALID_EXPORT_PARAM)
-		err_msg = " is invalid export param\n";
-	else
-		err_msg = NULL;
-	if (!(msg = ft_strjoin(g_err.err_value, err_msg)))
-		msg = err_msg;
-	write(2, msg, ft_strlen(msg));
-	if (g_err.err_value)
+	curr = g_err;
+	while (curr)
 	{
-		free(g_err.err_value);
-		free(msg);
+		err_info = curr->content;
+		err_msg = err_info->err_value;
+		// err_msg = get_err_msg(err_info->err_number);
+		// if (!(msg = ft_strjoin(err_info->err_value, err_msg)))
+		// 	msg = err_msg;
+		write(2, err_msg, ft_strlen(err_msg));
+		curr = curr->next;
+		// if (msg && msg != err_msg)
+		// 	free(msg);
 	}
-	g_err.err_value = 0;
-	g_err.err_number = 0;
+	ft_lstclear(&g_err, free_err_info);
+	g_err = 0;
 }
 
 bool	parsing_err_value(int error_number, char *error_point)
 {
-	if (!error_point)
-		return (false);
-	g_err.err_number = error_number;
-	g_err.err_value = ft_strdup(error_point);
+	t_error *err_info;
+
+	err_info = ft_calloc(sizeof(t_error), 1);
+	err_info->err_number = error_number;
+	if (error_point)
+		err_info->err_value = ft_strdup(error_point);
+	if (g_err)
+		ft_lstadd_back(&g_err, ft_lstnew(err_info));
+	else
+		g_err = ft_lstnew(err_info);
 	return (false);
 }
 
 void	set_quot_err(char quot_flag)
 {
-	if (!(g_err.err_value = ft_calloc(sizeof(char), 2)))
-		g_err.err_number = ALLOC_ERROR;
-	else
-	{
-		g_err.err_value[0] = quot_flag;
-		g_err.err_number = QUOT_IS_NOT_PAIR;
-	}
+	char	*err_value;
+
+	if (!(err_value = ft_calloc(sizeof(char), 2)))
+		return ;
+	err_value[0] = quot_flag;
+	parsing_err_value(QUOT_IS_NOT_PAIR, err_value);
+	free(err_value);
 }
 
 int		set_syntax_err(char *line, int i)
