@@ -1,18 +1,20 @@
 #include "parsing.h"
 
-char 		*get_env_value(char *target_key, t_list *env)
+char 		*get_env_value(char *target_key)
 {
 	char	*key;
 	char	*value;
 	int		i;
+	t_list	*env_list;
 
-	while (env)
+	env_list = g_env;
+	while (env_list)
 	{
 		i = 0;
-		while (((char *)env->content)[i] != '=')
+		while (((char *)env_list->content)[i] != '=')
 			i++;
-		key = ft_substr(env->content, 0, i);
-		value = ft_substr(env->content, i + 1, ft_strlen(env->content) - i);
+		key = ft_substr(env_list->content, 0, i);
+		value = ft_substr(env_list->content, i + 1, ft_strlen(env_list->content) - i);
 		if (are_equal(target_key, key))
 		{
 			free(key);
@@ -20,12 +22,12 @@ char 		*get_env_value(char *target_key, t_list *env)
 		}
 		free(key);
 		free(value);
-		env = env->next;
+		env_list = env_list->next;
 	}
 	return (ft_calloc(sizeof(char), 1));
 }
 
-static char	*get_absolute_path(char *value, t_list *env, int index)
+static char	*get_absolute_path(char *value, int index)
 {
 	char	*tmp;
 	int		curr_len;
@@ -48,11 +50,11 @@ static char	*get_absolute_path(char *value, t_list *env, int index)
 		}
 	}
 	else if (index != 0 && value[index - 1] == '~')
-		tmp = get_env_value("HOME", env);
+		tmp = get_env_value("HOME");
 	return (tmp);
 }
 
-char		*change_to_absolute_path(char *value, t_list *env)
+char		*change_to_absolute_path(char *value)
 {
 	char	*result;
 	char	*tmp;
@@ -69,7 +71,7 @@ char		*change_to_absolute_path(char *value, t_list *env)
 		if ((!are_equal(value, ".") && !are_equal(value, "..")))
 			return (0);
 	}
-	if ((tmp = get_absolute_path(value, env, i)))
+	if ((tmp = get_absolute_path(value, i)))
 	{
 		result = ft_strjoin(tmp, value + i);
 		free(tmp);
@@ -77,7 +79,7 @@ char		*change_to_absolute_path(char *value, t_list *env)
 	return (result);
 }
 
-void 		join_env_value(char **ret, char *str, int *i, t_list *env)
+void 		join_env_value(char **ret, char *str, int *i)
 {
 	char	*env_key;
 	char	*env_value;
@@ -86,11 +88,14 @@ void 		join_env_value(char **ret, char *str, int *i, t_list *env)
 
 	(*i)++;
 	env_key = str + *i;
-	while (str[*i] && str[*i] != ' ' && str[*i] != '\\' && str[*i] != '$')
+	// printf("what is env_key before ? '%s'\n", env_key);
+	while (str[*i] && str[*i] != ' ' && str[*i] != '\\' && str[*i] != '$' && str[*i] != '\'')
 		(*i)++;
 	seperator = str[*i];
 	str[*i] = 0;
-	env_value = get_env_value(env_key, env);
+	// printf("what is env_key after ? '%s'\n", env_key);
+	env_value = get_env_value(env_key);
+	// printf("what is env_value ? '%s'\n", env_value);
 	temp = *ret;
 	*ret = ft_strjoin(temp, env_value);
 	str[*i] = seperator;
@@ -98,7 +103,7 @@ void 		join_env_value(char **ret, char *str, int *i, t_list *env)
 	free(temp);
 }
 
-char		*set_multi_env(char *str, t_list *env)
+char		*set_multi_env(char *str)
 {
 	char	*ret;
 	char	*temp;
@@ -116,11 +121,46 @@ char		*set_multi_env(char *str, t_list *env)
 		seperator = str[i];
 		str[i] = 0;
 		temp = ret;
+		// printf("what is start before? '%s'\n", start);
 		ret = ft_strjoin(temp, start);
+		// printf("what is ret before? '%s'\n", ret);
 		free(temp);
 		if (seperator == '$')
-			join_env_value(&ret, str, &i, env);
+			join_env_value(&ret, str, &i);
+		// printf("what is ret after? '%s'\n", ret);
 		start = str + i;
+		// printf("what is start after? '%s'\n", start);
 	}
 	return (ret);
 }
+
+// char		*set_multi_env(char *str, t_list *env)
+// {
+// 	char	*ret;
+// 	char	*temp;
+// 	int		i;
+// 	char	*start;
+// 	char	seperator;
+
+// 	i = 0;
+// 	ret = ft_calloc(1, sizeof(char));
+// 	start = str;
+// 	while (str[i])
+// 	{
+// 		while (str[i] && str[i] != '$')
+// 			i++;
+// 		seperator = str[i];
+// 		str[i] = 0;
+// 		temp = ret;
+// 		printf("what is start before? '%s'\n", start);
+// 		ret = ft_strjoin(temp, start);
+// 		printf("what is ret before? '%s'\n", ret);
+// 		free(temp);
+// 		if (seperator == '$')
+// 			join_env_value(&ret, str, &i, env);
+// 		printf("what is ret after? '%s'\n", ret);
+// 		start = str + i;
+// 		printf("what is start after? '%s'\n", start);
+// 	}
+// 	return (ret);
+// }

@@ -1,11 +1,11 @@
 #include "command.h"
 
-int			find_file_fd(t_redir *redir, t_list *env)
+int			find_file_fd(t_redir *redir)
 {
 	char	*file_name;
 	int		fd;
 
-	file_name = change_to_absolute_path(redir->redir_param, env);
+	file_name = change_to_absolute_path(redir->redir_param);
 	if (!file_name)
 		file_name = redir->redir_param;
 	if (redir->redir_flag == OUT_ENDLINE)

@@ -20,6 +20,35 @@ void	free_redir_struct(t_redir *redir)
 		free(redir->redir_param);
 }
 
+// ---------------  before  --------------------
+// void	free_cmd_struct(t_cmd_line *cmd)
+// {
+// 	t_list	*tmp;
+// 	t_list	*tmp2;
+// 	t_redir	*r;
+
+// 	if (cmd->command)
+// 		free(cmd->command);
+// 	if (cmd->option)
+// 		free(cmd->option);
+// 	if (cmd->param)
+// 		free(cmd->param);
+// 	tmp2 = cmd->redir_param;
+// 	while (tmp2)
+// 	{
+// 		r = tmp2->content;
+// 		if (r)
+// 		{
+// 			free_redir_struct(r);
+// 			free(r);
+// 		}
+// 		tmp = tmp2;
+// 		tmp2 = tmp2->next;
+// 		free(tmp);
+// 	}
+// }
+
+// ---------------  after  --------------------
 void	free_cmd_struct(t_cmd_line *cmd)
 {
 	t_list	*tmp;
@@ -31,7 +60,7 @@ void	free_cmd_struct(t_cmd_line *cmd)
 	if (cmd->option)
 		free(cmd->option);
 	if (cmd->param)
-		free(cmd->param);
+		ft_lstclear(&cmd->param, free);
 	tmp2 = cmd->redir_param;
 	while (tmp2)
 	{

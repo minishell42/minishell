@@ -9,12 +9,14 @@
 // // chdir 함수의 -1일때 환경변수 pwd값과 oldpwd값은 그대로 있어야 한다.
 // // redir flag가 있으면 해당 파일 이름의 빈 파일을 생성하고, cd도 정상적으로 동작한다.
 
-t_list	*find_env_target_list(t_list *env, char *target)
+t_list	*find_env_target_list(char *target)
 {
 	char	*key;
 	char	*value;
 	int		i;
+	t_list	*env;
 
+	env = g_env;
 	while (env)
 	{
 		i = 0;
@@ -35,20 +37,20 @@ t_list	*find_env_target_list(t_list *env, char *target)
 	return (NULL);
 }
 
-void	set_env_target(t_list *env, char *target, char *value)
+void	set_env_target(char *target, char *value)
 {
 	t_list	*target_env;
 	char	*target_tmp;
 	void	*tmp;
 
-	if (!(target_env = find_env_target_list(env, target)))
+	if (!(target_env = find_env_target_list(target)))
 	{
 		target_env = ft_calloc(sizeof(t_list), 1);
 		target_tmp = ft_strjoin(target, "=");
 		target_env->content = ft_strjoin(target_tmp, value);
 		free(target_tmp);
 		target_env->next = NULL;
-		ft_lstadd_back(&env, target_env);
+		ft_lstadd_back(&g_env, target_env);
 	}
 	else
 	{
@@ -60,13 +62,16 @@ void	set_env_target(t_list *env, char *target, char *value)
 	}
 }
 
-static char	*set_home_dir(char *param, t_list *env)
+
+
+
+static char	*set_home_dir(char *param)
 {
 	char	*home;
 	char	*dir;
 	char	*tmp;
 
-	home = get_env_value("HOME", env);
+	home = get_env_value("HOME");
 	if (*home == '\0')
 	{
 		make_err_msg(NO_HOME, "bash", "cd", "HOME not set\n");
@@ -103,35 +108,40 @@ static char	*set_dir_param(char *param)
 	return (dir);
 }
 
-static char	*set_dir(char *param, t_list *env)
+static char	*set_dir(t_list *param_list)
 {
 	char	*dir;
 	char	*tmp;
 	char	*home;
 	int		index;
+	char	*param;
 
+	if (ft_lstsize(param_list) != 1)
+		return (NULL);
+	param = param_list->content;
 	if (param[0] == '-' && ft_strlen(param) == 1)
 	{
-		dir = get_env_value("OLDPWD", env);
+		dir = get_env_value("OLDPWD");
 		if (*dir == '\0')
 		{
 			make_err_msg(NO_OLDPWD, "bash", "cd", "OLDPWD not set\n");
-			free(param);
 			free(dir);
 			return (NULL);
 		}
 	}
 	else if (param[0] == '~' || are_equal(param, "--"))
-		dir = set_home_dir(param, env);
+		dir = set_home_dir(param);
 	else
 		dir = set_dir_param(param);
 	return (dir);
 }
 
-static bool	set_chdir(char *param, char *dir)
+static bool	set_chdir(t_list *param_list, char *dir)
 {
 	char	*tmp;
+	char	*param;
 
+	param = param_list->content;
 	if (chdir(dir) < 0)
 	{
 		make_err_msg(NO_FILE_OR_DIRECTORY, 
@@ -147,43 +157,37 @@ static bool	set_chdir(char *param, char *dir)
 	return (true);
 }
 
-static bool	set_pwd_to_env(t_list *env, char *env_value, char *param, char *dir)
+static bool	set_pwd_to_env(char *env_value, char *dir)
 {
 	char	*pwd;
 
 	if (!(pwd = getcwd(NULL, 0)))
 	{
-		free(param);
 		free(dir);
 		return (false);
 	}
-	set_env_target(env, env_value, pwd);
+	set_env_target(env_value, pwd);
 	free(pwd);
 	return (true);
 }
 
-bool	cd(t_cmd_line *cmd_line, t_list *env)
+bool	cd(t_cmd_line *cmd_line)
 {
 	char		*dir;
-	char		*param;
+	t_list		*param_list;
 
-	param = convert_to_valid_value(cmd_line->param, 
-								ft_strlen(cmd_line->param), env);
-	if (!(dir = set_dir(param, env)))
+	param_list = cmd_line->param;
+	if (!(dir = set_dir(param_list)))
+		return (false);
+	if (!set_pwd_to_env("OLDPWD", dir))
+		return (false);
+	if (!set_chdir(param_list, dir))
 	{
-		free(param);
+		free(param_list);
 		return (false);
 	}
-	if (!set_pwd_to_env(env, "OLDPWD", param, dir))
-		return (false);
-	if (!set_chdir(param, dir))
-	{
-		free(param);
-		return (false);
-	}
-	if (!set_pwd_to_env(env, "PWD", param, dir))
+	if (!set_pwd_to_env("PWD",dir))
 		return (false);
 	free(dir);
-	free(param);
-	return (true);	
+	return (true);
 }

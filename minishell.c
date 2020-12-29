@@ -17,7 +17,7 @@ int		get_read_fd(t_pipes *pipes)
 	return (pipes->old[READ]);
 }
 
-static void	set_pipe_flag(t_cmd_line *cmd_line, t_list *env, bool flag,
+static void	set_pipe_flag(t_cmd_line *cmd_line, bool flag,
 							t_pipes *pipes)
 {
 	t_list		*redir_list;
@@ -33,7 +33,7 @@ static void	set_pipe_flag(t_cmd_line *cmd_line, t_list *env, bool flag,
 	{
 		has_redir = true;
 		redir = redir_list->content;
-		file_fd = find_file_fd(redir, env);
+		file_fd = find_file_fd(redir);
 		if (file_fd < 0)
 			built_in_error();
 		if (redir->redir_flag == REDIR_IN)
@@ -62,15 +62,15 @@ static bool check_env_operator_cmd(t_cmd_line *cmd_line)
 		return (false);
 }
 
-static void run_env_operator_cmd(t_cmd_line *cmd_line, t_list *env,
+static void run_env_operator_cmd(t_cmd_line *cmd_line,
 									t_pipes *pipes, bool *pipe_flag)
 {
 	int		reset[2];
 
 	reset[0] = dup(0);
 	reset[1] = dup(1);
-	set_pipe_flag(cmd_line, env, *pipe_flag, pipes);
-	if (!run_command(cmd_line, env))
+	set_pipe_flag(cmd_line, *pipe_flag, pipes);
+	if (!run_command(cmd_line))
 		built_in_error();
 	if (*pipe_flag)
 	{
@@ -81,14 +81,14 @@ static void run_env_operator_cmd(t_cmd_line *cmd_line, t_list *env,
 	dup2(reset[0], 0);
 }
 
-static void	run(t_cmd_line *cmd_line, t_list *env, t_pipes *pipes, bool *pipe_flag)
+static void	run(t_cmd_line *cmd_line, t_pipes *pipes, bool *pipe_flag)
 {
 	char	*errmsg;
 	int		status;
 	pid_t	pid;
 	
 	if (check_env_operator_cmd(cmd_line))
-		run_env_operator_cmd(cmd_line, env, pipes, pipe_flag);
+		run_env_operator_cmd(cmd_line, pipes, pipe_flag);
 	else
 	{
 		pid = fork();
@@ -103,8 +103,8 @@ static void	run(t_cmd_line *cmd_line, t_list *env, t_pipes *pipes, bool *pipe_fl
 		}
 		else if (pid == 0)
 		{
-			set_pipe_flag(cmd_line, env, *pipe_flag, pipes);
-			if (!run_command(cmd_line, env))
+			set_pipe_flag(cmd_line, *pipe_flag, pipes);
+			if (!run_command(cmd_line))
 				built_in_error();
 			exit(0);
 		}
@@ -146,7 +146,7 @@ void	swap_pipe(t_pipes *pipes)
 	}
 }
 
-void	minishell(char *line, t_list *env)
+void	minishell(char *line)
 {
 	t_cmd_line		*command_line;
 	pid_t			pid;
@@ -180,13 +180,13 @@ void	minishell(char *line, t_list *env)
 		//		minishell
 		//				child
 		//			redir->child
-		if (!(command_line = get_command_line(&line, env)))
+		if (!(command_line = get_command_line(&line)))
 		{
 			// 따옴표 에러
 			built_in_error();
 			return ;
 		}
-		run(command_line, env, &pipes, &pipe_flag);
+		run(command_line, &pipes, &pipe_flag);
 		close_write_fd(&pipes);
 		swap_pipe(&pipes);
 		free_cmd_struct(command_line);

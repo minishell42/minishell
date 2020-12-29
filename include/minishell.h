@@ -15,6 +15,6 @@ t_list 				*get_env_llist(char *envp[]);
 /*
 ** minishell.c
 */
-void				minishell(char *line, t_list *env);
+void				minishell(char *line);
 
 #endif
