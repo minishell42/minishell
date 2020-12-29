@@ -6,28 +6,37 @@
 # include <dirent.h>
 # include <sys/stat.h>
 
+typedef	struct	s_export
+{
+	char		*env_key;
+	char		*env_value;
+	bool		end_in_plus;
+	char		**key_values;
+	char		*key_value;
+}				t_export;
+
 /*
 ** redirection.c
 */
-int			find_file_fd(t_redir *redir, t_list *env);
+int			find_file_fd(t_redir *redir);
 /*
 ** cd.c
 */
-bool	cd(t_cmd_line *cmd_line, t_list *env);
-t_list	*find_env_target_list(t_list *env, char *target);
-void	set_env_target(t_list *env, char *target, char *value);
+bool	cd(t_cmd_line *cmd_line);
+t_list	*find_env_target_list(char *target);
+void	set_env_target(char *target, char *value);
 /*
 ** echo.c
 */
-bool	echo(t_cmd_line *cmd_line, t_list *env);
+bool	echo(t_cmd_line *cmd_line);
 /*
 ** export.c
 */
-bool	export(t_cmd_line *cmd_line, t_list *env, char* pipe_input);
+bool	export(t_cmd_line *cmd_line, char* pipe_input);
 /*
-** run_command.c
+** run_command.
 */
-bool	run_command(t_cmd_line *cmd_line, t_list *env);
+bool	run_command(t_cmd_line *cmd_line);
 /*
 ** pwd.c
 */
@@ -35,9 +44,9 @@ bool	pwd(t_cmd_line *cmd_line);
 /*
 ** ft_exit.c 
 */
-char	*ft_exit(t_cmd_line *cmd_line, t_list *env);
+char	*ft_exit(t_cmd_line *cmd_line);
 
-char	*search_file(char *file_name, t_list *env);
+char	*search_file(char *file_name);
 
 
 

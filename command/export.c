@@ -23,7 +23,8 @@ char	*get_env_key(char *param)
 	char	*separator;
 
 	key = NULL;
-	key_value = ft_strdup(param);
+	if(!(key_value = ft_strdup(param)))
+		return (NULL);
 	separator = ft_strchr(key_value, '=');
 	if (separator)
 	{
@@ -46,13 +47,6 @@ bool	has_plus(char *env_key)
 	return (false);
 }
 
-bool		free_and_set_error(char **str_array, char *err_value)
-{
-	parsing_err_value(INVALID_EXPORT_PARAM, err_value);
-	free_str_array(str_array);
-	return (false);
-}
-
 static char	*get_value(char *str)
 {
 	char	*key_value;
@@ -60,7 +54,8 @@ static char	*get_value(char *str)
 	char	*value;
 
 	value = NULL;
-	key_value = ft_strdup(str);
+	if (!(key_value = ft_strdup(str)))
+		return (NULL);
 	if ((separator = ft_strchr(key_value, '=')))
 		value = ft_strdup(separator + 1);
 	free(key_value);
@@ -84,16 +79,15 @@ char	*join_key_value(char *env_key, char *key_value)
 		return (res);
 }
 
-bool	update_value(bool end_in_plus, t_list *target_llist, char *input)
+bool	update_value(t_list *target_llist, t_export *exp_info)
 {
 	char	*content;
 	char	*env_value;
 	
-	if (end_in_plus)
+	if (exp_info->end_in_plus)
 	{
 		content = target_llist->content;
-		env_value = get_value(input);
-		printf("env value = %s\n", env_value);
+		env_value = get_value(exp_info->key_value);
 		target_llist->content = ft_strjoin(content, env_value);
 		free(content);
 		free(env_value);
@@ -101,91 +95,119 @@ bool	update_value(bool end_in_plus, t_list *target_llist, char *input)
 	else
 	{
 		content = target_llist->content;
-		target_llist->content = ft_strdup(input);
+		target_llist->content = ft_strdup(exp_info->key_value);
 		free(content);
 	}
-}
-
-bool	add_new_key_value(bool end_in_plus, char *input, char *env_key, t_list *env)
-{
-	char	*new_key_value;
-
-	if (end_in_plus)
-		{
-			if (!(new_key_value = join_key_value(env_key, input)))
-				return (false);
-			ft_lstadd_back(&env, ft_lstnew(new_key_value));
-		}
-		else
-			ft_lstadd_back(&env, ft_lstnew(ft_strdup(input)));
 	return (true);
 }
 
-bool	check_env_key(char *env_key, bool *end_in_plus, char **key_values)
+bool	add_new_key_value(t_export *exp_info)
 {
+	char	*new_key_value;
+	char	*env_key;
+	char	*key_value;
+
+	env_key = exp_info->env_key;
+	key_value = exp_info->key_value;
+	if (exp_info->end_in_plus)
+		{
+			if (!(new_key_value = join_key_value(env_key, key_value)))
+				return (false);
+			ft_lstadd_back(&g_env, ft_lstnew(new_key_value));
+		}
+		else
+			ft_lstadd_back(&g_env, ft_lstnew(ft_strdup(key_value)));
+	return (true);
+}
+
+bool	check_env_key(t_export *exp_info, t_cmd_line *cmd_line)
+{
+	char	*env_key;
+
+	env_key = exp_info->env_key;
+	if (!env_key)
+		return (false);
 	if (has_plus(env_key))
 	{
-		*end_in_plus = true;
+		exp_info->end_in_plus = true;
 		env_key[ft_strlen(env_key) - 1] = '\0';
 	}
 	if (!validate_env_key(env_key))
 	{
-		free_and_set_error(key_values, env_key);
-		free(env_key);
+		make_err_msg(INVALID_EXPORT_PARAM, cmd_line->command,
+				env_key, get_err_msg(INVALID_EXPORT_PARAM));
 		return (false);
 	}
 	return (true);
 }
 
-bool	update_env(t_list *env, char *env_key, bool end_in_plus, char *input)
+bool	update_env(t_export *exp_info)
 {
 	t_list	*target_llist;
-	bool	ret;
 
-	ret = true;
-	if((target_llist = find_env_target_list(env, env_key)))
+	if((target_llist = find_env_target_list(exp_info->env_key)))
 	{
-		if (!update_value(end_in_plus, target_llist, input))
-			ret = false;
+		if (!update_value(target_llist, exp_info))
+			return (false);
 	}
 	else
 	{
-		if (!add_new_key_value(end_in_plus, input, env_key, env))
-			ret = false;
+		if (!add_new_key_value(exp_info))
+			return (false);
 	}
-	free(env_key);
-	return (ret);
+	return (true);
 }
 
-// key validation
-// 이미 존재하는 키라면 밸류를 덮어쓰기
-// 연결하는 문자가 = 가 아니라 += 라면 밸류 뒤에 붙이기
-bool	export(t_cmd_line *cmd_line, t_list *env, char* pipe_input)
+void	free_export(t_export *exp_info)
 {
-	char	**key_values;
-	char	*env_key;
-	bool	end_in_plus;
-	int		i;
-	int		ret;
+	if (exp_info->env_key)
+		free(exp_info->env_key);
+	free(exp_info);
+}
+
+t_export	*init_export(t_cmd_line *cmd_line, char **key_values, char *key_value)
+{
+	t_export	*export_info;
+
+	if (*key_value == '=')
+	{
+		make_err_msg(INVALID_EXPORT_PARAM, cmd_line->command,
+							"=", get_err_msg(INVALID_EXPORT_PARAM));
+		return (NULL);
+	}
+	if (!(export_info = ft_calloc(sizeof(t_export), 1)))
+		return (NULL);
+	export_info->key_values = key_values;
+	export_info->key_value = key_value;
+	export_info->end_in_plus = false;
+	export_info->env_key = get_env_key(key_value);
+	if (!(check_env_key(export_info, cmd_line)))
+	{
+		free_export(export_info);
+		return (NULL);
+	}
+	return (export_info);
+}
+
+bool	export(t_cmd_line *cmd_line, char* pipe_input)
+{
+	t_export	*exp_info;
+	char		**key_values;
+	int			ret;
+	int			i;
 
 	ret = true;
 	key_values = ft_split(cmd_line->param, ' ');
 	i = 0;
 	while (key_values[i])
 	{
-		end_in_plus = false;
-		if (*(key_values[i]) == '=')
-			return (free_and_set_error(key_values, key_values[i]));
-		env_key = get_env_key(key_values[i]);
-		if (!(ret = check_env_key(env_key, &end_in_plus, key_values)))
-			return (false);
-		if (!(update_env(env, env_key, end_in_plus, key_values[i])))
-			return (false);
+		if (!(exp_info = init_export(cmd_line, key_values, key_values[i]))
+			|| !(update_env(exp_info)))
+			ret = false;
+		if (exp_info)
+			free_export(exp_info);
 		i++;
 	}
 	free_str_array(key_values);
-	return (true);
+	return (ret);
 }
-
-
-
