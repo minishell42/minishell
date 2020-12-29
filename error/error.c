@@ -12,11 +12,8 @@ void	message_and_exit(char *message, bool built_in_error)
 	exit(1);
 }
 
-char	*get_err_msg(t_error *err_info)
+char	*get_err_msg(int	err_number)
 {
-	int 	err_number;
-	
-	err_number = err_info->err_number;
 	if (err_number == ALLOC_ERROR)
 		return ("malloc error\n");
 	else if (err_number == QUOT_IS_NOT_PAIR)
@@ -54,14 +51,15 @@ void	print_err_msg(void)
 	curr = g_err;
 	while (curr)
 	{
-		err_info = curr->content; 
-		err_msg = get_err_msg(err_info);
-		if (!(msg = ft_strjoin(err_info->err_value, err_msg)))
-			msg = err_msg;
-		write(2, msg, ft_strlen(msg));
+		err_info = curr->content;
+		err_msg = err_info->err_value;
+		// err_msg = get_err_msg(err_info->err_number);
+		// if (!(msg = ft_strjoin(err_info->err_value, err_msg)))
+		// 	msg = err_msg;
+		write(2, err_msg, ft_strlen(err_msg));
 		curr = curr->next;
-		if (msg && msg != err_msg)
-			free(msg);
+		// if (msg && msg != err_msg)
+		// 	free(msg);
 	}
 	ft_lstclear(&g_err, free_err_info);
 	g_err = 0;

@@ -1,12 +1,12 @@
 #include "command.h"
 
-char	**get_path_arr(t_list *env)
+char	**get_path_arr()
 {
 	t_list			*paths;
 	char			*value;
 	char			**path_arr;
 
-	if (!(paths = find_env_target_list(env, "PATH")))
+	if (!(paths = find_env_target_list("PATH")))
 		return (NULL);
 	value = ft_strchr(paths->content, '=');
 	if (!value || !(value + 1))
@@ -52,7 +52,7 @@ void free_dir_and_path(DIR *dir, char *path)
 	closedir(dir);
 }
 
-char	*search_file(char *file_name, t_list *env)
+char	*search_file(char *file_name)
 {
 	char			**path_arr;
 	DIR				*dir_ptr;
@@ -60,7 +60,7 @@ char	*search_file(char *file_name, t_list *env)
 	int				i;
 	char			*file_path;
 
-	path_arr = get_path_arr(env);
+	path_arr = get_path_arr();
 	i = 0;
 	while (path_arr[i])
 	{

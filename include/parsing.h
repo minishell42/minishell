@@ -17,20 +17,8 @@
 # define REDIR_IN 2
 # define OUT_ENDLINE 3
 
-// =====================  before  =========================
-// typedef struct		s_command_line
-// {
-// 	char			*command;
-// 	char			*option;
-// 	char			*param;
-// 	int				command_num;
-// 	bool			pipe_flag;
-// 	int				redir_flag;
-// 	t_list			*redir_param;
-// }					t_cmd_line;
+t_list	*g_env;
 
-// =====================  after  =========================
-// add s_redir
 typedef struct		s_redir
 {
 	int				redir_flag;
@@ -63,31 +51,31 @@ bool				check_cmd_num(t_cmd_line *cmd_line);
 /*
 ** get_command_lines.c
 */
-t_cmd_line			*get_command_line(char **line_ptr, t_list *env);
+t_cmd_line			*get_command_line(char **line_ptr);
 /*
 ** parse_command.c
 */
-bool				parse_command(t_cmd_line *cmd_line, char *start, int len, t_list *env);
-int					get_command_num(char *command, t_list *env);
+bool				parse_command(t_cmd_line *cmd_line, char *start, int len);
+int					get_command_num(char *command);
 
 /*
 ** parse_param.c
 */
-int					set_param(t_cmd_line *command_line, char *start, t_list *env);
-bool				change_param_value(t_cmd_line *cmd_line, t_list *env);
-char				*convert_to_valid_value(char *start, int len, t_list *env);
+int					set_param(t_cmd_line *command_line, char *start);
+bool				change_param_value(t_cmd_line *cmd_line);
+char				*convert_to_valid_value(char *start, int len);
 /*
 ** set_env_value.c
 */
-char 				*get_env_value(char *target_key, t_list *env);
-void 				join_env_value(char **ret, char *str, int *i, t_list *env);
-char				*set_multi_env(char *str, t_list *env);
-char				*change_to_absolute_path(char *value, t_list *env);
+char 				*get_env_value(char *target_key);
+void 				join_env_value(char **ret, char *str, int *i);
+char				*set_multi_env(char *str);
+char				*change_to_absolute_path(char *value);
 /*
 ** set_redirection_value.c
 */
 void				set_redirection_flag(t_cmd_line *cmd_line, int *i);
-bool				set_redirection_param(t_cmd_line *cmd_line, t_list *env);
+bool				set_redirection_param(t_cmd_line *cmd_line);
 /*
 ** validate_line.c
 */

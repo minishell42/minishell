@@ -1,6 +1,6 @@
 #include "parsing.h"
 
-static bool	set_command(t_cmd_line *cmd_line, char *line, int *index, t_list *env)
+static bool	set_command(t_cmd_line *cmd_line, char *line, int *index)
 {
 	int			len;
 	char		*start;
@@ -12,7 +12,7 @@ static bool	set_command(t_cmd_line *cmd_line, char *line, int *index, t_list *en
 	len = (line + *index) - start;
 	if (!line[*index + 1])
 		len++;
-	if (!parse_command(cmd_line, start, len, env))
+	if (!parse_command(cmd_line, start, len))
 	{
 		*index = tmp_index;
 		tmp_index = 0;
@@ -28,7 +28,7 @@ static bool	set_command(t_cmd_line *cmd_line, char *line, int *index, t_list *en
 	return (true);
 }
 
-static int	set_command_line(t_cmd_line *cmd_line, char *line, t_list *env)
+static int	set_command_line(t_cmd_line *cmd_line, char *line)
 {
 	char			*start;
 	int				len;
@@ -39,7 +39,7 @@ static int	set_command_line(t_cmd_line *cmd_line, char *line, t_list *env)
 	tmp_index = 0;
 	while (line[index])
 	{
-		if (!set_command(cmd_line, line, &index, env))
+		if (!set_command(cmd_line, line, &index))
 		{
 			if (g_err)
 				return (-1);
@@ -47,13 +47,13 @@ static int	set_command_line(t_cmd_line *cmd_line, char *line, t_list *env)
 		}
 	}
 	start = line + index;
-	if ((tmp_index = set_param(cmd_line, start, env)) < 0)
+	if ((tmp_index = set_param(cmd_line, start)) < 0)
 		return (-1);
 	index += tmp_index;
 	return (index);
 }
 
-t_cmd_line	*get_command_line(char **line_ptr, t_list *env)
+t_cmd_line	*get_command_line(char **line_ptr)
 {	
 	t_cmd_line		*command_line;
 	int				index;
@@ -65,8 +65,8 @@ t_cmd_line	*get_command_line(char **line_ptr, t_list *env)
 	line = *line_ptr + index;
 	if (!(command_line = ft_calloc(sizeof(t_cmd_line), 1)))
 		return (NULL);
-	index = set_command_line(command_line, line, env);
-	if (index < 0 || !set_redirection_param(command_line, env))
+	index = set_command_line(command_line, line);
+	if (index < 0 || !set_redirection_param(command_line))
 	{
 		free_cmd_struct(command_line);
 		free(command_line);

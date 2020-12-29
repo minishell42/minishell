@@ -1,11 +1,13 @@
 #include "parsing.h"
 
-char 		*get_env_value(char *target_key, t_list *env)
+char 		*get_env_value(char *target_key)
 {
 	char	*key;
 	char	*value;
 	int		i;
+	t_list	*env;
 
+	env = g_env;
 	while (env)
 	{
 		i = 0;
@@ -25,7 +27,7 @@ char 		*get_env_value(char *target_key, t_list *env)
 	return (ft_calloc(sizeof(char), 1));
 }
 
-static char	*get_absolute_path(char *value, t_list *env, int index)
+static char	*get_absolute_path(char *value, int index)
 {
 	char	*tmp;
 	int		curr_len;
@@ -48,11 +50,11 @@ static char	*get_absolute_path(char *value, t_list *env, int index)
 		}
 	}
 	else if (index != 0 && value[index - 1] == '~')
-		tmp = get_env_value("HOME", env);
+		tmp = get_env_value("HOME");
 	return (tmp);
 }
 
-char		*change_to_absolute_path(char *value, t_list *env)
+char		*change_to_absolute_path(char *value)
 {
 	char	*result;
 	char	*tmp;
@@ -69,7 +71,7 @@ char		*change_to_absolute_path(char *value, t_list *env)
 		if ((!are_equal(value, ".") && !are_equal(value, "..")))
 			return (0);
 	}
-	if ((tmp = get_absolute_path(value, env, i)))
+	if ((tmp = get_absolute_path(value, i)))
 	{
 		result = ft_strjoin(tmp, value + i);
 		free(tmp);
@@ -77,7 +79,7 @@ char		*change_to_absolute_path(char *value, t_list *env)
 	return (result);
 }
 
-void 		join_env_value(char **ret, char *str, int *i, t_list *env)
+void 		join_env_value(char **ret, char *str, int *i)
 {
 	char	*env_key;
 	char	*env_value;
@@ -90,7 +92,7 @@ void 		join_env_value(char **ret, char *str, int *i, t_list *env)
 		(*i)++;
 	seperator = str[*i];
 	str[*i] = 0;
-	env_value = get_env_value(env_key, env);
+	env_value = get_env_value(env_key);
 	temp = *ret;
 	*ret = ft_strjoin(temp, env_value);
 	str[*i] = seperator;
@@ -98,7 +100,7 @@ void 		join_env_value(char **ret, char *str, int *i, t_list *env)
 	free(temp);
 }
 
-char		*set_multi_env(char *str, t_list *env)
+char		*set_multi_env(char *str)
 {
 	char	*ret;
 	char	*temp;
@@ -119,7 +121,7 @@ char		*set_multi_env(char *str, t_list *env)
 		ret = ft_strjoin(temp, start);
 		free(temp);
 		if (seperator == '$')
-			join_env_value(&ret, str, &i, env);
+			join_env_value(&ret, str, &i);
 		start = str + i;
 	}
 	return (ret);

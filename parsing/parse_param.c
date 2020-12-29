@@ -1,6 +1,6 @@
 #include "parsing.h"
 
-char		*convert_to_valid_value(char *start, int len, t_list *env)
+char		*convert_to_valid_value(char *start, int len)
 {
 	char	*result;
 	char	*str;
@@ -8,7 +8,7 @@ char		*convert_to_valid_value(char *start, int len, t_list *env)
 
 	str = ft_calloc(sizeof(char), len + 1);
 	ft_strlcpy(str, start, len + 1);
-	tmp = set_multi_env(str, env);
+	tmp = set_multi_env(str);
 	free(str);
 	remove_quotation(tmp);
 	result = ft_strtrim(tmp, " ");
@@ -16,7 +16,7 @@ char		*convert_to_valid_value(char *start, int len, t_list *env)
 	return (result);
 }
 
-int			set_param(t_cmd_line *command_line, char *start, t_list *env)
+int			set_param(t_cmd_line *command_line, char *start)
 {
 	char	*param;
 	int		param_len;

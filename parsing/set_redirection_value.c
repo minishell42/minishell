@@ -1,7 +1,7 @@
 #include "parsing.h"
 
 bool	set_param_before_redir(t_cmd_line *cmd_line, 
-								t_list *env, char *param, int *index)
+								char *param, int *index)
 {
 	char	*before_param;
 	
@@ -38,7 +38,7 @@ bool	set_redir_flag(t_redir *redir, char *param, char **content)
 }
 
 bool	set_other_param(t_cmd_line *cmd_line, 
-						t_list *env, char *content, int index)
+						char *content, int index)
 {
 	char	*sub_param;
 	char	*other_param;
@@ -58,7 +58,7 @@ bool	set_other_param(t_cmd_line *cmd_line,
 }
 
 bool	set_redir_param(t_cmd_line *cmd_line, 
-						t_list *env, t_redir *redir, char *content)
+						t_redir *redir, char *content)
 {
 	int		index;
 	char	*tmp;
@@ -68,19 +68,19 @@ bool	set_redir_param(t_cmd_line *cmd_line,
 			check_character_in_line(content, &index, ft_isspace))
 		tmp = ft_substr(content, 0, index);
 	if (!(redir->redir_param = 
-			convert_to_valid_value(tmp, ft_strlen(tmp), env)))
+			convert_to_valid_value(tmp, ft_strlen(tmp))))
 	{
 		free(tmp);
 		return (false);
 	}
 	free(tmp);
-	if (!set_other_param(cmd_line, env, content, index))
+	if (!set_other_param(cmd_line, content, index))
 		return (false);
 	return (true);
 }
 
 bool	can_make_redir_list(t_cmd_line *cmd_line, 
-							t_list *env, char *param, char *content)
+							char *param, char *content)
 {
 	t_redir		*redir;
 	t_list		*list;
@@ -95,7 +95,7 @@ bool	can_make_redir_list(t_cmd_line *cmd_line,
 		free(redir);
 		return (false);
 	}
-	if (!(set_redir_param(cmd_line, env, redir, tmp)))
+	if (!(set_redir_param(cmd_line, redir, tmp)))
 	{
 		free(redir);
 		return (false);
@@ -106,7 +106,7 @@ bool	can_make_redir_list(t_cmd_line *cmd_line,
 }
 
 bool	get_redirection_param(t_cmd_line *cmd_line, 
-								t_list *env, char *param, int *index)
+								char *param, int *index)
 {
 	int			start;
 	char		*redir_content;
@@ -123,7 +123,7 @@ bool	get_redirection_param(t_cmd_line *cmd_line,
 		if (!(redir_content = ft_substr(param, start, *index - start)))
 			return (false);
 		start = *index;
-		if (!can_make_redir_list(cmd_line, env, param, redir_content))
+		if (!can_make_redir_list(cmd_line, param, redir_content))
 		{
 			free(redir_content);
 			return (false);
@@ -137,7 +137,7 @@ bool	get_redirection_param(t_cmd_line *cmd_line,
 	return (true);
 }
 
-bool	set_redirection_param(t_cmd_line *cmd_line, t_list *env)
+bool	set_redirection_param(t_cmd_line *cmd_line)
 {
 	char	*param;
 	char	*tmp;
@@ -145,9 +145,9 @@ bool	set_redirection_param(t_cmd_line *cmd_line, t_list *env)
 
 	param = cmd_line->param;
 	index = 0;
-	if (!set_param_before_redir(cmd_line, env, param, &index))
+	if (!set_param_before_redir(cmd_line, param, &index))
 		return (false);
-	if (!get_redirection_param(cmd_line, env, param, &index))
+	if (!get_redirection_param(cmd_line, param, &index))
 	{
 		free(param);
 		return (false);

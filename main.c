@@ -4,9 +4,9 @@ int			main(int argc, char **argv, char *envp[])
 {
 	char		*line;
 	t_list		*command_lines;
-	t_list		*env;
+	// t_list		*env;
 
-	env = get_env_llist(envp);
+	g_env = get_env_llist(envp);
 	// set_signal();
 	signal(SIGINT, handler_signal);
 	signal(SIGQUIT, handler_signal);
@@ -20,9 +20,9 @@ int			main(int argc, char **argv, char *envp[])
 			free(line);
 			continue ;
 		}
-		minishell(line, env);
+		minishell(line);
 		free(line);
 	}
-	free_env_list(&env);
+	free_env_list(&g_env);
 	return (0);
 }
