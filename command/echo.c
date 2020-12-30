@@ -29,6 +29,12 @@ char	*make_param_str(t_cmd_line *cmd_line)
 		result = ft_strjoin(result, param);
 		free(tmp);
 		param_list = param_list->next;
+		if (param_list)
+		{
+			tmp = result;
+			result = ft_strjoin(result, " ");
+			free(tmp);
+		}
 	}
 	return (result);
 }

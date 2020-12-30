@@ -87,28 +87,53 @@ static char	*set_home_dir(char *param)
 	return (dir);
 }
 
-static char	*set_dir(t_list *param_list)
+static char	*set_dir_param(t_list *param_list)
 {
-	char	*dir;
-	char	*tmp;
-	char	*home;
-	int		index;
-	char	*param;
+	char 	*param;
+	int		list_size;
 
-	if (ft_lstsize(param_list) > 1)
+	list_size = ft_lstsize(param_list);
+	if (list_size > 1)
 	{
 		make_err_msg(TOO_MANY_REDIR_PARAM, 
 					"bash", "cd", "too many arguments\n");
 		return (NULL);
 	}
-	param = param_list->content;
+	else if (!list_size)
+		param = ft_strdup("--");
+	else
+		param = ft_strdup(param_list->content);
+	return (param);
+}
+
+static bool	old_pwd_dir(char **dir, bool *flag)
+{
+	
+	*dir = get_env_value("OLDPWD");
+	if (**dir == '\0')
+	{
+		make_err_msg(NO_OLDPWD, "bash", "cd", "OLDPWD not set\n");
+		free(*dir);
+		return (false);
+	}
+	*flag = true;
+	return (true);
+}
+
+static char	*set_dir(t_list *param_list, bool *flag)
+{
+	char	*dir;
+	char	*tmp;
+	char	*home;
+	char	*param;
+
+	if (!(param = set_dir_param(param_list)))
+		return (NULL);
 	if (param[0] == '-' && ft_strlen(param) == 1)
 	{
-		dir = get_env_value("OLDPWD");
-		if (*dir == '\0')
+		if (!old_pwd_dir(&dir, flag))
 		{
-			make_err_msg(NO_OLDPWD, "bash", "cd", "OLDPWD not set\n");
-			free(dir);
+			free(param);
 			return (NULL);
 		}
 	}
@@ -116,15 +141,12 @@ static char	*set_dir(t_list *param_list)
 		dir = set_home_dir(param);
 	else
 		dir = ft_strdup(param);
+	free(param);
 	return (dir);
 }
 
-static bool	set_chdir(t_list *param_list, char *dir)
+static bool	set_chdir(char *dir, bool flag)
 {
-	char	*tmp;
-	char	*param;
-
-	param = param_list->content;
 	if (chdir(dir) < 0)
 	{
 		make_err_msg(NO_FILE_OR_DIRECTORY, 
@@ -132,7 +154,7 @@ static bool	set_chdir(t_list *param_list, char *dir)
 		free(dir);
 		return (false);
 	}
-	if (param[0] == '-' && ft_strlen(param) == 1)
+	if (flag)
 	{
 		write(1, dir, ft_strlen(dir));
 		write(1, "\n", 1);
@@ -159,23 +181,25 @@ bool	cd(t_cmd_line *cmd_line)
 	char		*dir;
 	char		*old_pwd;
 	t_list		*param_list;
+	bool		flag;
 
+	flag = false;
 	param_list = cmd_line->param;
-	if (!(dir = set_dir(param_list)))
+	if (!(dir = set_dir(param_list, &flag)))
 		return (false);
 	if (!(old_pwd = getcwd(NULL, 0)))
 	{
 		free(dir);
 		return (false);
 	}
-	if (!set_chdir(param_list, dir))
+	if (!set_chdir(dir, flag))
 	{
 		free(old_pwd);
 		return (false);
 	}
 	set_env_target("OLDPWD", old_pwd);
 	free(old_pwd);
-	if (!set_pwd_to_env("PWD",dir))
+	if (!set_pwd_to_env("PWD", dir))
 		return (false);
 	free(dir);
 	return (true);

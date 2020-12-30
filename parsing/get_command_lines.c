@@ -10,8 +10,6 @@ static bool	set_command(t_cmd_line *cmd_line, char *line, int *index)
 	if (!check_character_in_line(line, index, ft_isspace))
 		return (false);
 	len = (line + *index) - start;
-	if (!line[*index + 1])
-		len++;
 	if (!parse_command(cmd_line, start, len))
 	{
 		*index = tmp_index;
