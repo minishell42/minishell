@@ -41,10 +41,8 @@ bool		run_command(t_cmd_line *cmd_line)
 		return (cd(cmd_line));
 	else if (cmd_line->command_num == EXPORT)
 		return (export(cmd_line));
-	// else if (cmd_line->command_num == PWD)
-	// 	pwd(cmd_line);
-	// else if (cmd_line->command_num == EXIT)
-	// 	ft_exit(cmd_line);
+	else if (cmd_line->command_num == EXIT)
+		ft_exit(cmd_line);
 	else if((file_path = search_file(cmd_line->command)))
 		return (run_binary(cmd_line));
 	else if (!check_cmd_num(cmd_line))
