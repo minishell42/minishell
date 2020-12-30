@@ -62,8 +62,10 @@ void test_export()
 	char		*expect3_1 = "b=2";
 	t_cmd_line	*cmd_line3 = get_command_line(&case3);
 
-	if (!export(cmd_line3))
-		printf("export result is fail\n");
+	if (export(cmd_line3))
+		printf("return ok\n");
+	else
+		printf("return must be true!!!!!\n");
 	t_list *result3 = find_env_target_list("a");
 	t_list *result3_1 = find_env_target_list("b");
 
@@ -101,9 +103,9 @@ void test_export()
 
 	t_list *before_last5 = ft_lstlast(g_env);
 	if (!export(cmd_line5))
-		printf("result is fail\n");
+		printf("export ok\n");
 	else
-		printf("result is success\n");
+		printf("result must be fail!!!!!\n");
 	
 	if (before_last5 != ft_lstlast(g_env))
 	{
@@ -154,8 +156,11 @@ void test_export()
 
 	t_cmd_line	*cmd_line7 = get_command_line(&case7);
 
-	printf("export 7 is %d\n", export(cmd_line7));
-
+	if (export(cmd_line7))
+		printf("return ok\n");
+	else
+		printf("return must be true!!!!!\n");
+	
 	t_list *result7 = find_env_target_list("abc");
 	if (!result7)
 	{
@@ -164,22 +169,23 @@ void test_export()
 	}
 	if (!are_equal((char *)(result7->content), "abc=3"))
 	{
-		printf("last content = '%s'\n", (char *)ft_lstlast(g_env)->content);
+		printf("last content = '%s'\n", ((char *)ft_lstlast(g_env)->content));
 		printf("result content = '%s'\n", (char *)(result7->content));
 		exit(1);
 	}
+	ft_lstdel_last(g_env, free);
 	free_cmd_struct(cmd_line7);
 	free(cmd_line7);
 	printf("==============  case7 ok ==============\n");
 
 
-	char		*case8 = "export a=1 =b c=2";
+	char		*case8 = "export a=1 =b c=2 =d";
 	t_cmd_line	*cmd_line8 = get_command_line(&case8);
 
 	if (!export(cmd_line8))
-		printf("result is fail\n");
+		printf("return ok\n");
 	else
-		printf("result is success\n");
+		printf("return must be false!!!!!!!!!!!\n");
 	
 	t_list *expect8 = find_env_target_list("a");
 	t_list *expect8_1 = find_env_target_list("c");
@@ -192,9 +198,71 @@ void test_export()
 		perror("expect8_1 is fail\n");
 
 	print_err_msg();
-
+	ft_lstdel_last(g_env, free);
+	ft_lstdel_last(g_env, free);
 	free_cmd_struct(cmd_line8);
 	free(cmd_line8);
 	printf("==============  case8 ok ==============\n");
+
+
+
+	char		*case9 = "export a+= 1";
+	t_cmd_line	*cmd_line9 = get_command_line(&case9);
+
+	if (export(cmd_line9))
+		printf("rturn must be fail!!!!!!\n");
+	else
+		printf("return  ok\n");
+	
+	t_list *expect9 = find_env_target_list("a");
+
+	if (!expect9)
+		perror("not append export\n");
+	if (!(are_equal((char *)expect9->content, "a=")))
+	{
+		printf("err ----- content is '%s'\n", ((char *)expect9->content));
+		exit(1);
+	}
+
+	print_err_msg();
+	ft_lstdel_last(g_env, free);
+	free_cmd_struct(cmd_line9);
+	free(cmd_line9);
+	printf("==============  case9 ok ==============\n");
+
+
+	char		*case10 = "export ++";
+	t_cmd_line	*cmd_line10 = get_command_line(&case10);
+
+	if (export(cmd_line10))
+		printf("rturn must be fail!!!!!!\n");
+	else
+		printf("return  ok\n");
+
+	print_err_msg();
+	free_cmd_struct(cmd_line10);
+	free(cmd_line10);
+	printf("==============  case10 ok ==============\n\n");
+
+
+	char		*case11 = "export a +=1";
+	t_cmd_line	*cmd_line11 = get_command_line(&case11);
+
+	if (export(cmd_line11))
+		printf("return must be fail!!!!!!\n");
+	else
+		printf("return  ok\n");
+
+	t_list *target11 = find_env_target_list("a");
+	if (target11)
+	{
+		printf("fail ---- appended target\n\n");
+		exit(1);
+	}
+
+	print_err_msg();
+	free_cmd_struct(cmd_line11);
+	free(cmd_line11);
+	printf("==============  case11 ok ==============\n");
 }
 
