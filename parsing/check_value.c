@@ -35,7 +35,6 @@ bool			check_cmd_num(t_cmd_line *cmd_line)
 		if (!redir || *cmd_line->command)
 		{
 			make_err_msg(0, cmd_line->command, get_err_msg(INVALID_COMMAND));
-			// parsing_err_value(INVALID_COMMAND, cmd_line->command);
 			return (false);
 		}
 	}
