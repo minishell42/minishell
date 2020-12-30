@@ -11,7 +11,6 @@ void	built_in_error()
 		errmsg = strerror(errno);
 		write(2, errmsg, ft_strlen(errmsg));
 		write(2, "\n", 1);
-		exit(EXIT_FAILURE);
 	}
 }
 
