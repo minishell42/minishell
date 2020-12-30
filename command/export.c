@@ -134,8 +134,8 @@ bool	check_env_key(t_export *exp_info, t_cmd_line *cmd_line)
 	}
 	if (!validate_env_key(env_key))
 	{
-		make_err_msg(INVALID_EXPORT_PARAM, cmd_line->command,
-				env_key, get_err_msg(INVALID_EXPORT_PARAM));
+		make_err_msg(cmd_line->command, env_key,
+					get_err_msg(INVALID_EXPORT_PARAM));
 		return (false);
 	}
 	return (true);
@@ -171,8 +171,8 @@ t_export	*init_export(t_cmd_line *cmd_line, char **key_values, char *key_value)
 	
 	if (*key_value == '=')
 	{
-		make_err_msg(INVALID_EXPORT_PARAM, cmd_line->command,
-							"=", get_err_msg(INVALID_EXPORT_PARAM));
+		make_err_msg(cmd_line->command,	"=",
+					get_err_msg(INVALID_EXPORT_PARAM));
 		return (NULL);
 	}
 	if (!(export_info = ft_calloc(sizeof(t_export), 1)))

@@ -51,6 +51,9 @@ int				validate_line(char *line)
 	if (!check_validate_line(line + i, &flag))
 		return (0);
 	if (flag && flag != ';')
-		return (parsing_err_value(PARAM_IS_NEWLINE, ""));
+	{
+		make_err_msg(0, 0, get_err_msg(PARAM_IS_NEWLINE));
+		return (false);
+	}
 	return (1);
 }

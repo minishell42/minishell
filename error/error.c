@@ -12,22 +12,20 @@ void	message_and_exit(char *message, bool built_in_error)
 	exit(1);
 }
 
-char	*get_err_msg(int	err_number)
+char	*get_err_msg(int err_number)
 {
-	if (err_number == ALLOC_ERROR)
-		return ("malloc error\n");
-	else if (err_number == QUOT_IS_NOT_PAIR)
-		return (" quotation mark is not pair\n");
+	if (err_number == QUOT_IS_NOT_PAIR)
+		return ("quotation mark is not pair\n");
 	else if (err_number == INVALID_COMMAND)
-		return (" invalid command entered\n");
+		return ("invalid command entered\n");
 	else if (err_number == TOO_MANY_REDIR)
-		return (" too many redirects exist\n");
+		return ("too many redirects exist\n");
 	else if (err_number == SYNTAX_ERROR)
-		return (" syntax error near unexpected token\n");
+		return ("syntax error near unexpected token\n");
 	else if (err_number == PARAM_IS_NEWLINE)
-		return (" syntax error near unexpected token `newline'\n");
+		return ("syntax error near unexpected token `newline'\n");
 	else if (err_number == INVALID_EXPORT_PARAM)
-		return (" is invalid export param\n");
+		return ("is invalid export param\n");
 	return (NULL);
 }
 
@@ -53,31 +51,11 @@ void	print_err_msg(void)
 	{
 		err_info = curr->content;
 		err_msg = err_info->err_value;
-		// err_msg = get_err_msg(err_info->err_number);
-		// if (!(msg = ft_strjoin(err_info->err_value, err_msg)))
-		// 	msg = err_msg;
 		write(2, err_msg, ft_strlen(err_msg));
 		curr = curr->next;
-		// if (msg && msg != err_msg)
-		// 	free(msg);
 	}
 	ft_lstclear(&g_err, free_err_info);
 	g_err = 0;
-}
-
-bool	parsing_err_value(int error_number, char *error_point)
-{
-	t_error *err_info;
-
-	err_info = ft_calloc(sizeof(t_error), 1);
-	err_info->err_number = error_number;
-	if (error_point)
-		err_info->err_value = ft_strdup(error_point);
-	if (g_err)
-		ft_lstadd_back(&g_err, ft_lstnew(err_info));
-	else
-		g_err = ft_lstnew(err_info);
-	return (false);
 }
 
 void	set_quot_err(char quot_flag)
@@ -87,7 +65,7 @@ void	set_quot_err(char quot_flag)
 	if (!(err_value = ft_calloc(sizeof(char), 2)))
 		return ;
 	err_value[0] = quot_flag;
-	parsing_err_value(QUOT_IS_NOT_PAIR, err_value);
+	make_err_msg(0, err_value, get_err_msg(QUOT_IS_NOT_PAIR));
 	free(err_value);
 }
 
@@ -98,7 +76,7 @@ int		set_syntax_err(char *line, int i)
 	err_value[0] = line[i];
 	if (line[i] == line[i - 1] || line[i] == line[i + 1])
 		err_value[1] = line[i];
-	parsing_err_value(SYNTAX_ERROR, err_value);
+	make_err_msg(0, err_value, get_err_msg(SYNTAX_ERROR));
 	free(err_value);
 	return (0);
 }

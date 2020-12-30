@@ -17,7 +17,6 @@
 # define SYNTAX_ERROR 5
 # define PARAM_IS_NEWLINE 6
 # define INVALID_EXPORT_PARAM 7
-
 # define TOO_MANY_REDIR_PARAM 8
 # define NO_FILE_OR_DIRECTORY 9
 # define NO_OLDPWD 10
@@ -26,7 +25,6 @@
 
 typedef struct	s_error 
 {
-	int		err_number;
 	char	*err_value;
 }				t_error;
 
@@ -37,20 +35,13 @@ t_list			*g_err;
 */
 void			message_and_exit(char *message, bool built_in_error);
 void			print_err_msg(void);
-bool			parsing_err_value(int error_number, char *error_point);
 void			set_quot_err(char quot_flag);
 int				set_syntax_err(char *line, int i);
-char			*get_err_msg(int	err_number);
-
-
+char			*get_err_msg(int err_number);
 /*
 ** built_in_error.c
 */
 void			built_in_error(void);
-void			make_err_msg(int error_number, char *cmd,
-							char *value, char *msg);
-
-
-
+void			make_err_msg(char *cmd,	char *value, char *msg);
 
 # endif
