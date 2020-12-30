@@ -71,7 +71,7 @@ static char	*set_home_dir(char *param)
 	home = get_env_value("HOME");
 	if (*home == '\0')
 	{
-		make_err_msg("cd", 0, "HOME not set\n");
+		make_err_msg("cd", 0, get_err_msg(NO_HOME));
 		free(home);
 		return (NULL);
 	}
@@ -95,7 +95,7 @@ static char	*set_dir_param(t_list *param_list)
 	list_size = ft_lstsize(param_list);
 	if (list_size > 1)
 	{
-		make_err_msg("cd", 0, "too many arguments\n");
+		make_err_msg("cd", 0, get_err_msg(TOO_MANY_REDIR_PARAM));
 		return (NULL);
 	}
 	else if (!list_size)
@@ -111,7 +111,7 @@ static bool	old_pwd_dir(char **dir, bool *flag)
 	*dir = get_env_value("OLDPWD");
 	if (**dir == '\0')
 	{
-		make_err_msg("cd", 0, "OLDPWD not set\n");
+		make_err_msg("cd", 0, get_err_msg(NO_OLDPWD));
 		free(*dir);
 		return (false);
 	}
@@ -148,7 +148,7 @@ static bool	set_chdir(char *dir, bool flag)
 {
 	if (chdir(dir) < 0)
 	{
-		make_err_msg("cd", dir, "No such file or directory\n");
+		make_err_msg("cd", dir, get_err_msg(NO_FILE_OR_DIRECTORY));
 		free(dir);
 		return (false);
 	}
