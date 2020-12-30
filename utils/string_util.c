@@ -55,6 +55,13 @@ bool	is_contained(char c, char *str)
 	return (0);
 }
 
+int		is_seperate_character(int c)
+{
+	if (ft_isspace(c) ||is_redirection(c))
+		return (true);
+	return (false);
+}
+
 char	*ft_join_strs(char **strs)
 {
 	char	*res;
