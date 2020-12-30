@@ -39,7 +39,6 @@ void test_export()
 		message_and_exit((char *)(result1->content), false);
 	ft_lstdel_last(g_env, free);
 	free_cmd_struct(cmd_line1);
-	free(cmd_line1);
 	printf("==============  case1 OK ==============\n");
 
 
@@ -53,7 +52,6 @@ void test_export()
 		message_and_exit(result2->content, false);
 	ft_lstdel_last(g_env, free);
 	free_cmd_struct(cmd_line2);
-	free(cmd_line2);
 	printf("==============  case2 OK ==============\n");
 
 
@@ -77,7 +75,6 @@ void test_export()
 	ft_lstdel_last(g_env, free);
 	ft_lstdel_last(g_env, free);
 	free_cmd_struct(cmd_line3);
-	free(cmd_line3);
 	printf("==============  case3 OK ==============\n");
 
 
@@ -94,7 +91,6 @@ void test_export()
 	print_err_msg();
 
 	free_cmd_struct(cmd_line4);
-	free(cmd_line4);
 	printf("==============  case4 ok ==============\n");
 
 
@@ -115,7 +111,6 @@ void test_export()
 	print_err_msg();
 
 	free_cmd_struct(cmd_line5);
-	free(cmd_line5);
 	printf("==============  case5 ok ==============\n");
 
 
@@ -146,9 +141,7 @@ void test_export()
 
 	ft_lstdel_last(g_env, free);
 	free_cmd_struct(cmd_line6);
-	free(cmd_line6);
 	free_cmd_struct(cmd_line6_1);
-	free(cmd_line6_1);
 	printf("==============  case6 ok ==============\n");
 
 
@@ -175,7 +168,6 @@ void test_export()
 	}
 	ft_lstdel_last(g_env, free);
 	free_cmd_struct(cmd_line7);
-	free(cmd_line7);
 	printf("==============  case7 ok ==============\n");
 
 
@@ -201,7 +193,6 @@ void test_export()
 	ft_lstdel_last(g_env, free);
 	ft_lstdel_last(g_env, free);
 	free_cmd_struct(cmd_line8);
-	free(cmd_line8);
 	printf("==============  case8 ok ==============\n");
 
 
@@ -227,7 +218,6 @@ void test_export()
 	print_err_msg();
 	ft_lstdel_last(g_env, free);
 	free_cmd_struct(cmd_line9);
-	free(cmd_line9);
 	printf("==============  case9 ok ==============\n");
 
 
@@ -241,7 +231,6 @@ void test_export()
 
 	print_err_msg();
 	free_cmd_struct(cmd_line10);
-	free(cmd_line10);
 	printf("==============  case10 ok ==============\n\n");
 
 
@@ -262,7 +251,6 @@ void test_export()
 
 	print_err_msg();
 	free_cmd_struct(cmd_line11);
-	free(cmd_line11);
 	printf("==============  case11 ok ==============\n");
 }
 
