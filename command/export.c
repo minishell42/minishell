@@ -1,40 +1,5 @@
 #include "command.h"
 
-bool	validate_env_key(char *env_key)
-{
-	int		i;
-
-	i = 0;
-	if (!env_key)
-		return (true);
-	while (env_key[i] && env_key[i] != '=')
-	{
-		if (is_contained(env_key[i], "!@#$%^&*()_+"))
-			return (false);
-		i++;
-	}
-	return (true);
-}
-
-char	*get_env_key(char *param)
-{
-	char	*key;
-	char	*key_value;
-	char	*separator;
-
-	key = NULL;
-	if(!(key_value = ft_strdup(param)))
-		return (NULL);
-	separator = ft_strchr(key_value, '=');
-	if (separator)
-	{
-		*separator = '\0';
-		key = ft_strdup(key_value);
-	}
-	free(key_value);
-	return (key);
-}
-
 bool	has_plus(char *env_key)
 {
 	int		len;
@@ -45,6 +10,73 @@ bool	has_plus(char *env_key)
 	if (env_key[len - 1] == '+')
 		return (true);
 	return (false);
+}
+
+void	check_end_in_plus(t_export *exp_info, char *env_key)
+{
+	if (has_plus(env_key))
+	{
+		exp_info->end_in_plus = true;
+		env_key[ft_strlen(env_key) - 1] = '\0';
+	}
+}
+
+bool	validate_env_key(char *env_key)
+{
+	int		i;
+
+	i = 0;
+	if (!env_key)
+		return (true);
+	if (!(*env_key))
+		return (false);
+	while (env_key[i] && env_key[i] != '=')
+	{
+		if (is_contained(env_key[i], "!@#$%^&*()_+")
+			|| is_contained(env_key[i], "0123456789"))
+			return (false);
+		i++;
+	}
+	return (true);
+}
+
+char	*trim_key_value(char *key_value, t_export *exp_info)
+{
+	char	*separator;
+	char	*key;
+
+	separator = ft_strchr(key_value, '=');
+	if (separator)
+	{
+		exp_info->has_separator = true;
+ 		*separator = '\0';
+		key = ft_strdup(key_value);
+		*separator = '=';
+		check_end_in_plus(exp_info, key);
+	}
+	else
+		key = ft_strdup(key_value);
+	return (key);
+}
+
+char	*get_env_key(char *param, t_cmd_line *cmd_line, t_export *exp_info)
+{
+	char	*key;
+	char	*key_value;
+
+	if(!(key_value = ft_strdup(param)))
+		return (NULL);
+	key = trim_key_value(key_value, exp_info);
+	if (!validate_env_key(key))
+	{
+		make_err_msg(cmd_line->command, key_value,
+					get_err_msg(INVALID_EXPORT_PARAM));
+		free(key_value);
+		free(key);
+		return (NULL);
+	}
+	free(key_value);
+	return (key);
 }
 
 static char	*get_value(char *str)
@@ -120,31 +152,12 @@ bool	add_new_key_value(t_export *exp_info)
 	return (true);
 }
 
-bool	check_env_key(t_export *exp_info, t_cmd_line *cmd_line)
-{
-	char	*env_key;
-
-	env_key = exp_info->env_key;
-	if (!env_key)
-		return (false);
-	if (has_plus(env_key))
-	{
-		exp_info->end_in_plus = true;
-		env_key[ft_strlen(env_key) - 1] = '\0';
-	}
-	if (!validate_env_key(env_key))
-	{
-		make_err_msg(cmd_line->command, env_key,
-					get_err_msg(INVALID_EXPORT_PARAM));
-		return (false);
-	}
-	return (true);
-}
-
 bool	update_env(t_export *exp_info)
 {
 	t_list	*target_llist;
 
+	if (!exp_info->has_separator)
+		return (true);
 	if((target_llist = find_env_target_list(exp_info->env_key)))
 	{
 		if (!update_value(target_llist, exp_info))
@@ -165,28 +178,35 @@ void	free_export(t_export *exp_info)
 	free(exp_info);
 }
 
-t_export	*init_export(t_cmd_line *cmd_line, char **key_values, char *key_value)
+bool	validate_key_value(char *key_value, t_cmd_line *cmd_line)
 {
-	t_export	*export_info;
-	
 	if (*key_value == '=')
 	{
-		make_err_msg(cmd_line->command,	"=",
+		make_err_msg(cmd_line->command,	key_value,
 					get_err_msg(INVALID_EXPORT_PARAM));
-		return (NULL);
+		return (false);
 	}
-	if (!(export_info = ft_calloc(sizeof(t_export), 1)))
+	return (true);
+}
+
+t_export	*init_export(t_cmd_line *cmd_line, char **key_values, char *key_value)
+{
+	t_export	*exp_info;
+	char		*env_key;
+	
+	if (!validate_key_value(key_value, cmd_line))
 		return (NULL);
-	export_info->key_values = key_values;
-	export_info->key_value = key_value;
-	export_info->end_in_plus = false;
-	export_info->env_key = get_env_key(key_value);
-	if (!(check_env_key(export_info, cmd_line)))
+	if (!(exp_info = ft_calloc(sizeof(t_export), 1)))
+		return (NULL);
+	exp_info->key_value = key_value;
+	exp_info->key_values = key_values;
+	exp_info->end_in_plus = false;
+	if (!(exp_info->env_key = get_env_key(key_value, cmd_line, exp_info)))
 	{
-		free_export(export_info);
+		free_export(exp_info);
 		return (NULL);
 	}
-	return (export_info);
+	return (exp_info);
 }
 
 bool	export(t_cmd_line *cmd_line)

@@ -13,6 +13,7 @@ typedef	struct	s_export
 	bool		end_in_plus;
 	char		**key_values;
 	char		*key_value;
+	bool		has_separator;
 }				t_export;
 
 /*
