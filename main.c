@@ -6,9 +6,7 @@ int			main(int argc, char **argv, char *envp[])
 	t_list		*command_lines;
 
 	g_env = get_env_llist(envp);
-	// set_signal();
-	signal(SIGINT, handler_signal);
-	signal(SIGQUIT, handler_signal);
+	init_signal();
 	while (true)
 	{
 		prompt();

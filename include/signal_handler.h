@@ -9,10 +9,10 @@
 # define WHITE		"\033[0;39m"
 
 void		prompt(void);
-void		handler_signal(int signal_no);
 void		process_exit(bool option);
 void		set_signal(void);
-void		child_exit(int signo);
 
+void		init_child_signal(void);
+void		init_signal(void);
 
 #endif
