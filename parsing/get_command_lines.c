@@ -7,7 +7,7 @@ static bool	set_command(t_cmd_line *cmd_line, char *line, int *index)
 	static int	tmp_index = 0;
 
 	start = line + *index;
-	if (!check_character_in_line(line, index, ft_isspace))
+	if (!check_character_in_line(line, index, is_seperate_character))
 		return (false);
 	len = (line + *index) - start;
 	if (!parse_command(cmd_line, start, len))
@@ -16,9 +16,8 @@ static bool	set_command(t_cmd_line *cmd_line, char *line, int *index)
 		tmp_index = 0;
 		return (false);
 	}
-	while (line[*index] == ' ' && line[*index + 1] == ' ')
+	while (line[*index] == ' ')
 		(*index)++;
-	(*index)++;
 	if (line[*index])
 		tmp_index = *index;
 	else
