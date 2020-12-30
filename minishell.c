@@ -17,7 +17,7 @@ int		get_read_fd(t_pipes *pipes)
 	return (pipes->old[READ]);
 }
 
-static void	set_pipe_flag(t_cmd_line *cmd_line, bool flag,
+static bool	set_pipe_flag(t_cmd_line *cmd_line, bool flag,
 							t_pipes *pipes)
 {
 	t_list		*redir_list;
@@ -35,7 +35,10 @@ static void	set_pipe_flag(t_cmd_line *cmd_line, bool flag,
 		redir = redir_list->content;
 		file_fd = find_file_fd(redir);
 		if (file_fd < 0)
+		{
 			built_in_error();
+			return (false);
+		}
 		if (redir->redir_flag == REDIR_IN)
 		{
 			dup2(file_fd, 0);
@@ -48,6 +51,7 @@ static void	set_pipe_flag(t_cmd_line *cmd_line, bool flag,
 	}
 	if (cmd_line->pipe_flag && !has_redir)
 		dup2(get_write_fd(pipes), 1);
+	return (true);
 }
 
 static bool check_env_operator_cmd(t_cmd_line *cmd_line)
@@ -58,20 +62,25 @@ static bool check_env_operator_cmd(t_cmd_line *cmd_line)
 		return (true);
 	else if (cmd_line->command_num == UNSET)
 		return (true);
-	else
-		return (false);
+	else if (cmd_line->command_num == EXIT)
+		return (true);
+	return (false);
 }
 
-static void run_env_operator_cmd(t_cmd_line *cmd_line,
+static bool run_env_operator_cmd(t_cmd_line *cmd_line,
 									t_pipes *pipes, bool *pipe_flag)
 {
 	int		reset[2];
+	bool	return_flag;
 
+	return_flag = true;
 	reset[0] = dup(0);
 	reset[1] = dup(1);
-	set_pipe_flag(cmd_line, *pipe_flag, pipes);
-	if (!run_command(cmd_line))
+	if (!set_pipe_flag(cmd_line, *pipe_flag, pipes) || !run_command(cmd_line))
+	{
 		built_in_error();
+		return_flag = false;
+	}
 	if (*pipe_flag)
 	{
 		close(get_read_fd(pipes));
@@ -79,16 +88,20 @@ static void run_env_operator_cmd(t_cmd_line *cmd_line,
 	}
 	dup2(reset[1], 1);
 	dup2(reset[0], 0);
+	return (return_flag);
 }
 
-static void	run(t_cmd_line *cmd_line, t_pipes *pipes, bool *pipe_flag)
+static bool	run(t_cmd_line *cmd_line, t_pipes *pipes, bool *pipe_flag)
 {
 	char	*errmsg;
 	int		status;
 	pid_t	pid;
 	
 	if (check_env_operator_cmd(cmd_line))
-		run_env_operator_cmd(cmd_line, pipes, pipe_flag);
+	{
+		if (!run_env_operator_cmd(cmd_line, pipes, pipe_flag))
+			return (false);
+	}
 	else
 	{
 		pid = fork();
@@ -103,8 +116,8 @@ static void	run(t_cmd_line *cmd_line, t_pipes *pipes, bool *pipe_flag)
 		}
 		else if (pid == 0)
 		{
-			set_pipe_flag(cmd_line, *pipe_flag, pipes);
-			if (!run_command(cmd_line))
+			init_child_signal();
+			if ((!set_pipe_flag(cmd_line, *pipe_flag, pipes)) || (!run_command(cmd_line)))
 				built_in_error();
 			exit(0);
 		}
@@ -113,8 +126,8 @@ static void	run(t_cmd_line *cmd_line, t_pipes *pipes, bool *pipe_flag)
 		*pipe_flag = true;
 	else
 		*pipe_flag = false;
+	return (true);
 }
-
 
 void	init_pipe(t_pipes *pipes)
 {
@@ -156,8 +169,6 @@ void	minishell(char *line)
 
 	init_pipe(&pipes);
 	pipe_flag = false;
-	// signal(SIGINT, child_exit);
-	// signal(SIGQUIT, child_exit);
 	if (!validate_line(line))
 	{
 		built_in_error();
@@ -167,14 +178,16 @@ void	minishell(char *line)
 	{
 		if (!(command_line = get_command_line(&line)))
 		{
-			// 따옴표 에러
 			built_in_error();
 			return ;
 		}
-		run(command_line, &pipes, &pipe_flag);
+		if (!run(command_line, &pipes, &pipe_flag))
+		{
+			free_cmd_struct(command_line);
+			return ;
+		}
 		close_write_fd(&pipes);
 		swap_pipe(&pipes);
 		free_cmd_struct(command_line);
-		free(command_line);
 	}
 }
