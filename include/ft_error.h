@@ -44,4 +44,7 @@ char			*get_err_msg(int err_number);
 void			built_in_error(void);
 void			make_err_msg(char *cmd,	char *value, char *msg);
 
+void	err(char *str);
+
+
 # endif
