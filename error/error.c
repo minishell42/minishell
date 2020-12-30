@@ -26,6 +26,14 @@ char	*get_err_msg(int err_number)
 		return ("syntax error near unexpected token `newline'\n");
 	else if (err_number == INVALID_EXPORT_PARAM)
 		return ("is invalid export param\n");
+	else if (err_number == TOO_MANY_REDIR_PARAM)
+		return ("too many arguments\n");
+	else if (err_number == NO_FILE_OR_DIRECTORY)
+		return ("No such file or directory\n");
+	else if (err_number == NO_OLDPWD)
+		return ("OLDPWD not set\n");
+	else if (err_number == NO_HOME)
+		return ("HOME not set\n");
 	return (NULL);
 }
 
@@ -79,4 +87,10 @@ int		set_syntax_err(char *line, int i)
 	make_err_msg(0, err_value, get_err_msg(SYNTAX_ERROR));
 	free(err_value);
 	return (0);
+}
+
+void	err(char *str)
+{
+	write(2, str, ft_strlen(str));
+	write(2, "\n", 1);
 }
