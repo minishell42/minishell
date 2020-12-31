@@ -209,6 +209,21 @@ t_export	*init_export(t_cmd_line *cmd_line, char **key_values, char *key_value)
 	return (exp_info);
 }
 
+void	print_content_exp(void *content)
+{
+	int		len;
+	char	*str;
+
+	if (!content)
+		return ;
+	str = content;
+	len = ft_strlen(content);
+	str[len] = '\n';
+	write(1, "declare -x ", 11);
+	write(1, str, len + 1);
+	str[len] = '\0';
+}
+
 bool	export(t_cmd_line *cmd_line)
 {
 	t_export	*exp_info;
@@ -216,6 +231,8 @@ bool	export(t_cmd_line *cmd_line)
 	int			ret;
 	int			i;
 
+	if (!cmd_line->param)
+		ft_lstiter(g_env, print_content_exp);
 	ret = true;
 	key_values = convert_to_array_env_list(cmd_line->param);
 	i = 0;
