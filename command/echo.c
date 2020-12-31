@@ -12,14 +12,14 @@ void	apply_echo_option(t_cmd_line *cmd_line, char **ret)
 	}
 }
 
-char	*make_param_str(t_cmd_line *cmd_line)
+char	*make_param_str(t_list *param_list)
 {
-	t_list	*param_list;
+	// t_list	*param_list;
 	char	*param;
 	char	*tmp;
 	char	*result;
 
-	param_list = cmd_line->param;
+	// param_list = cmd_line->param;
 	result = ft_calloc(sizeof(char), 1);
 	//param을 다 살펴본다.
 	while (param_list)
@@ -45,7 +45,7 @@ bool	echo(t_cmd_line *cmd_line)
 	char	*ret;
 	char	*param;
 
-	param = make_param_str(cmd_line);
+	param = make_param_str(cmd_line->param);
 	if (!(param))
 		return (false);
 	apply_echo_option(cmd_line, &param);
