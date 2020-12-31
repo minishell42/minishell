@@ -34,7 +34,8 @@ COMMAND_SRCS	= echo.c \
 					export.c \
 					ft_exit.c \
 					search_file.c \
-					env.c
+					env.c \
+					unset.c
 COMMAND			= $(addprefix $(COMMAND_DIR), $(COMMAND_SRCS))
 
 SIGNAL_DIR		= signal/
@@ -71,7 +72,8 @@ TEST_DIR	= test_case/
 TEST_FILES	= test.c \
 				test_validate_line.c \
 				test_export.c \
-				test_env.c
+				test_env.c \
+				test_unset.c
 				
 TEST_SRC 	= $(addprefix $(TEST_DIR), $(TEST_FILES))
 TEST_SRC	+= $(FILES)

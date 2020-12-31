@@ -10,6 +10,8 @@
 // void	test_redirection(t_list *env);
 void	test_export();
 void	test_env();
+void 	test_unset();
+
 
 void ft_lstdel_last(t_list *lst, void (*del)(void *));
 

@@ -56,6 +56,10 @@ char	*search_file(char *file_name);
 ** env.c
 */
 bool	ft_env(t_cmd_line *cmd_line);
+void	print_content(void *content);
+
+bool	ft_unset(t_cmd_line *cmd_line);
+
 
 
 

@@ -37,8 +37,8 @@ bool		run_operator_cmd(t_cmd_line *cmd_line)
 		return (export(cmd_line));
 	else if (cmd_line->command_num == EXIT)
 		ft_exit(cmd_line);
-	// else if (cmd_line->command_num == UNSET)
-	// 	return (unset(cmd_line));
+	else if (cmd_line->command_num == UNSET)
+		return (ft_unset(cmd_line));
 	return (false);
 }
 
