@@ -9,6 +9,9 @@
 // void	test_validate_line();
 // void	test_redirection(t_list *env);
 void	test_export();
+void	test_env();
+
+void ft_lstdel_last(t_list *lst, void (*del)(void *));
 
 // void	test_cd(t_list *env);
 
