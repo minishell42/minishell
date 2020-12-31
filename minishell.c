@@ -17,7 +17,7 @@ int		get_read_fd(t_pipes *pipes)
 	return (pipes->old[READ]);
 }
 
-static bool	set_pipe_flag(t_cmd_line *cmd_line, bool flag,
+static bool	set_pipe(t_cmd_line *cmd_line, bool flag,
 							t_pipes *pipes)
 {
 	t_list		*redir_list;
@@ -35,10 +35,7 @@ static bool	set_pipe_flag(t_cmd_line *cmd_line, bool flag,
 		redir = redir_list->content;
 		file_fd = find_file_fd(redir);
 		if (file_fd < 0)
-		{
-			built_in_error();
 			return (false);
-		}
 		if (redir->redir_flag == REDIR_IN)
 		{
 			dup2(file_fd, 0);
@@ -67,6 +64,14 @@ static bool check_env_operator_cmd(t_cmd_line *cmd_line)
 	return (false);
 }
 
+void		set_pipe_flag(t_cmd_line *cmd_line, bool *pipe_flag)
+{
+	if (cmd_line->pipe_flag)
+		*pipe_flag = true;
+	else
+		*pipe_flag = false;
+}
+
 static bool run_env_operator_cmd(t_cmd_line *cmd_line,
 									t_pipes *pipes, bool *pipe_flag)
 {
@@ -76,7 +81,7 @@ static bool run_env_operator_cmd(t_cmd_line *cmd_line,
 	return_flag = true;
 	reset[0] = dup(0);
 	reset[1] = dup(1);
-	if (!set_pipe_flag(cmd_line, *pipe_flag, pipes) || !run_command(cmd_line))
+	if (!set_pipe(cmd_line, *pipe_flag, pipes) || !run_operator_cmd(cmd_line))
 	{
 		built_in_error();
 		return_flag = false;
@@ -88,44 +93,44 @@ static bool run_env_operator_cmd(t_cmd_line *cmd_line,
 	}
 	dup2(reset[1], 1);
 	dup2(reset[0], 0);
+	set_pipe_flag(cmd_line, pipe_flag);
 	return (return_flag);
 }
 
-static bool	run(t_cmd_line *cmd_line, t_pipes *pipes, bool *pipe_flag)
+void		run_normal_cmd(t_cmd_line *cmd_line, t_pipes *pipes, bool *pipe_flag)
 {
-	char	*errmsg;
-	int		status;
 	pid_t	pid;
-	
+	int		status;
+
+	pid = fork();
+	if (pid > 0)
+	{
+		waitpid(pid, &status, 0);
+		if (*pipe_flag)
+		{
+			close(get_read_fd(pipes));
+			pipes->old[READ] = -1;
+		}
+	}
+	else if (pid == 0)
+	{
+		init_child_signal();
+		if ((!set_pipe(cmd_line, *pipe_flag, pipes)) || (!run_command(cmd_line)))
+			built_in_error();
+		exit(0);
+	}
+	set_pipe_flag(cmd_line, pipe_flag);
+}
+
+static bool	run(t_cmd_line *cmd_line, t_pipes *pipes, bool *pipe_flag)
+{	
 	if (check_env_operator_cmd(cmd_line))
 	{
 		if (!run_env_operator_cmd(cmd_line, pipes, pipe_flag))
 			return (false);
 	}
 	else
-	{
-		pid = fork();
-		if (pid > 0)
-		{
-			waitpid(pid, &status, 0);
-			if (*pipe_flag)
-			{
-				close(get_read_fd(pipes));
-				pipes->old[READ] = -1;
-			}
-		}
-		else if (pid == 0)
-		{
-			init_child_signal();
-			if ((!set_pipe_flag(cmd_line, *pipe_flag, pipes)) || (!run_command(cmd_line)))
-				built_in_error();
-			exit(0);
-		}
-	}
-	if (cmd_line->pipe_flag)
-		*pipe_flag = true;
-	else
-		*pipe_flag = false;
+		run_normal_cmd(cmd_line, pipes, pipe_flag);
 	return (true);
 }
 
