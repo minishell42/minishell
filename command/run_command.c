@@ -29,6 +29,19 @@ static bool	run_binary(t_cmd_line *cmd_line)
 	return (true);
 }
 
+bool		run_operator_cmd(t_cmd_line *cmd_line)
+{
+	if (cmd_line->command_num == CD)
+		return (cd(cmd_line));
+	else if (cmd_line->command_num == EXPORT)
+		return (export(cmd_line));
+	else if (cmd_line->command_num == EXIT)
+		ft_exit(cmd_line);
+	// else if (cmd_line->command_num == UNSET)
+	// 	return (unset(cmd_line));
+	return (false);
+}
+
 bool		run_command(t_cmd_line *cmd_line)
 {
 	char		*file_path;
@@ -37,15 +50,11 @@ bool		run_command(t_cmd_line *cmd_line)
 		return (echo(cmd_line));
 	else if (cmd_line->command_num == PWD)
 		return (pwd(cmd_line));
-	else if (cmd_line->command_num == CD)
-		return (cd(cmd_line));
-	else if (cmd_line->command_num == EXPORT)
-		return (export(cmd_line));
-	else if (cmd_line->command_num == EXIT)
-		ft_exit(cmd_line);
+	else if (cmd_line->command_num == ENV)
+		return (ft_env(cmd_line));
 	else if((file_path = search_file(cmd_line->command)))
 		return (run_binary(cmd_line));
 	else if (!check_cmd_num(cmd_line))
 		return (false);
-	return (true);
+	return (false);
 }

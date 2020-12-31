@@ -30,6 +30,8 @@ void	set_env_target(char *target, char *value);
 ** echo.c
 */
 bool	echo(t_cmd_line *cmd_line);
+char	*make_param_str(t_list *param_list);
+
 /*
 ** export.c
 */
@@ -37,6 +39,7 @@ bool	export(t_cmd_line *cmd_line);
 /*
 ** run_command.
 */
+bool	run_operator_cmd(t_cmd_line *cmd_line);
 bool	run_command(t_cmd_line *cmd_line);
 /*
 ** pwd.c
@@ -48,6 +51,12 @@ bool	pwd(t_cmd_line *cmd_line);
 char	*ft_exit(t_cmd_line *cmd_line);
 
 char	*search_file(char *file_name);
+
+/*
+** env.c
+*/
+bool	ft_env(t_cmd_line *cmd_line);
+
 
 
 
