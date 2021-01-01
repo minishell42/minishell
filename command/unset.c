@@ -53,55 +53,14 @@ void	check_and_remove_env_value(t_list *param, char *key,
 	}
 }
 
-// t_list *get_valid_param(t_list *param)
-// {
-// 	t_list *valid_params;
-
-// 	valid_params = NULL;
-// 	while (param)
-// 	{
-// 		if (is_valid_key(param->content))
-// 		{
-// 			if (valid_params)
-// 				ft_lstadd_back(&valid_params, ft_lstnew(ft_strdup(param->content)));
-// 			else
-// 				valid_params = ft_lstnew(ft_strdup(param->content));
-// 		}
-// 		else
-// 			make_err_msg("unset", param->content, get_err_msg(INVALID_EXPORT_PARAM));
-// 		param = param->next;
-// 	}
-// 	return (valid_params);
-// }
-
-// void	check_and_remove_env_value(t_list *param, char *key,
-// 									t_list **env, t_list *prev_env)
-// {
-// 	while (param)
-// 	{
-// 		if (are_equal(param->content, key))
-// 		{
-// 			printf("remove params content ? '%s'\n", (char *)param->content);
-// 			prev_env->next = (*env)->next;
-// 			ft_lstdelone(*env, free);
-// 			*env = NULL;
-// 			return  ;
-// 		}
-// 		param = param->next;
-// 	}
-// }
-
-bool	ft_unset(t_cmd_line *cmd_line)
+void	search_and_remove_env(t_list	*params)
 {
-	t_list	*params;
-	int		i;
 	t_list	*env;
 	t_list	*prev;
 	char	*key;
+	int		i;
 
 	env = g_env;
-	if (!(params = get_valid_param(cmd_line->param)))
-		return (false);
 	prev = env;
 	while (env)
 	{
@@ -120,45 +79,18 @@ bool	ft_unset(t_cmd_line *cmd_line)
 		}
 		i++;
 	}
+}
+
+bool	ft_unset(t_cmd_line *cmd_line)
+{
+	t_list	*params;
+	int		i;
+
+	if (!(params = get_valid_param(cmd_line->param)))
+		return (false);
+	search_and_remove_env(params);
 	ft_lstclear(&params, free);
 	if (g_err)
 		return (false);
 	return (true);
 }
-
-// bool	ft_unset(t_cmd_line *cmd_line)
-// {
-// 	t_list	*params;
-// 	int		i;
-// 	t_list	*env;
-// 	t_list	*prev;
-// 	char	*key;
-
-// 	env = g_env;
-// 	if (!(params = get_valid_param(cmd_line->param)))
-// 		return (false);
-// 	prev = env;
-// 	while (env)
-// 	{
-// 		i = 0;
-// 		while ((((char *)env->content)[i] != '=') && ((char *)env->content)[i])
-// 			i++;
-// 		key = ft_substr(env->content, 0, i);
-// 		check_and_remove_env_value(params, key, &env, prev);
-// 		free(key);
-// 		if (!env && prev != g_env)
-// 			env = prev->next;
-// 		else
-// 		{
-// 			prev = env;
-// 			env = env->next;	
-// 		}
-// 		i++;
-// 	}
-// 	ft_lstclear(&params, free);
-// 	if (g_err)
-// 		return (false);
-// 	return (true);
-// }
-
-// unset a ++ 1 test cd+
