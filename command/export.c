@@ -1,116 +1,5 @@
 #include "command.h"
 
-bool	has_plus(char *env_key)
-{
-	int		len;
-
-	if (!env_key)
-		return (false);
-	len = ft_strlen(env_key);
-	if (env_key[len - 1] == '+')
-		return (true);
-	return (false);
-}
-
-void	check_end_in_plus(t_export *exp_info, char *env_key)
-{
-	if (has_plus(env_key))
-	{
-		exp_info->end_in_plus = true;
-		env_key[ft_strlen(env_key) - 1] = '\0';
-	}
-}
-
-bool	validate_env_key(char *env_key)
-{
-	int		i;
-
-	i = 0;
-	if (!env_key)
-		return (true);
-	if (!(*env_key))
-		return (false);
-	while (env_key[i] && env_key[i] != '=')
-	{
-		if (is_contained(env_key[i], "!@#$%^&*()_+")
-			|| is_contained(env_key[i], "0123456789"))
-			return (false);
-		i++;
-	}
-	return (true);
-}
-
-char	*trim_key_value(char *key_value, t_export *exp_info)
-{
-	char	*separator;
-	char	*key;
-
-	separator = ft_strchr(key_value, '=');
-	if (separator)
-	{
-		exp_info->has_separator = true;
- 		*separator = '\0';
-		key = ft_strdup(key_value);
-		*separator = '=';
-		check_end_in_plus(exp_info, key);
-	}
-	else
-		key = ft_strdup(key_value);
-	return (key);
-}
-
-char	*get_env_key(char *param, t_cmd_line *cmd_line, t_export *exp_info)
-{
-	char	*key;
-	char	*key_value;
-
-	if(!(key_value = ft_strdup(param)))
-		return (NULL);
-	key = trim_key_value(key_value, exp_info);
-	if (!validate_env_key(key))
-	{
-		make_err_msg(cmd_line->command, key_value,
-					get_err_msg(INVALID_EXPORT_PARAM));
-		free(key_value);
-		free(key);
-		return (NULL);
-	}
-	free(key_value);
-	return (key);
-}
-
-static char	*get_value(char *str)
-{
-	char	*key_value;
-	char	*separator;
-	char	*value;
-
-	value = NULL;
-	if (!(key_value = ft_strdup(str)))
-		return (NULL);
-	if ((separator = ft_strchr(key_value, '=')))
-		value = ft_strdup(separator + 1);
-	free(key_value);
-	return (value);
-}
-
-char	*join_key_value(char *env_key, char *key_value)
-{
-		char	*strs[4];
-		char	*res;
-		int		i;
-
-		ft_bzero(strs, sizeof(strs));
-		strs[0] = ft_strdup(env_key);
-		strs[1] = ft_strdup("=");
-		strs[2] = get_value(key_value);
-		res = ft_join_strs(strs);
-		i = 0;
-		while (strs[i])
-			free(strs[i++]);
-		return (res);
-}
-
 bool	update_value(t_list *target_llist, t_export *exp_info)
 {
 	char	*content;
@@ -171,24 +60,6 @@ bool	update_env(t_export *exp_info)
 	return (true);
 }
 
-void	free_export(t_export *exp_info)
-{
-	if (exp_info->env_key)
-		free(exp_info->env_key);
-	free(exp_info);
-}
-
-bool	validate_key_value(char *key_value, t_cmd_line *cmd_line)
-{
-	if (*key_value == '=')
-	{
-		make_err_msg(cmd_line->command,	key_value,
-					get_err_msg(INVALID_EXPORT_PARAM));
-		return (false);
-	}
-	return (true);
-}
-
 t_export	*init_export(t_cmd_line *cmd_line, char **key_values, char *key_value)
 {
 	t_export	*exp_info;
@@ -207,21 +78,6 @@ t_export	*init_export(t_cmd_line *cmd_line, char **key_values, char *key_value)
 		return (NULL);
 	}
 	return (exp_info);
-}
-
-void	print_content_exp(void *content)
-{
-	int		len;
-	char	*str;
-
-	if (!content)
-		return ;
-	str = content;
-	len = ft_strlen(content);
-	str[len] = '\n';
-	write(1, "declare -x ", 11);
-	write(1, str, len + 1);
-	str[len] = '\0';
 }
 
 bool	export(t_cmd_line *cmd_line)

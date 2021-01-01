@@ -36,6 +36,25 @@ char	*make_param_str(t_list *param_list);
 ** export.c
 */
 bool	export(t_cmd_line *cmd_line);
+
+/*
+** exp_utils.c
+*/
+void	print_content_exp(void *content);
+void	free_export(t_export *exp_info);
+
+/*
+** exp_key_value.c
+*/
+char	*join_key_value(char *env_key, char *key_value);
+bool	validate_key_value(char *key_value, t_cmd_line *cmd_line);
+char	*get_value(char *str);
+
+/*
+** exp_env_key.c
+*/
+char	*get_env_key(char *param, t_cmd_line *cmd_line, t_export *exp_info);
+
 /*
 ** run_command.
 */
@@ -58,6 +77,9 @@ char	*search_file(char *file_name);
 bool	ft_env(t_cmd_line *cmd_line);
 void	print_content(void *content);
 
+/*
+** env.c
+*/
 bool	ft_unset(t_cmd_line *cmd_line);
 
 
