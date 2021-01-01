@@ -2,7 +2,7 @@
 
 void	apply_echo_option(t_cmd_line *cmd_line, char **ret)
 {
-	char *tmp;
+	char	*tmp;
 
 	if (!cmd_line->option)
 	{
@@ -14,14 +14,11 @@ void	apply_echo_option(t_cmd_line *cmd_line, char **ret)
 
 char	*make_param_str(t_list *param_list)
 {
-	// t_list	*param_list;
 	char	*param;
 	char	*tmp;
 	char	*result;
 
-	// param_list = cmd_line->param;
 	result = ft_calloc(sizeof(char), 1);
-	//param을 다 살펴본다.
 	while (param_list)
 	{
 		param = (char *)param_list->content;
@@ -39,10 +36,8 @@ char	*make_param_str(t_list *param_list)
 	return (result);
 }
 
-// pipe, redir flag가 있는 경우 리턴해줘야 한다.
 bool	echo(t_cmd_line *cmd_line)
 {
-	char	*ret;
 	char	*param;
 
 	param = make_param_str(cmd_line->param);
