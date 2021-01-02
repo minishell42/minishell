@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_command_lines.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: sangpark <sangpark@student.42seoul.>       +#+  +:+       +#+        */
+/*   By: park <park@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 05:45:15 by sangpark          #+#    #+#             */
-/*   Updated: 2021/01/03 05:45:16 by sangpark         ###   ########.fr       */
+/*   Updated: 2021/01/03 07:04:20 by park             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,8 @@ static bool	set_command(t_cmd_line *cmd_line, char *line, int *index)
 {
 	int				len;
 	char			*start;
-	static int		tmp_index;
+	static int		tmp_index = 0;
 
-	tmp_index = 0;
 	start = line + *index;
 	if (!check_character_in_line(line, index, is_seperate_character))
 		return (false);
