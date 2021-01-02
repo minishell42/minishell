@@ -60,7 +60,8 @@ char	*search_file(char *file_name)
 	int				i;
 	char			*file_path;
 
-	path_arr = get_path_arr();
+	if (!(path_arr = get_path_arr()))
+		return (NULL);
 	i = 0;
 	while (path_arr[i])
 	{

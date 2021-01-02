@@ -6,6 +6,7 @@ int			main(int argc, char **argv, char *envp[])
 	t_list		*command_lines;
 
 	g_env = get_env_llist(envp);
+	set_exit_status(EXIT_SUCCESS);
 	init_signal();
 	while (true)
 	{
@@ -20,6 +21,7 @@ int			main(int argc, char **argv, char *envp[])
 		minishell(line);
 		free(line);
 	}
-	free_env_list(&g_env);
+	if (g_env)
+		free_env_list(&g_env);
 	return (0);
 }

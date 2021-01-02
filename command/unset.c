@@ -31,7 +31,8 @@ t_list *get_valid_param(t_list *param)
 				valid_params = ft_lstnew(ft_strdup(param->content));
 		}
 		else
-			make_err_msg("unset", param->content, get_err_msg(INVALID_EXPORT_PARAM));
+			make_err_msg(EXIT_FAILURE, "unset", param->content,
+						get_err_msg(INVALID_EXPORT_PARAM));
 		param = param->next;
 	}
 	return (valid_params);

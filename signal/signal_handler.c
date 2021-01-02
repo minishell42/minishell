@@ -28,12 +28,12 @@ void		child_signal(int signal_no)
 	if (signal_no == SIGINT)
 	{
 		ft_putchar_fd('\n', 1);
-		exit(signal_no);
+		exit(INVALID_ARGUMENT_TO_EXIT + signal_no);
 	}
 	else if (signal_no == SIGQUIT)
 	{
 		ft_putstr_fd("Quit: 3\n", 2);
-		exit(signal_no);
+		exit(INVALID_ARGUMENT_TO_EXIT + signal_no);
 	}
 }
 

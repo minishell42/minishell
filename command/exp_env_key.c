@@ -69,7 +69,7 @@ char	*get_env_key(char *param, t_cmd_line *cmd_line, t_export *exp_info)
 	key = trim_key_value(key_value, exp_info);
 	if (!validate_env_key(key))
 	{
-		make_err_msg(cmd_line->command, key_value,
+		make_err_msg(EXIT_FAILURE, cmd_line->command, key_value,
 					get_err_msg(INVALID_EXPORT_PARAM));
 		free(key_value);
 		free(key);

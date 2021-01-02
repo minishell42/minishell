@@ -16,7 +16,7 @@ t_list 				*get_env_llist(char *envp[]);
 */
 void				minishell(char *line);
 
-void				run_normal_cmd(t_cmd_line *cmd_line, t_pipes *pipes, bool *pipe_flag);
+bool				run_normal_cmd(t_cmd_line *cmd_line, t_pipes *pipes, bool *pipe_flag);
 
 
 #endif

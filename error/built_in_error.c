@@ -8,6 +8,7 @@ void	built_in_error()
 		print_err_msg();
 	else
 	{
+		set_exit_status(EXIT_FAILURE);
 		errmsg = strerror(errno);
 		write(2, errmsg, ft_strlen(errmsg));
 		write(2, "\n", 1);
@@ -27,7 +28,15 @@ static void	parsing_err_value(char *error_point)
 		g_err = ft_lstnew(err_info);
 }
 
-void		make_err_msg(char *cmd, char *value, char *msg)
+void		set_exit_status(int exit_code)
+{
+	if (exit_code >= 256)
+		g_exit_code = (exit_code / 256);
+	else
+		g_exit_code = exit_code;
+}
+
+void		make_err_msg(int exit_code, char *cmd, char *value, char *msg)
 {
 	char	*str;
 	char	*cmd_tmp;
@@ -36,6 +45,7 @@ void		make_err_msg(char *cmd, char *value, char *msg)
 
 	val_tmp = NULL;
 	cmd_tmp = NULL;
+	set_exit_status(exit_code);
 	if (cmd)
 		cmd_tmp = ft_strjoin(cmd, " : ");
 	if (value)

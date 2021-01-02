@@ -15,10 +15,9 @@ static char	**make_exec_args(t_cmd_line *cmd_line)
 	return (args);
 }
 
-static bool	run_binary(t_cmd_line *cmd_line)
+static bool	run_binary(t_cmd_line *cmd_line, char *file_path)
 {
 	char	*root;
-	char 	*file_path;
 	char	**envp;
 	char	**args;
 
@@ -53,7 +52,7 @@ bool		run_command(t_cmd_line *cmd_line)
 	else if (cmd_line->command_num == ENV)
 		return (ft_env(cmd_line));
 	else if((file_path = search_file(cmd_line->command)))
-		return (run_binary(cmd_line));
+		return (run_binary(cmd_line, file_path));
 	else if (!check_cmd_num(cmd_line))
 		return (false);
 	return (false);

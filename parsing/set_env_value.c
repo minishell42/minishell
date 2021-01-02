@@ -79,6 +79,23 @@ char		*change_to_absolute_path(char *value)
 	return (result);
 }
 
+char		*convert_to_env_value(char	*env_key)
+{
+	char	*after_question;
+	char	*env_value;
+	char	*exit_code_str;
+
+	if (env_key[0] == '?')
+	{
+		after_question = env_key + 1;
+		exit_code_str = ft_itoa(g_exit_code);
+		env_value = ft_strjoin(exit_code_str, after_question);
+		free(exit_code_str);
+		return (env_value);
+	}
+	return (get_env_value(env_key));
+}
+
 void 		join_env_value(char **ret, char *str, int *i)
 {
 	char	*env_key;
@@ -93,7 +110,15 @@ void 		join_env_value(char **ret, char *str, int *i)
 		(*i)++;
 	seperator = str[*i];
 	str[*i] = 0;
-	env_value = get_env_value(env_key);
+	env_value = convert_to_env_value(env_key);
+	// // $?aaa 2212312
+	// if (env_key[0] == '?')
+	// {
+	// 	after_question = env_key + 1;
+	// 	env_value = ft_strjoin(ft_itoa(g_exit_code), after_question);
+
+	// }
+	// env_value = get_env_value(env_key);
 	temp = *ret;
 	*ret = ft_strjoin(temp, env_value);
 	str[*i] = seperator;

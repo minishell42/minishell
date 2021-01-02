@@ -69,12 +69,7 @@ static char	*set_home_dir(char *param)
 	char	*tmp;
 
 	home = get_env_value("HOME");
-	if (*home == '\0')
-	{
-		make_err_msg("cd", 0, get_err_msg(NO_HOME));
-		free(home);
-		return (NULL);
-	}
+	// home이 없을 때도 home을 찾는 추가적인 작업 필요..ㅠ
 	if (ft_strlen(param) != 1 && !are_equal(param, "--"))
 	{
 		tmp = ft_substr(param, 1, ft_strlen(param));
@@ -95,7 +90,7 @@ static char	*set_dir_param(t_list *param_list)
 	list_size = ft_lstsize(param_list);
 	if (list_size > 1)
 	{
-		make_err_msg("cd", 0, get_err_msg(TOO_MANY_REDIR_PARAM));
+		make_err_msg(EXIT_FAILURE, "cd", 0, get_err_msg(TOO_MANY_REDIR_PARAM));
 		return (NULL);
 	}
 	else if (!list_size)
@@ -111,7 +106,7 @@ static bool	old_pwd_dir(char **dir, bool *flag)
 	*dir = get_env_value("OLDPWD");
 	if (**dir == '\0')
 	{
-		make_err_msg("cd", 0, get_err_msg(NO_OLDPWD));
+		make_err_msg(EXIT_FAILURE, "cd", 0, get_err_msg(NO_OLDPWD));
 		free(*dir);
 		return (false);
 	}
@@ -148,7 +143,8 @@ static bool	set_chdir(char *dir, bool flag)
 {
 	if (chdir(dir) < 0)
 	{
-		make_err_msg("cd", dir, get_err_msg(NO_FILE_OR_DIRECTORY));
+		make_err_msg(EXIT_FAILURE, "cd", dir,
+					get_err_msg(NO_FILE_OR_DIRECTORY));
 		free(dir);
 		return (false);
 	}

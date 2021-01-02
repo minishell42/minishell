@@ -36,7 +36,7 @@ bool	validate_key_value(char *key_value, t_cmd_line *cmd_line)
 {
 	if (*key_value == '=')
 	{
-		make_err_msg(cmd_line->command,	key_value,
+		make_err_msg(EXIT_FAILURE, cmd_line->command,	key_value,
 					get_err_msg(INVALID_EXPORT_PARAM));
 		return (false);
 	}

@@ -3,16 +3,23 @@
 t_list 		*get_env_llist(char *envp[])
 {
 	int			i;
+	char		*env_str;
 	t_list		*env;
+	t_list		*new_list;
 
 	i = 0;
 	env = 0;
 	while (envp[i])
 	{
+		if (!(env_str = ft_strdup(envp[i])) || !(new_list = ft_lstnew(env_str)))
+		{
+			built_in_error();
+			exit(EXIT_FAILURE);
+		}
 		if (env)
-			ft_lstadd_back(&env, ft_lstnew(ft_strdup(envp[i])));
+			ft_lstadd_back(&env, new_list);
 		else
-			env = ft_lstnew(ft_strdup(envp[i]));
+			env = new_list;
 		i++;
 	}
 	return (env);

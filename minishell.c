@@ -35,7 +35,10 @@ static bool	set_pipe(t_cmd_line *cmd_line, bool flag,
 		redir = redir_list->content;
 		file_fd = find_file_fd(redir);
 		if (file_fd < 0)
+		{
+			set_exit_status(EX_NOINPUT);
 			return (false);
+		}
 		if (redir->redir_flag == REDIR_IN)
 		{
 			dup2(file_fd, 0);
@@ -97,7 +100,7 @@ static bool run_env_operator_cmd(t_cmd_line *cmd_line,
 	return (return_flag);
 }
 
-void		run_normal_cmd(t_cmd_line *cmd_line, t_pipes *pipes, bool *pipe_flag)
+bool		run_normal_cmd(t_cmd_line *cmd_line, t_pipes *pipes, bool *pipe_flag)
 {
 	pid_t	pid;
 	int		status;
@@ -106,20 +109,27 @@ void		run_normal_cmd(t_cmd_line *cmd_line, t_pipes *pipes, bool *pipe_flag)
 	if (pid > 0)
 	{
 		waitpid(pid, &status, 0);
+		set_exit_status(status);
 		if (*pipe_flag)
 		{
 			close(get_read_fd(pipes));
 			pipes->old[READ] = -1;
 		}
+		set_pipe_flag(cmd_line, pipe_flag);
+		if (status)
+			return (false);
 	}
 	else if (pid == 0)
 	{
 		init_child_signal();
 		if ((!set_pipe(cmd_line, *pipe_flag, pipes)) || (!run_command(cmd_line)))
+		{
 			built_in_error();
+			exit(g_exit_code);
+		}
 		exit(0);
 	}
-	set_pipe_flag(cmd_line, pipe_flag);
+	return (true);
 }
 
 static bool	run(t_cmd_line *cmd_line, t_pipes *pipes, bool *pipe_flag)
@@ -130,14 +140,19 @@ static bool	run(t_cmd_line *cmd_line, t_pipes *pipes, bool *pipe_flag)
 			return (false);
 	}
 	else
-		run_normal_cmd(cmd_line, pipes, pipe_flag);
+		return (run_normal_cmd(cmd_line, pipes, pipe_flag));
 	return (true);
 }
 
-void	init_pipe(t_pipes *pipes)
+bool	init_pipe(t_pipes *pipes)
 {
-	pipe(pipes->old);
-	pipe(pipes->new);
+	if (pipe(pipes->old) < 0 || pipe(pipes->new) < 0)
+	{
+		built_in_error();
+		set_exit_status(EX_OSERR);
+		return (false);
+	}
+	return (true);
 }
 
 void	close_write_fd(t_pipes *pipes)
@@ -172,18 +187,17 @@ void	minishell(char *line)
 	bool			pipe_flag;
 	t_pipes 		pipes;
 
-	init_pipe(&pipes);
+	if (!init_pipe(&pipes))
+		return ;
 	pipe_flag = false;
 	if (!validate_line(line))
-	{
-		built_in_error();
 		return ;
-	}
 	while (line && *line)
 	{
 		if (!(command_line = get_command_line(&line)))
 		{
 			built_in_error();
+			set_exit_status(SYNTAX_ERROR);
 			return ;
 		}
 		if (!run(command_line, &pipes, &pipe_flag))
@@ -194,5 +208,6 @@ void	minishell(char *line)
 		close_write_fd(&pipes);
 		swap_pipe(&pipes);
 		free_cmd_struct(command_line);
+		set_exit_status(EXIT_SUCCESS);
 	}
 }
