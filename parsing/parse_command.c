@@ -21,7 +21,7 @@ int	get_command_num(char *command)
 
 static bool	parse_cmd(t_cmd_line *cmd_line, char *value)
 {
-	char *temp;
+	char 	*temp;
 	
 	if (temp = change_to_absolute_path(value))
 	{

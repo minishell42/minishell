@@ -14,7 +14,7 @@ static int		check_start_line(char *line, int i)
 static int		check_validate_line(char *line, char *flag)
 {
 	int	i;
-	
+
 	i = 0;
 	while (line[i])
 	{
@@ -41,10 +41,10 @@ static int		check_validate_line(char *line, char *flag)
 
 int				validate_line(char *line)
 {	
-	int		i;
-	char	flag;
-	bool	ret;	
-	
+	int			i;
+	char		flag;
+	bool		ret;	
+
 	i = 0;
 	flag = 0;
 	ret = true;
@@ -80,5 +80,4 @@ void			set_special_param(t_cmd_line *cmd_line)
 		}
 		param_list = param_list->next;
 	}
-
 }

@@ -2,10 +2,11 @@
 
 static bool	set_command(t_cmd_line *cmd_line, char *line, int *index)
 {
-	int			len;
-	char		*start;
-	static int	tmp_index = 0;
-
+	int				len;
+	char			*start;
+	static int		tmp_index;
+	
+	tmp_index = 0;
 	start = line + *index;
 	if (!check_character_in_line(line, index, is_seperate_character))
 		return (false);

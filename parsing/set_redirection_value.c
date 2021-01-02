@@ -1,26 +1,10 @@
 #include "parsing.h"
 
-// -------------------------  before  --------------------------------
-// bool	set_param_before_redir(t_cmd_line *cmd_line, 
-// 								t_list *env, char *param, int *index)
-// {
-// 	char	*before_param;
-	
-// 	if (!check_character_in_line(param, index, is_redirection))
-// 		return (false);
-// 	if (!(before_param = ft_substr(param, 0, *index)))
-// 		return (false);
-// 	cmd_line->param = before_param;
-// 	return (true);
-// }
-
-// -------------------------  after  --------------------------------
-
 bool	set_param_before_redir(t_cmd_line *cmd_line, 
 								char *param, int *index)
 {
 	char	*before_param;
-	
+
 	if (!check_character_in_line(param, index, is_redirection))
 		return (false);
 	if (!(before_param = ft_substr(param, 0, *index)))
@@ -106,9 +90,9 @@ bool	set_redir_param(t_cmd_line *cmd_line,
 bool	can_make_redir_list(t_cmd_line *cmd_line, 
 							char *param, char *content)
 {
-	t_redir		*redir;
-	t_list		*list;
-	char		*tmp;
+	t_redir	*redir;
+	t_list	*list;
+	char	*tmp;
 
 	list = cmd_line->redir_param;
 	tmp = content;
@@ -132,8 +116,8 @@ bool	can_make_redir_list(t_cmd_line *cmd_line,
 bool	get_redirection_param(t_cmd_line *cmd_line, 
 								char *param, int *index)
 {
-	int			start;
-	char		*redir_content;
+	int		start;
+	char	*redir_content;
 
 	if (param[*index])
 		start = (*index)++;

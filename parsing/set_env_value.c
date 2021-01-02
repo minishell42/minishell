@@ -60,7 +60,7 @@ char		*change_to_absolute_path(char *value)
 	char	*tmp;
 	int		i;
 	int		curr_len;
-	
+
 	tmp = NULL; 
 	result = NULL;
 	i = 0;
@@ -105,20 +105,12 @@ void 		join_env_value(char **ret, char *str, int *i)
 
 	(*i)++;
 	env_key = str + *i;
-	// printf("what is env_key before ? '%s'\n", env_key);
-	while (str[*i] && str[*i] != ' ' && str[*i] != '\\' && str[*i] != '$' && str[*i] != '\'')
+	while (str[*i] && str[*i] != ' ' && str[*i] != '\\'
+			&& str[*i] != '$' && str[*i] != '\'')
 		(*i)++;
 	seperator = str[*i];
 	str[*i] = 0;
 	env_value = convert_to_env_value(env_key);
-	// // $?aaa 2212312
-	// if (env_key[0] == '?')
-	// {
-	// 	after_question = env_key + 1;
-	// 	env_value = ft_strjoin(ft_itoa(g_exit_code), after_question);
-
-	// }
-	// env_value = get_env_value(env_key);
 	temp = *ret;
 	*ret = ft_strjoin(temp, env_value);
 	str[*i] = seperator;
