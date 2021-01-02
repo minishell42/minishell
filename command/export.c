@@ -1,10 +1,10 @@
 #include "command.h"
 
-bool	update_value(t_list *target_llist, t_export *exp_info)
+bool		update_value(t_list *target_llist, t_export *exp_info)
 {
 	char	*content;
 	char	*env_value;
-	
+
 	if (exp_info->end_in_plus)
 	{
 		content = target_llist->content;
@@ -22,7 +22,7 @@ bool	update_value(t_list *target_llist, t_export *exp_info)
 	return (true);
 }
 
-bool	add_new_key_value(t_export *exp_info)
+bool		add_new_key_value(t_export *exp_info)
 {
 	char	*new_key_value;
 	char	*env_key;
@@ -31,23 +31,23 @@ bool	add_new_key_value(t_export *exp_info)
 	env_key = exp_info->env_key;
 	key_value = exp_info->key_value;
 	if (exp_info->end_in_plus)
-		{
-			if (!(new_key_value = join_key_value(env_key, key_value)))
-				return (false);
-			ft_lstadd_back(&g_env, ft_lstnew(new_key_value));
-		}
-		else
-			ft_lstadd_back(&g_env, ft_lstnew(ft_strdup(key_value)));
+	{
+		if (!(new_key_value = join_key_value(env_key, key_value)))
+			return (false);
+		ft_lstadd_back(&g_env, ft_lstnew(new_key_value));
+	}
+	else
+		ft_lstadd_back(&g_env, ft_lstnew(ft_strdup(key_value)));
 	return (true);
 }
 
-bool	update_env(t_export *exp_info)
+bool		update_env(t_export *exp_info)
 {
 	t_list	*target_llist;
 
 	if (!exp_info->has_separator)
 		return (true);
-	if((target_llist = find_env_target_list(exp_info->env_key)))
+	if ((target_llist = find_env_target_list(exp_info->env_key)))
 	{
 		if (!update_value(target_llist, exp_info))
 			return (false);
@@ -60,11 +60,12 @@ bool	update_env(t_export *exp_info)
 	return (true);
 }
 
-t_export	*init_export(t_cmd_line *cmd_line, char **key_values, char *key_value)
+t_export	*init_export(t_cmd_line *cmd_line, \
+						char **key_values, char *key_value)
 {
 	t_export	*exp_info;
 	char		*env_key;
-	
+
 	if (!validate_key_value(key_value, cmd_line))
 		return (NULL);
 	if (!(exp_info = ft_calloc(sizeof(t_export), 1)))
@@ -80,7 +81,7 @@ t_export	*init_export(t_cmd_line *cmd_line, char **key_values, char *key_value)
 	return (exp_info);
 }
 
-bool	export(t_cmd_line *cmd_line)
+bool		export(t_cmd_line *cmd_line)
 {
 	t_export	*exp_info;
 	char		**key_values;

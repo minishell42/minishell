@@ -1,6 +1,6 @@
 #include "command.h"
 
-char	**get_path_arr()
+char	**get_path_arr(void)
 {
 	t_list			*paths;
 	char			*value;
@@ -31,7 +31,7 @@ char	*get_file(char *path, DIR *dir_ptr, char *file_name)
 			full_file_name = ft_strjoin(path, file->d_name);
 			if ((fd = open(full_file_name, O_RDONLY)) == -1)
 				return (NULL);
-			if(fstat(fd, &file_stat) == -1)
+			if (fstat(fd, &file_stat) == -1)
 				return (NULL);
 			if (file_stat.st_mode & __S_IFREG)
 			{
@@ -46,7 +46,7 @@ char	*get_file(char *path, DIR *dir_ptr, char *file_name)
 	return (NULL);
 }
 
-void free_dir_and_path(DIR *dir, char *path)
+void	free_dir_and_path(DIR *dir, char *path)
 {
 	free(path);
 	closedir(dir);
@@ -65,10 +65,10 @@ char	*search_file(char *file_name)
 	i = 0;
 	while (path_arr[i])
 	{
-		if(!(dir_ptr = opendir(path_arr[i])))
+		if (!(dir_ptr = opendir(path_arr[i])))
 			return (NULL);
 		path = ft_strjoin(path_arr[i], "/");
-		if((file_path = get_file(path, dir_ptr, file_name)))
+		if ((file_path = get_file(path, dir_ptr, file_name)))
 		{
 			free_str_array(path_arr);
 			free_dir_and_path(dir_ptr, path);

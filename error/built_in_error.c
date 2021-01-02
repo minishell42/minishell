@@ -1,6 +1,6 @@
 #include "ft_error.h"
 
-void	built_in_error()
+void		built_in_error(void)
 {
 	char	*errmsg;
 

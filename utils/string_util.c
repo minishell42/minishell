@@ -26,7 +26,7 @@ void		remove_quotation(char *value)
 	}
 }
 
-void	free_str_array(char **strs)
+void		free_str_array(char **strs)
 {
 	int			i;
 
@@ -39,7 +39,7 @@ void	free_str_array(char **strs)
 	free(strs);
 }
 
-bool	is_contained(char c, char *str)
+bool		is_contained(char c, char *str)
 {
 	int			i;
 
@@ -55,14 +55,14 @@ bool	is_contained(char c, char *str)
 	return (0);
 }
 
-int		is_seperate_character(int c)
+int			is_seperate_character(int c)
 {
-	if (ft_isspace(c) ||is_redirection(c))
+	if (ft_isspace(c) || is_redirection(c))
 		return (true);
 	return (false);
 }
 
-char	*ft_join_strs(char **strs)
+char		*ft_join_strs(char **strs)
 {
 	char	*res;
 	int		res_len;
@@ -70,7 +70,7 @@ char	*ft_join_strs(char **strs)
 
 	if (!strs)
 		return (NULL);
-	i = 0;	
+	i = 0;
 	res_len = 0;
 	while (strs[i])
 		res_len += ft_strlen(strs[i++]);

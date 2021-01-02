@@ -8,10 +8,14 @@
 # define B_YELLOW	"\033[1;33m"
 # define WHITE		"\033[0;39m"
 
+/*
+** set_prompt.c
+*/
 void		prompt(void);
 void		process_exit(bool option);
-void		set_signal(void);
-
+/*
+** signal_handler.c
+*/
 void		init_child_signal(void);
 void		init_signal(void);
 

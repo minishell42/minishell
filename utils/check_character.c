@@ -30,7 +30,7 @@ bool		is_delimitor(int c)
 	return (false);
 }
 
-bool	is_empty_line(char *line)
+bool		is_empty_line(char *line)
 {
 	int		i;
 

@@ -16,7 +16,7 @@ bool	is_valid_key(char *env_key)
 	return (true);
 }
 
-t_list *get_valid_param(t_list *param)
+t_list	*get_valid_param(t_list *param)
 {
 	t_list *valid_params;
 
@@ -26,7 +26,8 @@ t_list *get_valid_param(t_list *param)
 		if (is_valid_key(param->content))
 		{
 			if (valid_params)
-				ft_lstadd_back(&valid_params, ft_lstnew(ft_strdup(param->content)));
+				ft_lstadd_back(&valid_params, \
+							ft_lstnew(ft_strdup(param->content)));
 			else
 				valid_params = ft_lstnew(ft_strdup(param->content));
 		}
@@ -48,13 +49,13 @@ void	check_and_remove_env_value(t_list *param, char *key,
 			prev_env->next = (*env)->next;
 			ft_lstdelone(*env, free);
 			*env = NULL;
-			return  ;
+			return ;
 		}
 		param = param->next;
 	}
 }
 
-void	search_and_remove_env(t_list	*params)
+void	search_and_remove_env(t_list *params)
 {
 	t_list	*env;
 	t_list	*prev;
@@ -76,7 +77,7 @@ void	search_and_remove_env(t_list	*params)
 		else
 		{
 			prev = env;
-			env = env->next;	
+			env = env->next;
 		}
 		i++;
 	}

@@ -49,7 +49,7 @@ char	*trim_key_value(char *key_value, t_export *exp_info)
 	if (separator)
 	{
 		exp_info->has_separator = true;
- 		*separator = '\0';
+		*separator = '\0';
 		key = ft_strdup(key_value);
 		*separator = '=';
 		check_end_in_plus(exp_info, key);
@@ -64,7 +64,7 @@ char	*get_env_key(char *param, t_cmd_line *cmd_line, t_export *exp_info)
 	char	*key;
 	char	*key_value;
 
-	if(!(key_value = ft_strdup(param)))
+	if (!(key_value = ft_strdup(param)))
 		return (NULL);
 	key = trim_key_value(key_value, exp_info);
 	if (!validate_env_key(key))

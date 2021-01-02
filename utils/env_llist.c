@@ -1,6 +1,6 @@
 #include "utils.h"
 
-t_list 		*get_env_llist(char *envp[])
+t_list		*get_env_llist(char *envp[])
 {
 	int			i;
 	char		*env_str;
@@ -11,7 +11,8 @@ t_list 		*get_env_llist(char *envp[])
 	env = 0;
 	while (envp[i])
 	{
-		if (!(env_str = ft_strdup(envp[i])) || !(new_list = ft_lstnew(env_str)))
+		if (!(env_str = ft_strdup(envp[i])) ||
+			!(new_list = ft_lstnew(env_str)))
 		{
 			built_in_error();
 			exit(EXIT_FAILURE);
@@ -25,9 +26,9 @@ t_list 		*get_env_llist(char *envp[])
 	return (env);
 }
 
-char 		**convert_to_array_env_list(t_list *env)
+char		**convert_to_array_env_list(t_list *env)
 {
-	char 	**envp;
+	char	**envp;
 	int		len;
 	int		i;
 

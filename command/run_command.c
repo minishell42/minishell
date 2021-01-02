@@ -51,7 +51,7 @@ bool		run_command(t_cmd_line *cmd_line)
 		return (pwd(cmd_line));
 	else if (cmd_line->command_num == ENV)
 		return (ft_env(cmd_line));
-	else if((file_path = search_file(cmd_line->command)))
+	else if ((file_path = search_file(cmd_line->command)))
 		return (run_binary(cmd_line, file_path));
 	else if (!check_cmd_num(cmd_line))
 		return (false);
