@@ -135,7 +135,8 @@ bool	get_redirection_param(t_cmd_line *cmd_line,
 	int			start;
 	char		*redir_content;
 
-	start = (*index)++;
+	if (param[*index])
+		start = (*index)++;
 	while (param[*index] != '\0' && 
 			check_character_in_line(param, index, is_redirection))
 	{
@@ -173,6 +174,12 @@ bool	set_redirection_param(t_cmd_line *cmd_line)
 	index = 0;
 	if (!set_param_before_redir(cmd_line, param, &index))
 		return (false);
+	if (!param[index])
+	{
+		free(param);
+		free(param_list);
+		return (true);
+	}
 	if (!get_redirection_param(cmd_line, param, &index))
 	{
 		free(param);

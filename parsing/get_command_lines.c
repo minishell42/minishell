@@ -66,7 +66,6 @@ t_cmd_line	*get_command_line(char **line_ptr)
 	if (index < 0 || !set_redirection_param(command_line))
 	{
 		free_cmd_struct(command_line);
-		free(command_line);
 		return (NULL);
 	}
 	*line_ptr = line + index;
