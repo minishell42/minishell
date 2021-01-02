@@ -64,6 +64,12 @@ int					get_command_num(char *command);
 int					set_param(t_cmd_line *command_line, char *start);
 bool				change_param_value(t_cmd_line *cmd_line);
 char				*convert_to_valid_value(char *start, int len);
+
+/*
+** parse_param.c
+*/
+char		*convert_to_quote_str(char *str, int start, int *index);
+
 /*
 ** set_env_value.c
 */

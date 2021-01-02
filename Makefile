@@ -22,7 +22,8 @@ PARSE_SRCS	= check_value.c \
 				set_redirection_value.c \
 				validate_line.c \
 				free_struct.c \
-				make_param_list.c
+				make_param_list.c \
+				convert_quote_str.c
 PARSE		= $(addprefix $(PARSE_DIR), $(PARSE_SRCS))
 
 COMMAND_DIR		= command/
