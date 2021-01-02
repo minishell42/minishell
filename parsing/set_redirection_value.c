@@ -1,6 +1,6 @@
 #include "parsing.h"
 
-bool	set_param_before_redir(t_cmd_line *cmd_line, 
+bool	set_param_before_redir(t_cmd_line *cmd_line,
 								char *param, int *index)
 {
 	char	*before_param;
@@ -38,14 +38,14 @@ bool	set_redir_flag(t_redir *redir, char *param, char **content)
 	return (true);
 }
 
-bool	set_other_param(t_cmd_line *cmd_line, 
+bool	set_other_param(t_cmd_line *cmd_line,
 						char *content, int index)
 {
 	char	*other_param;
 	t_list	*other_param_list;
 	t_list	*tmp;
 
-	if (!(other_param = 
+	if (!(other_param =
 			ft_substr(content, index, ft_strlen(content) - index)))
 		return (false);
 	other_param_list = make_param_list(other_param);
@@ -65,17 +65,17 @@ bool	set_other_param(t_cmd_line *cmd_line,
 	return (true);
 }
 
-bool	set_redir_param(t_cmd_line *cmd_line, 
+bool	set_redir_param(t_cmd_line *cmd_line,
 						t_redir *redir, char *content)
 {
 	int		index;
 	char	*tmp;
 
 	index = 0;
-	if (content[index] && 
+	if (content[index] &&
 			check_character_in_line(content, &index, ft_isspace))
 		tmp = ft_substr(content, 0, index);
-	if (!(redir->redir_param = 
+	if (!(redir->redir_param =
 			convert_to_valid_value(tmp, ft_strlen(tmp))))
 	{
 		free(tmp);
@@ -87,7 +87,7 @@ bool	set_redir_param(t_cmd_line *cmd_line,
 	return (true);
 }
 
-bool	can_make_redir_list(t_cmd_line *cmd_line, 
+bool	can_make_redir_list(t_cmd_line *cmd_line,
 							char *param, char *content)
 {
 	t_redir	*redir;
@@ -113,7 +113,7 @@ bool	can_make_redir_list(t_cmd_line *cmd_line,
 	return (true);
 }
 
-bool	get_redirection_param(t_cmd_line *cmd_line, 
+bool	get_redirection_param(t_cmd_line *cmd_line,
 								char *param, int *index)
 {
 	int		start;
@@ -121,7 +121,7 @@ bool	get_redirection_param(t_cmd_line *cmd_line,
 
 	if (param[*index])
 		start = (*index)++;
-	while (param[*index] != '\0' && 
+	while (param[*index] != '\0' &&
 			check_character_in_line(param, index, is_redirection))
 	{
 		if (param[*index] == '>' && start + 1 == *index)

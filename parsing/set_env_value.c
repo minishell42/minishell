@@ -1,6 +1,6 @@
 #include "parsing.h"
 
-char 		*get_env_value(char *target_key)
+char		*get_env_value(char *target_key)
 {
 	char	*key;
 	char	*value;
@@ -61,7 +61,7 @@ char		*change_to_absolute_path(char *value)
 	int		i;
 	int		curr_len;
 
-	tmp = NULL; 
+	tmp = NULL;
 	result = NULL;
 	i = 0;
 	while (value[i] && value[i] != '/')
@@ -79,7 +79,7 @@ char		*change_to_absolute_path(char *value)
 	return (result);
 }
 
-char		*convert_to_env_value(char	*env_key)
+char		*convert_to_env_value(char *env_key)
 {
 	char	*after_question;
 	char	*env_value;
@@ -96,7 +96,7 @@ char		*convert_to_env_value(char	*env_key)
 	return (get_env_value(env_key));
 }
 
-void 		join_env_value(char **ret, char *str, int *i)
+void		join_env_value(char **ret, char *str, int *i)
 {
 	char	*env_key;
 	char	*env_value;

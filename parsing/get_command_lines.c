@@ -5,7 +5,7 @@ static bool	set_command(t_cmd_line *cmd_line, char *line, int *index)
 	int				len;
 	char			*start;
 	static int		tmp_index;
-	
+
 	tmp_index = 0;
 	start = line + *index;
 	if (!check_character_in_line(line, index, is_seperate_character))
@@ -32,7 +32,7 @@ static int	set_command_line(t_cmd_line *cmd_line, char *line)
 	int				len;
 	int				index;
 	int				tmp_index;
-	
+
 	index = 0;
 	tmp_index = 0;
 	while (line[index])
@@ -41,7 +41,7 @@ static int	set_command_line(t_cmd_line *cmd_line, char *line)
 		{
 			if (g_err)
 				return (-1);
-			break;
+			break ;
 		}
 	}
 	start = line + index;
@@ -52,7 +52,7 @@ static int	set_command_line(t_cmd_line *cmd_line, char *line)
 }
 
 t_cmd_line	*get_command_line(char **line_ptr)
-{	
+{
 	t_cmd_line		*command_line;
 	int				index;
 	char			*line;

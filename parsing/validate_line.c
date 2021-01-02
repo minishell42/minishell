@@ -40,10 +40,10 @@ static int		check_validate_line(char *line, char *flag)
 }
 
 int				validate_line(char *line)
-{	
+{
 	int			i;
 	char		flag;
-	bool		ret;	
+	bool		ret;
 
 	i = 0;
 	flag = 0;

@@ -1,8 +1,8 @@
 #include "parsing.h"
 
-int	get_command_num(char *command)
+int			get_command_num(char *command)
 {
-    if (are_equal(command, "echo"))
+	if (are_equal(command, "echo"))
 		return (ECHO);
 	else if (are_equal(command, "cd"))
 		return (CD);
@@ -21,8 +21,8 @@ int	get_command_num(char *command)
 
 static bool	parse_cmd(t_cmd_line *cmd_line, char *value)
 {
-	char 	*temp;
-	
+	char	*temp;
+
 	if (temp = change_to_absolute_path(value))
 	{
 		cmd_line->command = temp;

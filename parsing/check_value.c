@@ -1,6 +1,6 @@
 #include "parsing.h"
 
-bool			check_character_in_line(char *line, 
+bool			check_character_in_line(char *line,
 					int *index, int (*func)())
 {
 	char	quot_flag;
