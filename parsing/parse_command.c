@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_command.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sangpark <sangpark@student.42seoul.>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/03 05:46:42 by sangpark          #+#    #+#             */
+/*   Updated: 2021/01/03 05:55:09 by sangpark         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parsing.h"
 
 int			get_command_num(char *command)
@@ -43,7 +55,7 @@ bool		parse_command(t_cmd_line *cmd_line, char *start, int len)
 	value = convert_to_valid_value(start, len);
 	if (!cmd_line->command)
 	{
-		if (value[0] ==  '>' || value[0] == '<')
+		if (value[0] == '>' || value[0] == '<')
 		{
 			value[0] = 0;
 			cmd_line->command = value;

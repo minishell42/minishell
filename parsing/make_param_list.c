@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   make_param_list.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: sangpark <sangpark@student.42seoul.>       +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/03 05:44:25 by sangpark          #+#    #+#             */
+/*   Updated: 2021/01/03 05:44:54 by sangpark         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parsing.h"
 
 static char		*make_param(char *param, int start, int len)
@@ -15,7 +27,7 @@ static char		*make_param(char *param, int start, int len)
 	return (arg);
 }
 
-t_list	*make_param_list(char *param)
+t_list			*make_param_list(char *param)
 {
 	t_list	*args_list;
 	int		start;
