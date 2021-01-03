@@ -4,6 +4,7 @@ static char		*make_param(char *param, int start, int len)
 {
 	char	*tmp;
 	char	*arg;
+	char	*result;
 
 	tmp = ft_substr(param, start, len);
 	if (!tmp)
@@ -12,7 +13,9 @@ static char		*make_param(char *param, int start, int len)
 	free(tmp);
 	if (!arg)
 		return (NULL);
-	return (arg);
+	result = apply_tilde_expansion(arg);
+	free(arg);
+	return (result);
 }
 
 t_list	*make_param_list(char *param)

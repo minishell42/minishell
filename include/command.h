@@ -2,7 +2,6 @@
 # define COMMAND_H
 
 # include "signal_handler.h"
-# include <dirent.h>
 # include <sys/stat.h>
 
 typedef	struct	s_export

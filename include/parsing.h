@@ -3,6 +3,8 @@
 
 # include "utils.h"
 # include "get_next_line.h"
+# include <sys/types.h>
+# include <dirent.h>
 
 # define EXCUTABLE 1
 # define ECHO 2
@@ -102,5 +104,11 @@ char				*change_to_absolute_path(char *value);
 ** make_param_list.c
 */
 t_list				*make_param_list(char *param);
+
+/*
+** tilde_expansion.c
+*/
+char				*apply_tilde_expansion(char *before_str);
+
 
 #endif

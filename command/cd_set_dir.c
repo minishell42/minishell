@@ -38,14 +38,19 @@ static char	*set_home_dir(char *param)
 	char	*tmp;
 
 	home = get_env_value("HOME");
-	if (ft_strlen(param) != 1 && !are_equal(param, "--"))
+	if (*home == '\0')
 	{
-		tmp = ft_substr(param, 1, ft_strlen(param));
-		dir = ft_strjoin(home, tmp);
-		free(tmp);
+		make_err_msg(EXIT_FAILURE, "cd", 0, get_err_msg(NO_HOME));
+		return (NULL);
 	}
-	else
-		dir = ft_strdup(home);
+	// if (ft_strlen(param) != 1 && !are_equal(param, "--"))
+	// {
+	// 	tmp = ft_substr(param, 1, ft_strlen(param));
+	// 	dir = ft_strjoin(home, tmp);
+	// 	free(tmp);
+	// }
+	// else
+	dir = ft_strdup(home);
 	free(home);
 	return (dir);
 }
@@ -67,7 +72,7 @@ char		*set_dir(t_list *param_list, bool *flag)
 			return (NULL);
 		}
 	}
-	else if (param[0] == '~' || are_equal(param, "--"))
+	else if (are_equal(param, "--"))
 		dir = set_home_dir(param);
 	else
 		dir = ft_strdup(param);

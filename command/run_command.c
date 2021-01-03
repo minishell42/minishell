@@ -21,6 +21,7 @@ static bool	run_binary(t_cmd_line *cmd_line, char *file_path)
 	char	**envp;
 	char	**args;
 
+	printf("in run binary\n");
 	envp = convert_to_array_env_list(g_env);
 	args = make_exec_args(cmd_line);
 	if (execve(file_path, args, envp) == -1)
@@ -74,6 +75,7 @@ bool		run_normal_cmd(t_cmd_line *cmd_line, \
 	}
 	else if (pid == 0)
 	{
+		printf("in run_normal_cmd\n");
 		init_child_signal();
 		if ((!set_pipe(cmd_line, *pipe_flag, pipes)) \
 				|| (!run_command(cmd_line)))

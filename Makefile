@@ -25,7 +25,8 @@ PARSE_SRCS	= check_value.c \
 				make_param_list.c \
 				apply_absolute_path.c \
 				convert_to_quote.c \
-				make_redir_list.c
+				make_redir_list.c \
+				tilde_expansion.c
 PARSE		= $(addprefix $(PARSE_DIR), $(PARSE_SRCS))
 
 COMMAND_DIR		= command/

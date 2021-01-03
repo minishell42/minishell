@@ -23,7 +23,6 @@ static bool	set_redir_flag(t_redir *redir, char *param, char **content)
 		return (false);
 	return (true);
 }
-
 static bool	set_other_param(t_cmd_line *cmd_line, \
 						char *content, int index)
 {
@@ -56,18 +55,26 @@ static bool	set_redir_param(t_cmd_line *cmd_line, \
 {
 	int		index;
 	char	*tmp;
+	char	*file_name;
+	char	*file;
 
 	index = 0;
 	if (content[index] && \
 			check_character_in_line(content, &index, ft_isspace))
 		tmp = ft_substr(content, 0, index);
-	if (!(redir->redir_param = \
-			convert_to_valid_value(tmp, ft_strlen(tmp))))
+	if (!(file_name = convert_to_valid_value(tmp, ft_strlen(tmp))))
 	{
 		free(tmp);
 		return (false);
 	}
 	free(tmp);
+	if (file = change_to_absolute_path(file_name))
+	{
+		redir->redir_param = file;
+		free(file_name);
+	}
+	else
+		redir->redir_param = file_name;
 	if (!set_other_param(cmd_line, content, index))
 		return (false);
 	return (true);
