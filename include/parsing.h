@@ -94,6 +94,11 @@ int					validate_line(char *line);
 */
 bool				can_make_redir_list(t_cmd_line *cmd_line, char *param, char *content);
 
+/*
+** change_to_absolute_path.c
+*/
+char		*change_to_absolute_path(char *value);
+
 t_list				*make_param_list(char *param);
 
 
