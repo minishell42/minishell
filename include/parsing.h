@@ -52,6 +52,7 @@ bool				check_cmd_num(t_cmd_line *cmd_line);
 ** get_command_lines.c
 */
 t_cmd_line			*get_command_line(char **line_ptr);
+
 /*
 ** parse_command.c
 */
@@ -77,6 +78,7 @@ char 				*get_env_value(char *target_key);
 void 				join_env_value(char **ret, char *str, int *i);
 char				*set_multi_env(char *str);
 char				*change_to_absolute_path(char *value);
+
 /*
 ** set_redirection_value.c
 */
@@ -87,7 +89,12 @@ bool				set_redirection_param(t_cmd_line *cmd_line);
 */
 int					validate_line(char *line);
 
-t_list	*make_param_list(char *param);
+/*
+** set_redir_struct.c
+*/
+bool				can_make_redir_list(t_cmd_line *cmd_line, char *param, char *content);
+
+t_list				*make_param_list(char *param);
 
 
 #endif
