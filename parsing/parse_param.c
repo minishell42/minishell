@@ -11,60 +11,10 @@ char		*set_value_before_quote(char *str, int start, int end)
 	return (result);
 }
 
-char		*make_quote_str(char *str, int *i)
+static char	*make_valid_value(char *str)
 {
-	char	quote;
+	int		i;
 	int		start;
-	char	*quote_str;
-	char	*tmp;
-	char	*result;
-
-	quote = str[*i];
-	start = ++(*i);
-	// 해당 따옴표가 끝나는 지점을 찾기
-	// printf("quote_start ? '%c'\n", str[*i]);
-	while (str[*i] != quote)
-		(*i)++;
-	// 해당 따옴표로 묶여있는 문자열 만들기
-	quote_str = ft_substr(str, start, *i - start);
-	// printf("quote_str ? '%s'\n", quote_str);
-	// 해당 따옴표에 따라서 리턴값 달라지기
-	if (quote == '\'')
-		return (quote_str);
-	else if (quote == '\"')
-	{
-		// 큰 따옴표로 감싸져 있을 
-		tmp = quote_str;
-		quote_str = set_multi_env(quote_str);
-		free(tmp);
-	}
-	return (quote_str);
-}
-
-char		*convert_to_quote_str(char *str, int start, int *index)
-{
-	char	*normal_str;
-	char	*quote_str;
-	char	*result;
-
-	// 따옴표가 있다면 그 인덱스 까지 찾기
-	// find_quote(str, index);
-	while (str[*index] != '\'' && str[*index] != '\"' && str[*index])
-		(*index)++;
-	// 변경된 index까지의 값중 환경변수가 있다면 변경해주기
-	normal_str = set_value_before_quote(str, start, *index);
-	//따옴표가 시작된 부분부터 해당 따옴표가 끝나는 부분까지의 문자열을 반환
-	quote_str = make_quote_str(str, index);
-	result = ft_strjoin(normal_str, quote_str);
-	free(normal_str);
-	free(quote_str);
-	return (result);
-}
-
-char		*make_valid_value(char *str)
-{
-	int	i;
-	int	start;
 	char	*result;
 	char	*str_tmp;
 	char	*r_tmp;
@@ -72,7 +22,6 @@ char		*make_valid_value(char *str)
 	i = 0;
 	start = i;
 	result = ft_calloc(sizeof(char), 1);
-	// 문자열 내부의 문자 확인
 	while (str[i])
 	{
 		str_tmp = convert_to_quote_str(str, start, &i);

@@ -1,7 +1,7 @@
 #ifndef SIGNAL_HANDLER_H
-# define SIGANL_HANDLER_H
+# define SIGNAL_HANDLER_H
 
-# include "parsing.h"
+# include "pipe.h"
 # include <signal.h>
 
 # define I_CYAN		"\033[3;36m"

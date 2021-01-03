@@ -42,3 +42,56 @@ bool	validate_key_value(char *key_value, t_cmd_line *cmd_line)
 	}
 	return (true);
 }
+
+t_list	*find_env_target_list(char *target)
+{
+	char	*key;
+	char	*value;
+	int		i;
+	t_list	*env;
+
+	env = g_env;
+	while (env)
+	{
+		i = 0;
+		while ((((char *)env->content)[i] != '=') && ((char *)env->content)[i])
+			i++;
+		key = ft_substr(env->content, 0, i);
+		value = ft_substr(env->content, i + 1, ft_strlen(env->content) - i);
+		if (are_equal(target, key))
+		{
+			free(key);
+			free(value);
+			return (env);
+		}
+		free(key);
+		free(value);
+		env = env->next;
+	}
+	return (NULL);
+}
+
+void	set_env_target(char *target, char *value)
+{
+	t_list	*target_env;
+	char	*target_tmp;
+	void	*tmp;
+
+	if (!(target_env = find_env_target_list(target)))
+	{
+		target_env = ft_calloc(sizeof(t_list), 1);
+		target_tmp = ft_strjoin(target, "=");
+		target_env->content = ft_strjoin(target_tmp, value);
+		free(target_tmp);
+		target_env->next = NULL;
+		ft_lstadd_back(&g_env, target_env);
+	}
+	else
+	{
+		tmp = target_env->content;
+		target_tmp = ft_strjoin(target, "=");
+		target_env->content = ft_strjoin(target_tmp, value);
+		free(target_tmp);
+		free(tmp);
+	}
+}

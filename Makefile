@@ -22,7 +22,10 @@ PARSE_SRCS	= check_value.c \
 				set_redirection_value.c \
 				validate_line.c \
 				free_struct.c \
-				make_param_list.c
+				make_param_list.c \
+				apply_absolute_path.c \
+				convert_to_quote.c \
+				make_redir_list.c
 PARSE		= $(addprefix $(PARSE_DIR), $(PARSE_SRCS))
 
 COMMAND_DIR		= command/
@@ -38,12 +41,20 @@ COMMAND_SRCS	= echo.c \
 					unset.c \
 					exp_key_value.c \
 					exp_env_key.c \
-					exp_utils.c 
+					exp_utils.c \
+					cd_set_dir.c \
+					run_operator_command.c
 COMMAND			= $(addprefix $(COMMAND_DIR), $(COMMAND_SRCS))
 
 SIGNAL_DIR		= signal/
-SIGNAL_SRCS		= signal_handler.c
+SIGNAL_SRCS		= signal_handler.c \
+					set_prompt.c
 SIGNAL			= $(addprefix $(SIGNAL_DIR), $(SIGNAL_SRCS))
+
+PIPE_DIR		= pipe/
+PIPE_SRCS		= fd_handler.c \
+					set_pipe.c
+PIPE			= $(addprefix $(PIPE_DIR), $(PIPE_SRCS))
 
 UTILS_DIR	= utils/
 UTILS_SRCS	= string_util.c \
@@ -53,7 +64,8 @@ UTILS		= $(addprefix $(UTILS_DIR), $(UTILS_SRCS))
 
 ERROR_DIR	= error/
 ERROR_SRCS	= error.c \
-				built_in_error.c
+				built_in_error.c \
+				syntax_error.c
 ERROR		= $(addprefix $(ERROR_DIR), $(ERROR_SRCS))
 
 FILES		= minishell.c
@@ -63,6 +75,7 @@ FILES		+= $(COMMAND)
 FILES		+= $(UTILS)
 FILES		+= $(ERROR)
 FILES		+= $(SIGNAL)
+FILES		+= $(PIPE)
 
 SRC			= main.c
 SRC			+= $(FILES)

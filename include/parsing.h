@@ -53,6 +53,7 @@ bool				check_cmd_num(t_cmd_line *cmd_line);
 ** get_command_lines.c
 */
 t_cmd_line			*get_command_line(char **line_ptr);
+
 /*
 ** parse_command.c
 */
@@ -62,26 +63,44 @@ int					get_command_num(char *command);
 /*
 ** parse_param.c
 */
-int					set_param(t_cmd_line *command_line, char *start);
-bool				change_param_value(t_cmd_line *cmd_line);
+char				*set_value_before_quote(char *str, int start, int end);
 char				*convert_to_valid_value(char *start, int len);
+int					set_param(t_cmd_line *command_line, char *start);
+
 /*
 ** set_env_value.c
 */
 char				*get_env_value(char *target_key);
-void				join_env_value(char **ret, char *str, int *i);
 char				*set_multi_env(char *str);
-char				*change_to_absolute_path(char *value);
+
 /*
 ** set_redirection_value.c
 */
-void				set_redirection_flag(t_cmd_line *cmd_line, int *i);
 bool				set_redirection_param(t_cmd_line *cmd_line);
+
 /*
 ** validate_line.c
 */
 int					validate_line(char *line);
+void				set_special_param(t_cmd_line *cmd_line);
+/*
+** make_redir_list.c
+*/
+bool				can_make_redir_list(t_cmd_line *cmd_line, \
+										char *param, char *content);
+/*
+** convert_to_quote.c
+*/
+char				*convert_to_quote_str(char *str, int start, int *index);
 
+/*
+** apply_absolute_path.c
+*/
+char				*change_to_absolute_path(char *value);
+
+/*
+** make_param_list.c
+*/
 t_list				*make_param_list(char *param);
 
 #endif

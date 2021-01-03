@@ -2,7 +2,6 @@
 # define COMMAND_H
 
 # include "signal_handler.h"
-# include <sys/fcntl.h>
 # include <dirent.h>
 # include <sys/stat.h>
 
@@ -17,16 +16,14 @@ typedef	struct	s_export
 }				t_export;
 
 /*
-** redirection.c
+** cd_set_dir.c
 */
-int				find_file_fd(t_redir *redir);
+char			*set_dir(t_list *param_list, bool *flag);
 
 /*
 ** cd.c
 */
 bool			cd(t_cmd_line *cmd_line);
-t_list			*find_env_target_list(char *target);
-void			set_env_target(char *target, char *value);
 
 /*
 ** echo.c
@@ -51,6 +48,8 @@ void			free_export(t_export *exp_info);
 char			*join_key_value(char *env_key, char *key_value);
 bool			validate_key_value(char *key_value, t_cmd_line *cmd_line);
 char			*get_value(char *str);
+t_list			*find_env_target_list(char *target);
+void			set_env_target(char *target, char *value);
 
 /*
 ** exp_env_key.c
@@ -61,9 +60,15 @@ char			*get_env_key(char *param, \
 /*
 ** run_command.
 */
-bool			run_operator_cmd(t_cmd_line *cmd_line);
 bool			run_command(t_cmd_line *cmd_line);
-
+bool			run_normal_cmd(t_cmd_line *cmd_line, \
+							t_pipes *pipes, bool *pipe_flag);
+/*
+** run_operator_command.c
+*/
+bool			check_env_operator_cmd(t_cmd_line *cmd_line);
+bool			run_env_operator_cmd(t_cmd_line *cmd_line, \
+									t_pipes *pipes, bool *pipe_flag);
 /*
 ** pwd.c
 */
@@ -73,7 +78,6 @@ bool			pwd(t_cmd_line *cmd_line);
 ** ft_exit.c
 */
 char			*ft_exit(t_cmd_line *cmd_line);
-char			*search_file(char *file_name);
 
 /*
 ** env.c
@@ -82,8 +86,13 @@ bool			ft_env(t_cmd_line *cmd_line);
 void			print_content(void *content);
 
 /*
-** env.c
+** unset.c
 */
 bool			ft_unset(t_cmd_line *cmd_line);
+
+/*
+** search_file.c
+*/
+char			*search_file(char *file_name);
 
 #endif

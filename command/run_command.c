@@ -28,19 +28,6 @@ static bool	run_binary(t_cmd_line *cmd_line, char *file_path)
 	return (true);
 }
 
-bool		run_operator_cmd(t_cmd_line *cmd_line)
-{
-	if (cmd_line->command_num == CD)
-		return (cd(cmd_line));
-	else if (cmd_line->command_num == EXPORT)
-		return (export(cmd_line));
-	else if (cmd_line->command_num == EXIT)
-		ft_exit(cmd_line);
-	else if (cmd_line->command_num == UNSET)
-		return (ft_unset(cmd_line));
-	return (false);
-}
-
 bool		run_command(t_cmd_line *cmd_line)
 {
 	char		*file_path;
@@ -56,4 +43,44 @@ bool		run_command(t_cmd_line *cmd_line)
 	else if (!check_cmd_num(cmd_line))
 		return (false);
 	return (false);
+}
+
+static bool	set_parents_condition(t_cmd_line *cmd_line, \
+				t_pipes *pipes, bool *pipe_flag, int status)
+{
+	set_exit_status(status);
+	if (*pipe_flag)
+	{
+		close(get_read_fd(pipes));
+		pipes->old[READ] = -1;
+	}
+	set_pipe_flag(cmd_line, pipe_flag);
+	if (status)
+		return (false);
+	return (true);
+}
+
+bool		run_normal_cmd(t_cmd_line *cmd_line, \
+							t_pipes *pipes, bool *pipe_flag)
+{
+	pid_t	pid;
+	int		status;
+
+	pid = fork();
+	if (pid > 0)
+	{
+		waitpid(pid, &status, 0);
+		return (set_parents_condition(cmd_line, pipes, pipe_flag, status));
+	}
+	else if (pid == 0)
+	{
+		init_child_signal();
+		if ((!set_pipe(cmd_line, *pipe_flag, pipes)) \
+				|| (!run_command(cmd_line)))
+		{
+			built_in_error();
+			exit(g_exit_code);
+		}
+		exit(0);
+	}
 }
