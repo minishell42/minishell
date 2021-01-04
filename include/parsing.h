@@ -85,11 +85,7 @@ bool				set_redirection_param(t_cmd_line *cmd_line);
 */
 int					validate_line(char *line);
 void				set_special_param(t_cmd_line *cmd_line);
-/*
-** make_redir_list.c
-*/
-bool				can_make_redir_list(t_cmd_line *cmd_line, \
-										char *param, char *content);
+
 /*
 ** convert_to_quote.c
 */
@@ -99,16 +95,22 @@ char				*convert_to_quote_str(char *str, int start, int *index);
 ** apply_absolute_path.c
 */
 char				*change_to_absolute_path(char *value);
-
-/*
-** make_param_list.c
-*/
-t_list				*make_param_list(char *param);
-
 /*
 ** tilde_expansion.c
 */
 char				*apply_tilde_expansion(char *before_str);
+/*
+** set_redir_struct.c
+*/
+bool				can_make_redir_list(t_cmd_line *cmd_line, \
+										char *param, char *content);
+
+/*
+** change_to_absolute_path.c
+*/
+char				*change_to_absolute_path(char *value);
+
+t_list				*make_param_list(char *param);
 
 
 #endif

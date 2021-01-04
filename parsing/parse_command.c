@@ -1,8 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_command.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dokang <dokang@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/03 05:46:42 by sangpark          #+#    #+#             */
+/*   Updated: 2021/01/04 14:22:00 by dokang           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parsing.h"
 
-int	get_command_num(char *command)
+int			get_command_num(char *command)
 {
-    if (are_equal(command, "echo"))
+	if (are_equal(command, "echo"))
 		return (ECHO);
 	else if (are_equal(command, "cd"))
 		return (CD);
@@ -34,7 +46,7 @@ bool		parse_command(t_cmd_line *cmd_line, char *start, int len)
 	value = convert_to_valid_value(start, len);
 	if (!cmd_line->command)
 	{
-		if (value[0] ==  '>' || value[0] == '<')
+		if (value[0] == '>' || value[0] == '<')
 		{
 			value[0] = 0;
 			cmd_line->command = value;

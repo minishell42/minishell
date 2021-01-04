@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set_redirection_value.c                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dokang <dokang@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/03 05:46:17 by sangpark          #+#    #+#             */
+/*   Updated: 2021/01/04 14:42:30 by dokang           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parsing.h"
 
-static bool	set_param_before_redir(t_cmd_line *cmd_line, \
+static bool	set_param_before_redir(t_cmd_line *cmd_line,
 								char *param, int *index)
 {
 	char	*before_param;
@@ -38,20 +50,29 @@ static bool	make_redir_param(t_cmd_line *cmd_line, \
 	return (true);
 }
 
-static bool	get_redirection_param(t_cmd_line *cmd_line, \
-								char *param, int *index)
+bool	check_and_set_redir_param(char *param, int *index,
+								t_cmd_line *cmd_line, int start)
 {
-	int			start;
-	char		*redir_content;
+	char	*redir_content;
 
-	if (param[*index])
-		start = (*index)++;
-	while (param[*index] != '\0' && \
-			check_character_in_line(param, index, is_redirection))
+	while (param[*index] != '\0' &&
+		check_character_in_line(param, index, is_redirection))
 	{
 		if (!make_redir_param(cmd_line, param, index, &start))
 			return (false);
 	}
+	return (true);
+}
+
+bool	get_redirection_param(t_cmd_line *cmd_line,
+								char *param, int *index)
+{
+	int		start;
+
+	if (param[*index])
+		start = (*index)++;
+	if (!(check_and_set_redir_param(param, index, cmd_line, start)))
+		return (false);
 	if (g_err)
 		return (false);
 	return (true);

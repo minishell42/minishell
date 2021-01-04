@@ -23,15 +23,14 @@ PARSE_SRCS	= check_value.c \
 				validate_line.c \
 				free_struct.c \
 				make_param_list.c \
-				apply_absolute_path.c \
-				convert_to_quote.c \
-				make_redir_list.c \
+				convert_quote_str.c \
+				set_redir_struct.c \
+				change_to_absolute_path.c \
 				tilde_expansion.c
 PARSE		= $(addprefix $(PARSE_DIR), $(PARSE_SRCS))
 
 COMMAND_DIR		= command/
 COMMAND_SRCS	= echo.c \
-					redirection.c \
 					run_command.c \
 					cd.c \
 					pwd.c \

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   validate_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: prk <par@student.42.fr>                           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/03 05:45:33 by sangpark          #+#    #+#             */
+/*   Updated: 2021/01/04 14:41:47 by par             ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parsing.h"
 
 static int		check_start_line(char *line, int i)
@@ -41,9 +53,9 @@ static int		check_validate_line(char *line, char *flag)
 
 int				validate_line(char *line)
 {
-	int		i;
-	char	flag;
-	bool	ret;
+	int			i;
+	char		flag;
+	bool		ret;
 
 	i = 0;
 	flag = 0;

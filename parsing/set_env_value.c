@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   set_env_value.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: dokang <dokang@student.42seoul.kr>         +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2021/01/03 05:47:03 by sangpark          #+#    #+#             */
+/*   Updated: 2021/01/04 14:25:11 by dokang           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "parsing.h"
 
 char		*get_env_value(char *target_key)
@@ -53,8 +65,8 @@ static void	join_env_value(char **ret, char *str, int *i)
 
 	(*i)++;
 	env_key = str + *i;
-	while (str[*i] && str[*i] != ' ' && \
-			str[*i] != '\\' && str[*i] != '$' && str[*i] != '\'')
+	while (str[*i] && str[*i] != ' ' && str[*i] != '\\'
+			&& str[*i] != '$' && str[*i] != '\'')
 		(*i)++;
 	seperator = str[*i];
 	str[*i] = 0;
