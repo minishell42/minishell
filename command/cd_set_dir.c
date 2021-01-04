@@ -43,13 +43,6 @@ static char	*set_home_dir(char *param)
 		make_err_msg(EXIT_FAILURE, "cd", 0, get_err_msg(NO_HOME));
 		return (NULL);
 	}
-	// if (ft_strlen(param) != 1 && !are_equal(param, "--"))
-	// {
-	// 	tmp = ft_substr(param, 1, ft_strlen(param));
-	// 	dir = ft_strjoin(home, tmp);
-	// 	free(tmp);
-	// }
-	// else
 	dir = ft_strdup(home);
 	free(home);
 	return (dir);

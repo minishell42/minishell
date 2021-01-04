@@ -6,7 +6,7 @@
 /*   By: dokang <dokang@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/04 04:43:34 by sangpark          #+#    #+#             */
-/*   Updated: 2021/01/04 14:33:16 by dokang           ###   ########.fr       */
+/*   Updated: 2021/01/04 15:00:46 by dokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,7 @@ static char	*get_absolute_path(char *value, int index)
 		{
 			curr_len = ft_strlen(tmp) - 1;
 			while (curr_len >= 0 && tmp[curr_len] != '/')
-			{
-				tmp[curr_len] = '\0';
-				curr_len--;
-			}
+				tmp[curr_len--] = '\0';
 			if (tmp[curr_len] == '/')
 				tmp[curr_len] = '\0';
 		}

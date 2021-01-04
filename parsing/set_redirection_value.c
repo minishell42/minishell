@@ -6,7 +6,7 @@
 /*   By: dokang <dokang@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 05:46:17 by sangpark          #+#    #+#             */
-/*   Updated: 2021/01/04 14:42:30 by dokang           ###   ########.fr       */
+/*   Updated: 2021/01/04 15:03:07 by dokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ static bool	make_redir_param(t_cmd_line *cmd_line, \
 	return (true);
 }
 
-bool	check_and_set_redir_param(char *param, int *index,
+bool		check_and_set_redir_param(char *param, int *index,
 								t_cmd_line *cmd_line, int start)
 {
 	char	*redir_content;
@@ -64,7 +64,7 @@ bool	check_and_set_redir_param(char *param, int *index,
 	return (true);
 }
 
-bool	get_redirection_param(t_cmd_line *cmd_line,
+bool		get_redirection_param(t_cmd_line *cmd_line,
 								char *param, int *index)
 {
 	int		start;

@@ -39,82 +39,14 @@ int		can_apply_tilde_expansion(char *before_str)
 			return (4);
 		}
 		else if (ft_strchr(before_str, '/'))
-			return (5);		
+			return (5);
 	}
 	return (-1);
 }
 
-char	*set_tilde_case2(char *before_str)
-{
-	char	*tilde_dir;
-	char	*result;
-	char	*other_dir;
-
-	tilde_dir = tilde_expansion_dir();
-	result = ft_strjoin(tilde_dir, before_str + 1);
-	free(tilde_dir);
-	return (result);
-}
-
-static char	*set_tilde_case3(char *before_str)
-{
-	char	*pwd;
-	char	*tilde_dir;
-
-	pwd = get_env_value("PWD");
-	if (!*pwd)
-	{
-		free(pwd);
-		return (ft_strdup(before_str));
-	}
-	tilde_dir = ft_strjoin(pwd, before_str + 2);
-	free(pwd);
-	return (tilde_dir);
-}
-
-static char	*set_tilde_case4(char *before_str)
-{
-	char	*old_pwd;
-	char	*tilde_dir;
-
-	old_pwd = get_env_value("OLDPWD");
-	if (!*old_pwd)
-	{
-		free(old_pwd);
-		return (ft_strdup(before_str));
-	}
-	tilde_dir = ft_strjoin(old_pwd, before_str + 2);
-	free(old_pwd);
-	return (tilde_dir);
-}
-
-static char	*set_tilde_case5(char *before_str)
-{
-	char	*tilde_dir;
-	char	*user_name;
-	char	*result;
-	char	*tmp;
-	DIR		*dir_ptr;
-
-	tmp = ft_strchr(before_str, '/');
-	user_name =ft_substr(before_str, 1, tmp - before_str);
-	tilde_dir = ft_strjoin("/home/", user_name);
-	free(user_name);
-	if (!(dir_ptr = opendir(tilde_dir)))
-	{
-		free(tilde_dir);
-		closedir(dir_ptr);
-		return (ft_strdup(before_str));
-	}
-	closedir(dir_ptr);
-	result = ft_strjoin(tilde_dir, tmp + 1);
-	free(tilde_dir);
-	return (result);
-}
-
 char	*apply_tilde_expansion(char *before_str)
 {
-	int	apply_case;
+	int			apply_case;
 
 	if ((apply_case = can_apply_tilde_expansion(before_str)) < 0)
 		return (ft_strdup(before_str));

@@ -28,7 +28,6 @@ static bool	run_binary(t_cmd_line *cmd_line, char *file_path)
 		free_str_array(envp);
 		free_str_array(args);
 		free(file_path);
-		// free(args);
 		return (false);
 	}
 	return (true);
@@ -37,6 +36,7 @@ static bool	run_binary(t_cmd_line *cmd_line, char *file_path)
 bool		run_command(t_cmd_line *cmd_line)
 {
 	char		*file_path;
+
 	if (cmd_line->command_num == ECHO)
 		return (echo(cmd_line));
 	else if (cmd_line->command_num == PWD)
@@ -70,10 +70,11 @@ bool		run_normal_cmd(t_cmd_line *cmd_line, \
 {
 	pid_t	pid;
 	int		status;
-
 	pid = fork();
 	if (pid > 0)
 	{
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		waitpid(pid, &status, 0);
 		return (set_parents_condition(cmd_line, pipes, pipe_flag, status));
 	}

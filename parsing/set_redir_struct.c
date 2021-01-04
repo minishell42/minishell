@@ -6,7 +6,7 @@
 /*   By: dokang <dokang@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/04 04:44:11 by sangpark          #+#    #+#             */
-/*   Updated: 2021/01/04 14:34:27 by dokang           ###   ########.fr       */
+/*   Updated: 2021/01/04 15:01:43 by dokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ static bool	set_redir_flag(t_redir *redir, char *param, char **content)
 		return (false);
 	return (true);
 }
+
 static bool	set_other_param(t_cmd_line *cmd_line, \
 						char *content, int index)
 {
