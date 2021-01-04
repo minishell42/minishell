@@ -65,7 +65,7 @@ int					get_command_num(char *command);
 /*
 ** parse_param.c
 */
-char				*set_value_before_quote(char *str, int start, int end);
+char				*set_value_before_quote(char *str, int start, int *index);
 char				*convert_to_valid_value(char *start, int len);
 int					set_param(t_cmd_line *command_line, char *start);
 

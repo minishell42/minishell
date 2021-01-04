@@ -3,14 +3,26 @@
 /*                                                        :::      ::::::::   */
 /*   check_value.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: dokang <dokang@student.42seoul.kr>         +#+  +:+       +#+        */
+/*   By: park <park@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 05:45:44 by sangpark          #+#    #+#             */
-/*   Updated: 2021/01/04 17:26:29 by dokang           ###   ########.fr       */
+/*   Updated: 2021/01/05 03:24:23 by park             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
+
+bool			pass_escape(char *line, int *index)
+{
+	if (line[*index] == '\\')
+	{
+		(*index)++;
+		if (!line[*index])
+			return (false);
+		(*index)++;
+	}
+	return (true);
+}
 
 bool			check_character_in_line(char *line,
 					int *index, int (*func)())
@@ -20,6 +32,8 @@ bool			check_character_in_line(char *line,
 	quot_flag = 0;
 	while (line[*index] && !(func(line[*index]) && quot_flag == 0))
 	{
+		if (!(pass_escape(line, index)))
+			return (false);
 		if (line[*index] == '\'' || line[*index] == '"')
 		{
 			if (quot_flag == line[*index])
