@@ -3,10 +3,11 @@
 static char	*get_absolute_path(char *value, int index)
 {
 	char	*tmp;
+	char	*result;
 	int		curr_len;
 
 	curr_len = 0;
-	tmp = NULL;
+	result = NULL;
 	if (index != 0 && value[index - 1] == '.')
 	{
 		tmp = getcwd(NULL, 0);
@@ -21,10 +22,12 @@ static char	*get_absolute_path(char *value, int index)
 			if (tmp[curr_len] == '/')
 				tmp[curr_len] = '\0';
 		}
+		result = ft_strjoin(tmp, value + index);
+		free(tmp);
 	}
-	else if (index != 0 && value[index - 1] == '~')
-		tmp = get_env_value("HOME");
-	return (tmp);
+	else
+		result = apply_tilde_expansion(value);
+	return (result);
 }
 
 char		*change_to_absolute_path(char *value)
@@ -44,10 +47,6 @@ char		*change_to_absolute_path(char *value)
 		if ((!are_equal(value, ".") && !are_equal(value, "..")))
 			return (0);
 	}
-	if ((tmp = get_absolute_path(value, i)))
-	{
-		result = ft_strjoin(tmp, value + i);
-		free(tmp);
-	}
+	result = get_absolute_path(value, i);
 	return (result);
 }

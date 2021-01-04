@@ -1,30 +1,5 @@
 #include "parsing.h"
-// ~
-// The value of $HOME
-// $HOME doesn't exist /home + username;
 
-// ~/foo
-// $HOME/foo
-
-// ~fred/foo
-// The subdirectory foo of the home directory of the user fred
-
-// ~+/foo
-// $PWD/foo
-
-// ~-/foo
-// ${OLDPWD-'~-'}/foo
-
-// ~N
-// The string that would be displayed by ‘dirs +N’
-
-// ~+N
-// The string that would be displayed by ‘dirs +N’
-
-// ~-N
-// The string that would be displayed by ‘dirs -N’
-
-// ~가 뜻하는 경로를 가져오기
 char	*tilde_expansion_dir(void)
 {
 	char	*tilde_dir;
@@ -153,5 +128,4 @@ char	*apply_tilde_expansion(char *before_str)
 		return (set_tilde_case4(before_str));
 	else if (apply_case == 5)
 		return (set_tilde_case5(before_str));
-	
 }

@@ -12,34 +12,38 @@ static char	**make_exec_args(t_cmd_line *cmd_line)
 	if (!args_list)
 		return (NULL);
 	args = convert_to_array_env_list(args_list);
+	free(args_list);
 	return (args);
 }
 
 static bool	run_binary(t_cmd_line *cmd_line, char *file_path)
 {
-	char	*root;
 	char	**envp;
 	char	**args;
 
-	printf("in run binary\n");
 	envp = convert_to_array_env_list(g_env);
 	args = make_exec_args(cmd_line);
 	if (execve(file_path, args, envp) == -1)
+	{
+		free_str_array(envp);
+		free_str_array(args);
+		free(file_path);
+		// free(args);
 		return (false);
+	}
 	return (true);
 }
 
 bool		run_command(t_cmd_line *cmd_line)
 {
 	char		*file_path;
-
 	if (cmd_line->command_num == ECHO)
 		return (echo(cmd_line));
 	else if (cmd_line->command_num == PWD)
 		return (pwd(cmd_line));
 	else if (cmd_line->command_num == ENV)
 		return (ft_env(cmd_line));
-	else if ((file_path = search_file(cmd_line->command)))
+	else if ((file_path = search_file(cmd_line, cmd_line->command)))
 		return (run_binary(cmd_line, file_path));
 	else if (!check_cmd_num(cmd_line))
 		return (false);
@@ -75,7 +79,6 @@ bool		run_normal_cmd(t_cmd_line *cmd_line, \
 	}
 	else if (pid == 0)
 	{
-		printf("in run_normal_cmd\n");
 		init_child_signal();
 		if ((!set_pipe(cmd_line, *pipe_flag, pipes)) \
 				|| (!run_command(cmd_line)))

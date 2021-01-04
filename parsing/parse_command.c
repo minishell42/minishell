@@ -21,16 +21,7 @@ int	get_command_num(char *command)
 
 static bool	parse_cmd(t_cmd_line *cmd_line, char *value)
 {
-	char *temp;
-	
-	if (temp = change_to_absolute_path(value))
-	{
-		cmd_line->command = temp;
-		cmd_line->command_num = EXCUTABLE;
-		free(value);
-	}
-	else
-		cmd_line->command = value;
+	cmd_line->command = apply_tilde_expansion(value);
 	if (!cmd_line->command_num)
 		cmd_line->command_num = get_command_num(cmd_line->command);
 	return (true);
@@ -49,7 +40,9 @@ bool		parse_command(t_cmd_line *cmd_line, char *start, int len)
 			cmd_line->command = value;
 			return (false);
 		}
-		return (parse_cmd(cmd_line, value));
+		parse_cmd(cmd_line, value);
+		free(value);
+		return (true);
 	}
 	else if (cmd_line->command_num == ECHO && are_equal(value, "-n"))
 	{

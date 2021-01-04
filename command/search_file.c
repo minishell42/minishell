@@ -52,7 +52,7 @@ void	free_dir_and_path(DIR *dir, char *path)
 	closedir(dir);
 }
 
-char	*search_file(char *file_name)
+char	*search_path(char *file_name)
 {
 	char			**path_arr;
 	DIR				*dir_ptr;
@@ -79,4 +79,35 @@ char	*search_file(char *file_name)
 	}
 	free_str_array(path_arr);
 	return (NULL);
+}
+
+char	*search_file(t_cmd_line *cmd_line, char *file_name)
+{
+	DIR				*dir_ptr;
+	struct stat		buf;
+	char			*absolute_path;
+	char			*file_path;
+
+	absolute_path = change_to_absolute_path(file_name);
+	if (stat(absolute_path, &buf) < 0)
+	{
+		file_path = search_path(file_name);
+		if (file_path)
+		{
+			free(absolute_path);
+			return (file_path);
+		}
+		free(absolute_path);
+		return (NULL);
+	}
+	if (buf.st_mode & __S_IFDIR)
+	{
+		free(absolute_path);
+		make_err_msg(IS_NOT_EXECUTABLE, cmd_line->command, 0, "is directory\n");
+		built_in_error();
+		exit(g_exit_code);
+	}
+	free(cmd_line->command);
+	cmd_line->command = ft_strdup(absolute_path);
+	return (absolute_path);
 }

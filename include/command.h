@@ -92,6 +92,6 @@ bool			ft_unset(t_cmd_line *cmd_line);
 /*
 ** search_file.c
 */
-char			*search_file(char *file_name);
+char			*search_file(t_cmd_line *cmd_line, char *file_name);
 
 #endif
