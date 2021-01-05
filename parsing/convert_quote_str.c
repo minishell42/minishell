@@ -6,7 +6,7 @@
 /*   By: park <park@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/04 04:43:07 by sangpark          #+#    #+#             */
-/*   Updated: 2021/01/05 03:49:31 by park             ###   ########.fr       */
+/*   Updated: 2021/01/05 11:40:25 by park             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char		*set_value_before_quote(char *str, int start, int *index)
 	char		*result;
 
 	bef_idx = 0;
-	before_str = ft_calloc(sizeof(char), ft_strlen(str));
+	before_str = ft_calloc(sizeof(char), ft_strlen(str) + 1);
 	while (str[*index] && str[*index] != '\'' && str[*index] != '\"')
 	{
 		if (str[*index] == '\\')
@@ -48,7 +48,7 @@ char		*make_quote_str(char *str, int *i)
 	len = 0;
 	while (str[*i] != quote)	
 	{
-		if (str[*i] == '\\')
+		if (str[*i] == '\\' && (str[*i + 1] == '\"'))
 			quote_str[len++] = str[++(*i)];
 		else
 			quote_str[len++] = str[*i];
