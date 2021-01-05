@@ -7,9 +7,9 @@ int			main(int argc, char **argv, char *envp[])
 
 	g_env = get_env_llist(envp);
 	set_exit_status(EXIT_SUCCESS);
-	init_signal();
 	while (true)
 	{
+		init_signal();
 		prompt();
 		if (!get_next_line(0, &line))
 			process_exit(1);
