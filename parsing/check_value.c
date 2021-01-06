@@ -18,7 +18,11 @@ bool			pass_escape(char *line, int *index, char quot_flag)
 	{
 		(*index)++;
 		if (!line[*index])
+		{
+			make_err_msg(SYNTAX_ERROR, 0, "\\", \
+							get_err_msg(SYNTAX_ERROR));
 			return (false);
+		}
 		if (line[*index] == '\"')
 			(*index)++;
 	}
