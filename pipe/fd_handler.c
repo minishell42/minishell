@@ -33,6 +33,7 @@ int			find_file_fd(t_redir *redir)
 	char	*file_name;
 	int		fd;
 
+	fd = -1;
 	file_name = change_to_absolute_path(redir->redir_param);
 	if (!file_name)
 		file_name = ft_strdup(redir->redir_param);

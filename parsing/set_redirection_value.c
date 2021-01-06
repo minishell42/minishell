@@ -6,7 +6,7 @@
 /*   By: dokang <dokang@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/03 05:46:17 by sangpark          #+#    #+#             */
-/*   Updated: 2021/01/04 15:03:07 by dokang           ###   ########.fr       */
+/*   Updated: 2021/01/06 17:53:29 by dokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,7 @@ bool		get_redirection_param(t_cmd_line *cmd_line,
 {
 	int		start;
 
+	start = 0;
 	if (param[*index])
 		start = (*index)++;
 	if (!(check_and_set_redir_param(param, index, cmd_line, start)))

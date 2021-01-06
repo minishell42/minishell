@@ -103,7 +103,7 @@ all:
 	./$(NAME)
 
 $(NAME) : $(OBJS)
-	$(CC) -fsanitize=address -lasan -o $(NAME) $(OBJS) $(LIBFTFLAG)
+	$(CC) -fsanitize=address -o $(NAME) $(OBJS) $(LIBFTFLAG)
 
 clean :
 	rm -f $(OBJS)

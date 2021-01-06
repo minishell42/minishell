@@ -71,6 +71,7 @@ bool		run_normal_cmd(t_cmd_line *cmd_line, \
 	pid_t	pid;
 	int		status;
 
+	status = 0;
 	signal_ignore();
 	pid = fork();
 	if (pid > 0)

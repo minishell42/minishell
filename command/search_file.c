@@ -33,7 +33,7 @@ char	*get_file(char *path, DIR *dir_ptr, char *file_name)
 				return (NULL);
 			if (fstat(fd, &file_stat) == -1)
 				return (NULL);
-			if (file_stat.st_mode & __S_IFREG)
+			if (file_stat.st_mode & S_IFREG)
 			{
 				close(fd);
 				return (full_file_name);
@@ -96,7 +96,7 @@ char	*search_file(t_cmd_line *cmd_line, char *file_name)
 			return (file_path);
 		return (NULL);
 	}
-	if (buf.st_mode & __S_IFDIR)
+	if (buf.st_mode & S_IFDIR)
 	{
 		free(absolute_path);
 		make_err_msg(IS_NOT_EXECUTABLE, cmd_line->command, 0, "is directory\n");

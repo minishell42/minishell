@@ -6,7 +6,7 @@
 /*   By: dokang <dokang@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/04 04:44:11 by sangpark          #+#    #+#             */
-/*   Updated: 2021/01/04 15:01:43 by dokang           ###   ########.fr       */
+/*   Updated: 2021/01/06 17:55:52 by dokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,7 @@ static bool	set_redir_param(t_cmd_line *cmd_line, \
 	char	*file;
 
 	index = 0;
+	tmp = NULL;
 	if (content[index] && \
 			check_character_in_line(content, &index, ft_isspace))
 		tmp = ft_substr(content, 0, index);
