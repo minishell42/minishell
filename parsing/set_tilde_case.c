@@ -1,5 +1,24 @@
 #include "parsing.h"
 
+char	*tilde_expansion_dir(void)
+{
+	char	*tilde_dir;
+	char	*user_name;
+	char	*home;
+
+	home = get_env_value("HOME");
+	if (!*home)
+	{
+		user_name = get_env_value("USER");
+		tilde_dir = set_tilde_dir(user_name);
+		free(user_name);
+		free(home);
+	}
+	else
+		tilde_dir = home;
+	return (tilde_dir);
+}
+
 char	*set_tilde_case2(char *before_str)
 {
 	char	*tilde_dir;
@@ -58,7 +77,6 @@ char	*set_tilde_case5(char *before_str)
 	if (!(dir_ptr = opendir(tilde_dir)))
 	{
 		free(tilde_dir);
-	//	closedir(dir_ptr);
 		return (ft_strdup(before_str));
 	}
 	closedir(dir_ptr);

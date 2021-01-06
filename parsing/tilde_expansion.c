@@ -45,8 +45,9 @@ char	**set_path_arr(void)
 	return (path_arr);
 }
 
-char	*get_root_dir(void)
+char	*set_tilde_dir(char *user_name)
 {
+	char	*tilde_dir;
 	char	**path_arr;
 	char	*root_path;
 	char	*tmp;
@@ -58,36 +59,8 @@ char	*get_root_dir(void)
 	tmp = ft_strchr(root_path + 1, '/');
 	result = ft_substr(root_path, 0, tmp - root_path + 1);
 	free(root_path);
-	return (result);
-}
-
-char	*set_tilde_dir(char *user_name)
-{
-	char	*root;
-	char	*tilde_dir;
-
-	root = get_root_dir();
-	tilde_dir = ft_strjoin(root, user_name);
-	free(root);
-	return (tilde_dir);
-}
-
-char	*tilde_expansion_dir(void)
-{
-	char	*tilde_dir;
-	char	*user_name;
-	char	*home;
-
-	home = get_env_value("HOME");
-	if (!*home)
-	{
-		user_name = get_env_value("USER");
-		tilde_dir = set_tilde_dir(user_name);
-		free(user_name);
-		free(home);
-	}
-	else
-		tilde_dir = home;
+	tilde_dir = ft_strjoin(result, user_name);
+	free(result);
 	return (tilde_dir);
 }
 

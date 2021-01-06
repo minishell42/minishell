@@ -99,7 +99,6 @@ char				*change_to_absolute_path(char *value);
 ** tilde_expansion.c
 */
 char				*apply_tilde_expansion(char *before_str);
-char				*tilde_expansion_dir(void);
 char				*set_tilde_dir(char *user_name);
 
 /*
@@ -112,11 +111,12 @@ bool				can_make_redir_list(t_cmd_line *cmd_line, \
 ** change_to_absolute_path.c
 */
 char				*change_to_absolute_path(char *value);
-
 t_list				*make_param_list(char *param);
+
 /*
 ** set_tilde_case.c
 */
+char				*tilde_expansion_dir(void);
 char				*set_tilde_case2(char *before_str);
 char				*set_tilde_case3(char *before_str);
 char				*set_tilde_case4(char *before_str);
