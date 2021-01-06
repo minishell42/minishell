@@ -57,6 +57,16 @@ echo "$a '$a' $a"
 echo $a
 echo '$a'
 echo "$a"
+echo "h\\a\$test \"$test"
+echo "h\a\$test \\"$test"
+echo "\h\a\$test \"$test"
+echo 'h\a\$test \'$test'
+echo "h\a\$test \\"$test"\
+
+
+echo "h\a\$test \"$test"
+echo 'h\a\$test \"$test'
+echo "h\a\\$test \"$test"
 */
 
 
