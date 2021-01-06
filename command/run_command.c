@@ -70,11 +70,11 @@ bool		run_normal_cmd(t_cmd_line *cmd_line, \
 {
 	pid_t	pid;
 	int		status;
+
+	signal_ignore();
 	pid = fork();
 	if (pid > 0)
 	{
-		signal(SIGINT, SIG_IGN);
-		signal(SIGQUIT, SIG_IGN);
 		waitpid(pid, &status, 0);
 		return (set_parents_condition(cmd_line, pipes, pipe_flag, status));
 	}

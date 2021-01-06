@@ -42,17 +42,14 @@ char		*make_quote_str(char *str, int *i)
 
 	if (!(quote = str[*i]))
 		return (NULL);
-	(*i)++;
-
 	quote_str = ft_calloc(sizeof(char), ft_strlen(str));
 	len = 0;
-	while (str[*i] != quote)	
+	while (str[++(*i)] != quote)
 	{
-		if (str[*i] == '\\' && (str[*i + 1] == '\"'))
+		if (quote == '"' && str[*i] == '\\' && str[*i + 1] == '\"')
 			quote_str[len++] = str[++(*i)];
 		else
 			quote_str[len++] = str[*i];
-		(*i)++;
 	}
 	if (quote == '\'')
 		return (quote_str);

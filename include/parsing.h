@@ -121,5 +121,4 @@ char				*set_tilde_case3(char *before_str);
 char				*set_tilde_case4(char *before_str);
 char				*set_tilde_case5(char *before_str);
 
-
 #endif

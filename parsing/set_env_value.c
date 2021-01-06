@@ -78,6 +78,26 @@ static void	join_env_value(char **ret, char *str, int *i)
 	free(temp);
 }
 
+char		*make_str_before_env_param(char *str, int *index)
+{
+	char	*tmp;
+	int		len;
+
+	tmp = ft_calloc(sizeof(char), ft_strlen(str) + 1);
+	len = 0;
+	while (str[*index] && str[*index] != '$')
+	{
+		if (str[*index] == '\\')
+		{
+			if (str[*index + 1] == '\\' || str[*index + 1] == '$')
+				(*index)++;
+		}
+		tmp[len++] = str[*index];
+		(*index)++;
+	}
+	return (tmp);
+}
+
 char		*set_multi_env(char *str)
 {
 	char	*ret;
@@ -89,45 +109,16 @@ char		*set_multi_env(char *str)
 	i = 0;
 	ret = ft_calloc(1, sizeof(char));
 	start = str;
-	// back 슬래시 flag on , off
-	// on 조건
-	// back 슬래시가 존재할때
-	// back 슬래시는 무시된다.
-	// off 조건
-	// 문자가 존재 할때
-	// 특정 문자를 제외하고 백슬래시를 앞에 추가해 준다.
-	// echo "\$test"
-	printf("before str = %s\n", str);
-	// bool b_flag;
-// echo "h\a\$test \"$test"
-// echo "h\a\$test \'$test"
-	// b_flag = false;
-	printf("===============  start loop  =====================\n");
 	while (str[i])
 	{
-		// \$test
-		printf("str = %s\n", ret);
-		while (str[i] && str[i] != '$' && str[i] != '\\')
-		{
-			// if (str[i] == '\\')
-			// {
-			// 	i++;
-			// 	if (str[i] == '\'' || str[i] == '"' || str[i] == '\\' || str[i] == '$')
-			// 		start++;
-			// }
-			i++;
-		}
-		// str[i] == '\\'	str[i] == '$'
-
+		start = make_str_before_env_param(str, &i);
 		seperator = str[i];
-		str[i] = 0;
 		temp = ret;
-		ret = ft_strjoin(temp, start);  //ret : '\\' 
+		ret = ft_strjoin(temp, start);
+		free(start);
 		free(temp);
 		if (seperator == '$')
 			join_env_value(&ret, str, &i);
-		start = str + i;
 	}
-	printf("===============  end loop  =====================\n");
 	return (ret);
 }
