@@ -88,7 +88,11 @@ bool	ft_unset(t_cmd_line *cmd_line)
 	t_list	*params;
 
 	if (!(params = get_valid_param(cmd_line->param)))
-		return (false);
+	{
+		if (g_err || errno != 0)
+			return (false);
+		return (true);
+	}
 	search_and_remove_env(params);
 	ft_lstclear(&params, free);
 	if (g_err)
