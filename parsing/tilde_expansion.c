@@ -1,5 +1,77 @@
 #include "parsing.h"
 
+t_list	*env_target_list(char *target)
+{
+	char	*key;
+	char	*value;
+	int		i;
+	t_list	*env;
+
+	env = g_env;
+	while (env)
+	{
+		i = 0;
+		while ((((char *)env->content)[i] != '=') && ((char *)env->content)[i])
+			i++;
+		key = ft_substr(env->content, 0, i);
+		value = ft_substr(env->content, i + 1, ft_strlen(env->content) - i);
+		if (are_equal(target, key))
+		{
+			free(key);
+			free(value);
+			return (env);
+		}
+		free(key);
+		free(value);
+		env = env->next;
+	}
+	return (NULL);
+}
+
+char	**set_path_arr(void)
+{
+	t_list			*paths;
+	char			*value;
+	char			**path_arr;
+
+	if (!(paths = env_target_list("PATH")))
+		return (NULL);
+	value = ft_strchr(paths->content, '=');
+	if (!value || !(value + 1))
+		return (NULL);
+	value++;
+	if (!(path_arr = ft_split(value, ':')))
+		return (NULL);
+	return (path_arr);
+}
+
+char	*get_root_dir(void)
+{
+	char	**path_arr;
+	char	*root_path;
+	char	*tmp;
+	char	*result;
+
+	path_arr = set_path_arr();
+	root_path = ft_strdup(path_arr[0]);
+	free_str_array(path_arr);
+	tmp = ft_strchr(root_path + 1, '/');
+	result = ft_substr(root_path, 0, tmp - root_path + 1);
+	free(root_path);
+	return (result);
+}
+
+char	*set_tilde_dir(char *user_name)
+{
+	char	*root;
+	char	*tilde_dir;
+
+	root = get_root_dir();
+	tilde_dir = ft_strjoin(root, user_name);
+	free(root);
+	return (tilde_dir);
+}
+
 char	*tilde_expansion_dir(void)
 {
 	char	*tilde_dir;
@@ -10,8 +82,9 @@ char	*tilde_expansion_dir(void)
 	if (!*home)
 	{
 		user_name = get_env_value("USER");
-		tilde_dir = ft_strjoin("/home/", user_name);
+		tilde_dir = set_tilde_dir(user_name);
 		free(user_name);
+		free(home);
 	}
 	else
 		tilde_dir = home;

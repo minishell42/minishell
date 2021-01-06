@@ -100,6 +100,7 @@ char				*change_to_absolute_path(char *value);
 */
 char				*apply_tilde_expansion(char *before_str);
 char				*tilde_expansion_dir(void);
+char				*set_tilde_dir(char *user_name);
 
 /*
 ** set_redir_struct.c

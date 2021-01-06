@@ -53,7 +53,7 @@ char	*set_tilde_case5(char *before_str)
 
 	tmp = ft_strchr(before_str, '/');
 	user_name = ft_substr(before_str, 1, tmp - before_str);
-	tilde_dir = ft_strjoin("/home/", user_name);
+	tilde_dir = set_tilde_dir(user_name);
 	free(user_name);
 	if (!(dir_ptr = opendir(tilde_dir)))
 	{
