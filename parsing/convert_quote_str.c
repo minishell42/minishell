@@ -33,24 +33,42 @@ char		*set_value_before_quote(char *str, int start, int *index)
 	return (result);
 }
 
+char		*set_quote_str(char *str, int *i, char quote)
+{
+	char	*quote_str;
+	int		len;
+
+	quote_str = ft_calloc(sizeof(char), ft_strlen(str));
+	len = 0;
+	while (str[++(*i)] != quote && str[*i])
+	{
+		if (quote == '"' && str[*i] == '\\')
+		{
+			if (str[*i + 1] == '\\')
+			{
+				quote_str[len++] = str[(*i)++];
+				quote_str[len++] = str[(*i)];
+			}
+			else if (str[*i + 1] == '\"')
+				quote_str[len++] = str[++(*i)];
+			else
+				quote_str[len++] = str[(*i)];
+		}
+		else
+			quote_str[len++] = str[*i];
+	}
+	return (quote_str);
+}
+
 char		*make_quote_str(char *str, int *i)
 {
 	char		quote;
-	int			len;
 	char		*quote_str;
 	char		*tmp;
 
 	if (!(quote = str[*i]))
 		return (NULL);
-	quote_str = ft_calloc(sizeof(char), ft_strlen(str));
-	len = 0;
-	while (str[++(*i)] != quote)
-	{
-		if (quote == '"' && str[*i] == '\\' && str[*i + 1] == '\"')
-			quote_str[len++] = str[++(*i)];
-		else
-			quote_str[len++] = str[*i];
-	}
+	quote_str = set_quote_str(str, i, quote);
 	if (quote == '\'')
 		return (quote_str);
 	else if (quote == '\"')
