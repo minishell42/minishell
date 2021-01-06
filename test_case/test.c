@@ -10,18 +10,18 @@ int main(int argc, char **argv, char *envp[])
 	// test_cd(env);
 	//  test_command_lines(env);
 	// test_redirection(env);
-	// test_validate_line();
-	// test_export();
-	// test_env();
-	// test_unset();
+	test_validate_line();
+	test_export();
+	test_env();
+	test_unset();
 	// char *str;
 	// str = "n\  d\n\0";
 	// write(1, str, 5);
-	char *line;
-	line = 0;
-	get_next_line(0, &line);
-	write(1, line, ft_strlen(line));
-	free(line);
+	// char *line;
+	// line = 0;
+	// get_next_line(0, &line);
+	// write(1, line, ft_strlen(line));
+	// free(line);
 	ft_lstclear(&g_env, free);
 
 	return (0);
