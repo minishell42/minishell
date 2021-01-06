@@ -40,7 +40,7 @@ bool		run_command(t_cmd_line *cmd_line)
 	if (cmd_line->command_num == ECHO)
 		return (echo(cmd_line));
 	else if (cmd_line->command_num == PWD)
-		return (pwd(cmd_line));
+		return (pwd());
 	else if (cmd_line->command_num == ENV)
 		return (ft_env(cmd_line));
 	else if ((file_path = search_file(cmd_line, cmd_line->command)))
@@ -74,10 +74,7 @@ bool		run_normal_cmd(t_cmd_line *cmd_line, \
 	signal_ignore();
 	pid = fork();
 	if (pid > 0)
-	{
 		waitpid(pid, &status, 0);
-		return (set_parents_condition(cmd_line, pipes, pipe_flag, status));
-	}
 	else if (pid == 0)
 	{
 		init_child_signal();
@@ -89,4 +86,5 @@ bool		run_normal_cmd(t_cmd_line *cmd_line, \
 		}
 		exit(0);
 	}
+	return (set_parents_condition(cmd_line, pipes, pipe_flag, status));
 }

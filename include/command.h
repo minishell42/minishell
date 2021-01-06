@@ -71,12 +71,12 @@ bool			run_env_operator_cmd(t_cmd_line *cmd_line, \
 /*
 ** pwd.c
 */
-bool			pwd(t_cmd_line *cmd_line);
+bool			pwd(void);
 
 /*
 ** ft_exit.c
 */
-char			*ft_exit(t_cmd_line *cmd_line);
+void			ft_exit(t_cmd_line *cmd_line);
 
 /*
 ** env.c

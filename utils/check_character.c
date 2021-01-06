@@ -39,7 +39,7 @@ bool		is_empty_line(char *line)
 	i = 0;
 	while (ft_isspace(line[i]))
 		i++;
-	if (line[i] == '\n' && !line[i + 1] || !line[i])
+	if ((line[i] == '\n' && !line[i + 1]) || !line[i])
 		return (true);
 	return (false);
 }

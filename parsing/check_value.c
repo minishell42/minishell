@@ -12,7 +12,7 @@
 
 #include "parsing.h"
 
-bool			pass_escape(char *line, int *index, char quot_flag)
+bool			pass_escape(char *line, int *index)
 {
 	if (line[*index] == '\\')
 	{
@@ -37,7 +37,7 @@ bool			check_character_in_line(char *line,
 	quot_flag = 0;
 	while (line[*index] && !(func(line[*index]) && quot_flag == 0))
 	{
-		if (!(pass_escape(line, index, quot_flag)))
+		if (!(pass_escape(line, index)))
 			return (false);
 		if (line[*index] == '\'' || line[*index] == '"')
 		{

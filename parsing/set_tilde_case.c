@@ -4,7 +4,6 @@ char	*set_tilde_case2(char *before_str)
 {
 	char	*tilde_dir;
 	char	*result;
-	char	*other_dir;
 
 	tilde_dir = tilde_expansion_dir();
 	result = ft_strjoin(tilde_dir, before_str + 1);

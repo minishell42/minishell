@@ -1,8 +1,8 @@
-CC			=gcc
+CC			= gcc
 
 INCLUDE		= include/
 
-CFLAGS		=-I$(INCLUDE)
+CFLAGS		= -I$(INCLUDE) -Wall -Werror -Wextra
 
 LIB			= libft/
 

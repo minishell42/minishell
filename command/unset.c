@@ -86,7 +86,6 @@ void	search_and_remove_env(t_list *params)
 bool	ft_unset(t_cmd_line *cmd_line)
 {
 	t_list	*params;
-	int		i;
 
 	if (!(params = get_valid_param(cmd_line->param)))
 		return (false);

@@ -40,7 +40,6 @@ static bool	set_command(t_cmd_line *cmd_line, char *line, int *index)
 static int	set_command_line(t_cmd_line *cmd_line, char *line)
 {
 	char			*start;
-	int				len;
 	int				index;
 	int				tmp_index;
 

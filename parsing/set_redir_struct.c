@@ -12,7 +12,7 @@
 
 #include "parsing.h"
 
-static bool	set_redir_flag(t_redir *redir, char *param, char **content)
+static bool	set_redir_flag(t_redir *redir, char **content)
 {
 	if (**content == '>')
 	{
@@ -81,7 +81,7 @@ static bool	set_redir_param(t_cmd_line *cmd_line, \
 		return (false);
 	}
 	free(tmp);
-	if (file = change_to_absolute_path(file_name))
+	if ((file = change_to_absolute_path(file_name)))
 	{
 		redir->redir_param = file;
 		free(file_name);
@@ -93,8 +93,7 @@ static bool	set_redir_param(t_cmd_line *cmd_line, \
 	return (true);
 }
 
-bool		can_make_redir_list(t_cmd_line *cmd_line, \
-							char *param, char *content)
+bool		can_make_redir_list(t_cmd_line *cmd_line, char *content)
 {
 	t_redir		*redir;
 	t_list		*list;
@@ -104,7 +103,7 @@ bool		can_make_redir_list(t_cmd_line *cmd_line, \
 	tmp = content;
 	if (!(redir = ft_calloc(sizeof(t_redir), 1)))
 		return (false);
-	if (!(set_redir_flag(redir, param, &tmp)))
+	if (!(set_redir_flag(redir, &tmp)))
 	{
 		free(redir);
 		return (false);

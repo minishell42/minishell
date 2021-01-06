@@ -65,7 +65,7 @@ int					get_command_num(char *command);
 /*
 ** parse_param.c
 */
-char				*set_value_before_quote(char *str, int start, int *index);
+char				*set_value_before_quote(char *str, int *index);
 char				*convert_to_valid_value(char *start, int len);
 int					set_param(t_cmd_line *command_line, char *start);
 
@@ -89,7 +89,7 @@ void				set_special_param(t_cmd_line *cmd_line);
 /*
 ** convert_to_quote.c
 */
-char				*convert_to_quote_str(char *str, int start, int *index);
+char				*convert_to_quote_str(char *str, int *index);
 
 /*
 ** apply_absolute_path.c
@@ -105,7 +105,7 @@ char				*tilde_expansion_dir(void);
 ** set_redir_struct.c
 */
 bool				can_make_redir_list(t_cmd_line *cmd_line, \
-										char *param, char *content);
+										char *content);
 
 /*
 ** change_to_absolute_path.c

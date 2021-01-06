@@ -42,11 +42,8 @@ static char	*get_absolute_path(char *value, int index)
 char		*change_to_absolute_path(char *value)
 {
 	char	*result;
-	char	*tmp;
 	int		i;
-	int		curr_len;
 
-	tmp = NULL;
 	result = NULL;
 	i = 0;
 	while (value[i] && value[i] != '/')

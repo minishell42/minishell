@@ -15,23 +15,20 @@
 char		*make_valid_value(char *str)
 {
 	int			i;
-	int			start;
 	char		*result;
 	char		*str_tmp;
 	char		*r_tmp;
 
 	i = 0;
-	start = i;
 	result = ft_calloc(sizeof(char), 1);
 	while (str[i])
 	{
-		str_tmp = convert_to_quote_str(str, start, &i);
+		str_tmp = convert_to_quote_str(str, &i);
 		r_tmp = result;
 		result = ft_strjoin(r_tmp, str_tmp);
 		free(r_tmp);
 		if (str[i])
 			i++;
-		start = i;
 		free(str_tmp);
 	}
 	return (result);
@@ -41,7 +38,6 @@ char		*convert_to_valid_value(char *start, int len)
 {
 	char		*result;
 	char		*str;
-	char		*tmp;
 
 	str = ft_calloc(sizeof(char), len + 1);
 	ft_strlcpy(str, start, len + 1);
@@ -53,7 +49,6 @@ char		*convert_to_valid_value(char *start, int len)
 int			set_param(t_cmd_line *command_line, char *start)
 {
 	char		*param;
-	int			param_len;
 	int			i;
 
 	i = 0;

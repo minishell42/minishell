@@ -12,7 +12,7 @@ static bool	run(t_cmd_line *cmd_line, t_pipes *pipes, bool *pipe_flag)
 	return (true);
 }
 
-static bool	set_condition_after_run(t_cmd_line *cmd_line, t_pipes *pipes)
+static void	set_condition_after_run(t_cmd_line *cmd_line, t_pipes *pipes)
 {
 	close_write_fd(pipes);
 	swap_pipe(pipes);
@@ -23,8 +23,6 @@ static bool	set_condition_after_run(t_cmd_line *cmd_line, t_pipes *pipes)
 void		minishell(char *line)
 {
 	t_cmd_line		*command_line;
-	pid_t			pid;
-	int				status;
 	bool			pipe_flag;
 	t_pipes			pipes;
 

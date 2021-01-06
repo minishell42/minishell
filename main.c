@@ -1,10 +1,20 @@
-#include "include/minishell.h"
+#include "minishell.h"
+
+static void	argv_err(int argc, char **argv)
+{
+	if (argc != 1)
+	{
+		write(1, "error : ", 9);
+		write(1, argv[0], ft_strlen(argv[0]));
+		exit (1);
+	}
+}
 
 int			main(int argc, char **argv, char *envp[])
 {
 	char		*line;
-	t_list		*command_lines;
 
+	argv_err(argc, argv);
 	g_env = get_env_llist(envp);
 	set_exit_status(EXIT_SUCCESS);
 	while (true)

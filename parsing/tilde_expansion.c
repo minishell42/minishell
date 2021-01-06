@@ -60,4 +60,5 @@ char	*apply_tilde_expansion(char *before_str)
 		return (set_tilde_case4(before_str));
 	else if (apply_case == 5)
 		return (set_tilde_case5(before_str));
+	return (ft_strdup(before_str));
 }

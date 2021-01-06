@@ -39,7 +39,7 @@ static bool	make_redir_param(t_cmd_line *cmd_line, \
 	if (!(redir_content = ft_substr(param, *start, *index - *start)))
 		return (false);
 	*start = *index;
-	if (!can_make_redir_list(cmd_line, param, redir_content))
+	if (!can_make_redir_list(cmd_line, redir_content))
 	{
 		free(redir_content);
 		return (false);
@@ -53,8 +53,6 @@ static bool	make_redir_param(t_cmd_line *cmd_line, \
 bool		check_and_set_redir_param(char *param, int *index,
 								t_cmd_line *cmd_line, int start)
 {
-	char	*redir_content;
-
 	while (param[*index] != '\0' &&
 		check_character_in_line(param, index, is_redirection))
 	{
@@ -82,7 +80,6 @@ bool		set_redirection_param(t_cmd_line *cmd_line)
 {
 	char	*param;
 	t_list	*param_list;
-	char	*tmp;
 	int		index;
 
 	param_list = cmd_line->param;

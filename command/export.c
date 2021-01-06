@@ -64,7 +64,6 @@ t_export	*init_export(t_cmd_line *cmd_line, \
 						char **key_values, char *key_value)
 {
 	t_export	*exp_info;
-	char		*env_key;
 
 	if (!validate_key_value(key_value, cmd_line))
 		return (NULL);

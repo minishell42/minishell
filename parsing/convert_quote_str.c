@@ -12,7 +12,7 @@
 
 #include "parsing.h"
 
-char		*set_value_before_quote(char *str, int start, int *index)
+char		*set_value_before_quote(char *str, int *index)
 {
 	char		*before_str;
 	int			bef_idx;
@@ -80,13 +80,13 @@ char		*make_quote_str(char *str, int *i)
 	return (quote_str);
 }
 
-char		*convert_to_quote_str(char *str, int start, int *index)
+char		*convert_to_quote_str(char *str, int *index)
 {
 	char		*normal_str;
 	char		*quote_str;
 	char		*result;
 
-	normal_str = set_value_before_quote(str, start, index);
+	normal_str = set_value_before_quote(str, index);
 	quote_str = make_quote_str(str, index);
 	result = ft_strjoin(normal_str, quote_str);
 	free(normal_str);

@@ -31,11 +31,10 @@ static char	*set_dir_param(t_list *param_list)
 	return (param);
 }
 
-static char	*set_home_dir(char *param)
+static char	*set_home_dir(void)
 {
 	char	*home;
 	char	*dir;
-	char	*tmp;
 
 	home = get_env_value("HOME");
 	if (*home == '\0')
@@ -51,8 +50,6 @@ static char	*set_home_dir(char *param)
 char		*set_dir(t_list *param_list, bool *flag)
 {
 	char	*dir;
-	char	*tmp;
-	char	*home;
 	char	*param;
 
 	if (!(param = set_dir_param(param_list)))
@@ -66,7 +63,7 @@ char		*set_dir(t_list *param_list, bool *flag)
 		}
 	}
 	else if (are_equal(param, "--"))
-		dir = set_home_dir(param);
+		dir = set_home_dir();
 	else
 		dir = ft_strdup(param);
 	free(param);

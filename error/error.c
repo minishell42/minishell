@@ -50,7 +50,6 @@ void	free_err_info(void *content)
 void	print_err_msg(void)
 {
 	char	*err_msg;
-	char	*msg;
 	t_error	*err_info;
 	t_list	*curr;
 
