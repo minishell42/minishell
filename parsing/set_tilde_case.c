@@ -58,7 +58,7 @@ char	*set_tilde_case5(char *before_str)
 	if (!(dir_ptr = opendir(tilde_dir)))
 	{
 		free(tilde_dir);
-		closedir(dir_ptr);
+	//	closedir(dir_ptr);
 		return (ft_strdup(before_str));
 	}
 	closedir(dir_ptr);
