@@ -89,6 +89,8 @@ bool		export(t_cmd_line *cmd_line)
 
 	if (!cmd_line->param)
 		ft_lstiter(g_env, print_content_exp);
+	if (cmd_line->pipe_flag)
+		return (true);
 	ret = true;
 	key_values = convert_to_array_env_list(cmd_line->param);
 	i = 0;

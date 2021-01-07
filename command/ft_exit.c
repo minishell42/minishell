@@ -12,9 +12,12 @@
 
 #include "command.h"
 
-void	ft_exit(t_cmd_line *cmd_line)
+bool	ft_exit(t_cmd_line *cmd_line)
 {
+	if (cmd_line->pipe_flag)
+		return (true);
 	free_cmd_struct(cmd_line);
 	free_env_list(&g_env);
 	process_exit(0);
+	return (true);
 }

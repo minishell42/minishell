@@ -87,6 +87,8 @@ bool	ft_unset(t_cmd_line *cmd_line)
 {
 	t_list	*params;
 
+	if (cmd_line->pipe_flag)
+		return (true);
 	if (!(params = get_valid_param(cmd_line->param)))
 	{
 		if (g_err || errno != 0)
