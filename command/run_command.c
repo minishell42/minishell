@@ -65,7 +65,7 @@ bool		run_command(t_cmd_line *cmd_line)
 static bool	set_parents_condition(t_cmd_line *cmd_line, \
 				t_pipes *pipes, bool *pipe_flag, int status)
 {
-	set_exit_status(status);
+	set_exit_status(status / 256);
 	if (*pipe_flag)
 	{
 		close(get_read_fd(pipes));

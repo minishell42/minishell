@@ -22,7 +22,7 @@
 
 # include "libft.h"
 
-# define SYNTAX_ERROR 2
+# define SYNTAX_ERROR 258
 # define TOO_MANY_REDIR 4
 # define QUOT_IS_NOT_PAIR 5
 # define PARAM_IS_NEWLINE 6

@@ -44,6 +44,7 @@ typedef struct		s_command_line
 	char			*option;
 	t_list			*param;
 	int				command_num;
+	bool			param_err;
 	bool			pipe_flag;
 	t_list			*redir_param;
 }					t_cmd_line;

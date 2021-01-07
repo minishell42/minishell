@@ -65,7 +65,12 @@ bool			check_cmd_num(t_cmd_line *cmd_line)
 	{
 		if (!redir || *cmd_line->command)
 		{
-			make_err_msg(INVALID_COMMAND, 0,
+			if (ft_strchr(cmd_line->command, '/'))
+				make_err_msg(INVALID_COMMAND, \
+						cmd_line->command, 0, \
+						get_err_msg(NO_FILE_OR_DIRECTORY));
+			else
+				make_err_msg(INVALID_COMMAND, 0,
 						cmd_line->command, get_err_msg(INVALID_COMMAND));
 			return (false);
 		}

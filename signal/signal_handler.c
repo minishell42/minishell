@@ -16,9 +16,11 @@ void		default_signal(int signal_no)
 {
 	if (signal_no == SIGINT)
 	{
-		ft_putstr_fd("\n", 1);
+		ft_putstr_fd(" \b\b \b\b \b\n", 1);
 		prompt();
 	}
+	else if (signal_no == SIGQUIT)
+		ft_putstr_fd(" \b\b \b\b \b", 1);
 }
 
 void		child_signal(int signal_no)
@@ -38,7 +40,7 @@ void		child_signal(int signal_no)
 void		init_signal(void)
 {
 	signal(SIGINT, default_signal);
-	signal(SIGQUIT, SIG_IGN);
+	signal(SIGQUIT, default_signal);
 }
 
 void		signal_ignore(void)

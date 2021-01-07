@@ -45,25 +45,28 @@ static bool	set_redir_fd(t_cmd_line *cmd_line, t_pipes *pipes, \
 						t_list *redir_list, bool *has_redir)
 {
 	t_redir		*redir;
-	int			file_fd;
 
 	*has_redir = true;
 	redir = redir_list->content;
-	file_fd = find_file_fd(redir);
-	redir->file_fd = file_fd;
-	if (file_fd < 0)
+	redir->file_fd = find_file_fd(redir);
+	if (redir->file_fd < 0)
 	{
 		set_exit_status(EX_NOINPUT);
 		return (false);
 	}
+	if (cmd_line->param_err)
+	{
+		cmd_line->param_err = false;
+		return (true);
+	}
 	if (redir->redir_flag == REDIR_IN)
 	{
-		dup2(file_fd, 0);
+		dup2(redir->file_fd, 0);
 		if (cmd_line->pipe_flag)
 			dup2(get_write_fd(pipes), 1);
 	}
 	else
-		dup2(file_fd, 1);
+		dup2(redir->file_fd, 1);
 	return (true);
 }
 

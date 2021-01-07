@@ -42,10 +42,7 @@ static void	parsing_err_value(char *error_point)
 
 void		set_exit_status(int exit_code)
 {
-	if (exit_code >= 256)
-		g_exit_code = (exit_code / 256);
-	else
-		g_exit_code = exit_code;
+	g_exit_code = exit_code;
 }
 
 void		make_err_msg(int exit_code, char *cmd, char *value, char *msg)

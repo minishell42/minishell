@@ -69,7 +69,7 @@ bool		is_contained(char c, char *str)
 
 int			is_seperate_character(int c)
 {
-	if (ft_isspace(c) || is_redirection(c))
+	if (ft_isspace(c) || is_redirection(c) || is_semicolon(c))
 		return (true);
 	return (false);
 }

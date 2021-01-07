@@ -16,11 +16,22 @@ static bool	set_param_before_redir(t_cmd_line *cmd_line,
 								char *param, int *index)
 {
 	char	*before_param;
+	char	*param_tmp;
+	char	*tmp;
 
 	if (!check_character_in_line(param, index, is_redirection))
 		return (false);
 	if (!(before_param = ft_substr(param, 0, *index)))
 		return (false);
+	if (*index != 0 && \
+		(before_param[*index - 1] != ' ' && is_redirection(param[*index])))
+	{
+		cmd_line->param_err = true;
+		tmp = (char *)ft_strrchr(before_param, ' ');
+		param_tmp = ft_substr(before_param, 0, tmp - before_param);
+		free(before_param);
+		before_param = param_tmp;
+	}
 	cmd_line->param = make_param_list(before_param);
 	free(before_param);
 	return (true);

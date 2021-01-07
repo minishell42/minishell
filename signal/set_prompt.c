@@ -26,7 +26,7 @@ void		process_exit(bool option)
 
 	if (option)
 		ft_putstr_fd("exit\n", 1);
-	str = B_YELLOW"minishell exit\n";
+	str = "minishell exit\n";
 	write(1, str, ft_strlen(str));
 	exit(0);
 }
