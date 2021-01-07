@@ -74,13 +74,13 @@ int		can_apply_tilde_expansion(char *before_str)
 			return (2);
 		else if (before_str[1] == '+')
 		{
-			if (before_str[2] != '/')
+			if (before_str[2] && before_str[2] != '/')
 				return (-1);
 			return (3);
 		}
 		else if (before_str[1] == '-')
 		{
-			if (before_str[2] != '/')
+			if (before_str[2] && before_str[2] != '/')
 				return (-1);
 			return (4);
 		}
