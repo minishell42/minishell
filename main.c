@@ -6,7 +6,7 @@ static void	argv_err(int argc, char **argv)
 	{
 		write(1, "error : ", 9);
 		write(1, argv[0], ft_strlen(argv[0]));
-		exit (1);
+		exit(1);
 	}
 }
 

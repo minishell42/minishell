@@ -14,6 +14,18 @@ void		close_write_fd(t_pipes *pipes)
 	}
 }
 
+void		close_pipe_fd(t_pipes *pipes)
+{
+	if (pipes->old[WRITE] != -1)
+		close(pipes->old[WRITE]);
+	if (pipes->old[READ] != -1)
+		close(pipes->old[READ]);
+	if (pipes->new[WRITE] != -1)
+		close(pipes->new[WRITE]);
+	if (pipes->new[READ] != -1)
+		close(pipes->new[READ]);
+}
+
 int			get_write_fd(t_pipes *pipes)
 {
 	if (pipes->old[WRITE] == -1)

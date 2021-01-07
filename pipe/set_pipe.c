@@ -38,6 +38,7 @@ static bool	set_redir_fd(t_cmd_line *cmd_line, t_pipes *pipes, \
 	*has_redir = true;
 	redir = redir_list->content;
 	file_fd = find_file_fd(redir);
+	redir->file_fd = file_fd;
 	if (file_fd < 0)
 	{
 		set_exit_status(EX_NOINPUT);
@@ -58,6 +59,7 @@ bool		set_pipe(t_cmd_line *cmd_line, bool flag,
 							t_pipes *pipes)
 {
 	t_list		*redir_list;
+	t_redir		*tmp;
 	bool		has_redir;
 
 	if (flag)
@@ -68,6 +70,7 @@ bool		set_pipe(t_cmd_line *cmd_line, bool flag,
 	{
 		if (!set_redir_fd(cmd_line, pipes, redir_list, &has_redir))
 			return (false);
+		tmp = redir_list->content;
 		redir_list = redir_list->next;
 	}
 	if (cmd_line->pipe_flag && !has_redir)

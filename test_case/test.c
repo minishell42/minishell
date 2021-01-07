@@ -43,23 +43,23 @@ echo 123 > ./001
 echo 123 >> 123
 echo 123 < 123
 echo -n 123
-en ; echo 123; en; echo 45
+en ; echo 123; en; echo 45   ==== error
 echo 123 | echo 456
 echo 123 ; echo 456
 echo 123 > 789 | echo 456
-echo 123 >> 789 | echo 456
+echo 123 >> 789 | echo 456echo
 echo ~
 echo ~/do
-echo ~-/k	(oldpwd가 있을때 / 없을때)
+echo ~-/k	(oldpwd가 있을때 / 없을때)  == error /가 없어도 변환이 되야 한다. 다른문자가 있으면 -1
 echo ~+/k	(pwd가 있을때 / 없을때)
 echo '$a "$a" $a'
 echo "$a '$a' $a"
 echo $a
 echo '$a'
 echo "$a"
-echo "h\\a\$test \"$test"
+"echo "h\\a\$test \"$test"
 echo "h\a\$test \\"$test"
-echo "\h\a\$test \"$test"
+echo "\h\a\$test \"$test""
 echo 'h\a\$test \'$test'
 echo "h\a\$test \\"$test"\
 

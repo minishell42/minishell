@@ -2,7 +2,7 @@ CC			= gcc
 
 INCLUDE		= include/
 
-CFLAGS		= -I$(INCLUDE) -Wall -Werror -Wextra
+CFLAGS		= -I$(INCLUDE) 
 
 LIB			= libft/
 

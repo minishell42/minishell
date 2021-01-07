@@ -76,7 +76,7 @@ bool			pwd(void);
 /*
 ** ft_exit.c
 */
-void			ft_exit(t_cmd_line *cmd_line);
+bool			ft_exit(t_cmd_line *cmd_line);
 
 /*
 ** env.c

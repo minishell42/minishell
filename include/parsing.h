@@ -23,6 +23,7 @@ typedef struct		s_redir
 {
 	int				redir_flag;
 	char			*redir_param;
+	int				file_fd;
 }					t_redir;
 
 typedef struct		s_command_line
@@ -42,6 +43,7 @@ t_list				*g_env;
 */
 void				free_cmd_struct(t_cmd_line *cmd);
 void				free_env_list(t_list **env);
+void				close_redir_file(t_cmd_line *cmd);
 
 /*
 ** check_value.c

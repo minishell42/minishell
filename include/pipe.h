@@ -20,6 +20,7 @@ void			close_write_fd(t_pipes *pipes);
 int				get_write_fd(t_pipes *pipes);
 int				get_read_fd(t_pipes *pipes);
 int				find_file_fd(t_redir *redir);
+void			close_pipe_fd(t_pipes *pipes);
 
 /*
 ** set_pipe.c

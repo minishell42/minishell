@@ -82,9 +82,11 @@ bool		run_normal_cmd(t_cmd_line *cmd_line, \
 		if ((!set_pipe(cmd_line, *pipe_flag, pipes)) \
 				|| (!run_command(cmd_line)))
 		{
+			close_redir_file(cmd_line);
 			built_in_error();
 			exit(g_exit_code);
 		}
+		close_redir_file(cmd_line);
 		exit(0);
 	}
 	return (set_parents_condition(cmd_line, pipes, pipe_flag, status));

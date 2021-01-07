@@ -34,7 +34,29 @@ void	free_redir_struct(void *redir_param)
 		redir->redir_flag = 0;
 	if (redir->redir_param)
 		free(redir->redir_param);
+	if (redir->file_fd > 0)
+		close(redir->file_fd);
 	free(redir);
+}
+
+void	close_redir_file(t_cmd_line *cmd_line)
+{
+	t_redir	*redir;
+	t_list	*tmp;
+
+	if (!cmd_line->redir_param)
+		return ;
+	tmp = cmd_line->redir_param;
+	while (tmp)
+	{
+		redir = (t_redir *)(tmp->content);
+		if (redir->file_fd > 0)
+		{
+			close(redir->file_fd);
+			redir->file_fd = -1;
+		}
+		tmp = tmp->next;
+	}
 }
 
 void	free_cmd_struct(t_cmd_line *cmd)

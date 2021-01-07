@@ -35,13 +35,15 @@ void		minishell(char *line)
 		{
 			built_in_error();
 			set_exit_status(SYNTAX_ERROR);
+			close_pipe_fd(&pipes);
 			return ;
 		}
 		if (!run(command_line, &pipes, &pipe_flag))
 		{
 			free_cmd_struct(command_line);
-			return ;
+			continue ;
 		}
 		set_condition_after_run(command_line, &pipes);
 	}
+	close_pipe_fd(&pipes);
 }
