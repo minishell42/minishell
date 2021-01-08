@@ -30,7 +30,7 @@ int			is_seperate_character(int c);
 int			is_separator(int c);
 int			is_redirection(int c);
 int			is_semicolon(int c);
-bool		is_delimitor(int c);
+int			is_delimitor(int c);
 bool		is_empty_line(char *line);
 
 /*

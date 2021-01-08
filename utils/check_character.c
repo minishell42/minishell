@@ -35,7 +35,7 @@ int			is_semicolon(int c)
 	return (false);
 }
 
-bool		is_delimitor(int c)
+int			is_delimitor(int c)
 {
 	if (is_separator(c) || is_redirection(c) || is_semicolon(c))
 		return (true);

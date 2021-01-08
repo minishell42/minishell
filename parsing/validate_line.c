@@ -30,8 +30,8 @@ static int		check_validate_line(char *line, char *flag)
 	i = 0;
 	while (line[i])
 	{
-		while (line[i] && !is_delimitor(line[i]))
-			i++;
+		if (!check_character_in_line(line, &i, is_delimitor))
+			return (false);
 		if (line[i] && !*flag)
 		{
 			*flag = line[i++];
