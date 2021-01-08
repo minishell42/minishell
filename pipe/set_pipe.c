@@ -74,7 +74,6 @@ bool		set_pipe(t_cmd_line *cmd_line, bool flag,
 							t_pipes *pipes)
 {
 	t_list		*redir_list;
-	t_redir		*tmp;
 	bool		has_redir;
 
 	if (flag)
@@ -85,7 +84,6 @@ bool		set_pipe(t_cmd_line *cmd_line, bool flag,
 	{
 		if (!set_redir_fd(cmd_line, pipes, redir_list, &has_redir))
 			return (false);
-		tmp = redir_list->content;
 		redir_list = redir_list->next;
 	}
 	if (cmd_line->pipe_flag && !has_redir)
