@@ -22,6 +22,52 @@ static void	argv_err(int argc, char **argv)
 	}
 }
 
+static void	add_line(char **before_str, char *line)
+{
+	char		*tmp;
+
+	if (*line)
+	{
+		if (!before_str)
+			*before_str = ft_strdup(line);
+		else
+		{
+			tmp = ft_strjoin(*before_str, line);
+			free(*before_str);
+			*before_str = tmp;
+		}
+	}
+}
+
+static char	*read_line(void)
+{
+	char		*line;
+	char		*before_line;
+	int			flag;
+
+	before_line = NULL;
+	flag = false;
+	while (get_next_line(0, &line) <= 0)
+	{
+		if (*line || flag)
+		{
+			flag = true;
+			add_line(&before_line, line);
+		}
+		else
+			process_exit(1);
+		free(line);
+	}
+	if (before_line)
+	{
+		add_line(&before_line, line);
+		free(line);
+		line = ft_strdup(before_line);
+		free(before_line);
+	}
+	return (line);
+}
+
 int			main(int argc, char **argv, char *envp[])
 {
 	char		*line;
@@ -33,9 +79,8 @@ int			main(int argc, char **argv, char *envp[])
 	{
 		init_signal();
 		prompt();
-		if (!get_next_line(0, &line))
-			process_exit(1);
-		else if (is_empty_line(line))
+		line = read_line();
+		if (is_empty_line(line))
 		{
 			free(line);
 			continue ;
