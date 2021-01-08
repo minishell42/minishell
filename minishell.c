@@ -29,7 +29,6 @@ static void	set_condition_after_run(t_cmd_line *cmd_line, t_pipes *pipes)
 	close_write_fd(pipes);
 	swap_pipe(pipes);
 	free_cmd_struct(cmd_line);
-	set_exit_status(EXIT_SUCCESS);
 }
 
 void		minishell(char *line)
@@ -52,10 +51,11 @@ void		minishell(char *line)
 		}
 		if (!run(command_line, &pipes, &pipe_flag))
 		{
-			free_cmd_struct(command_line);
+			set_condition_after_run(command_line, &pipes);
 			continue ;
 		}
 		set_condition_after_run(command_line, &pipes);
+		set_exit_status(EXIT_SUCCESS);
 	}
 	close_pipe_fd(&pipes);
 }
