@@ -77,7 +77,8 @@ int			main(int argc, char **argv, char *envp[])
 	set_exit_status(EXIT_SUCCESS);
 	while (true)
 	{
-		init_signal();
+		signal(SIGINT, default_signal);
+		signal(SIGQUIT, default_signal);
 		prompt();
 		line = read_line();
 		if (is_empty_line(line))
