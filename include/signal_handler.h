@@ -29,7 +29,6 @@ void		process_exit(bool option);
 ** signal_handler.c
 */
 void		init_child_signal(void);
-void		init_signal(void);
 void		signal_ignore(void);
 void		default_signal(int signal_no);
 
