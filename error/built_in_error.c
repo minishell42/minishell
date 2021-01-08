@@ -6,7 +6,7 @@
 /*   By: dokang <dokang@student.42seoul.kr>         +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/01/07 17:07:25 by dokang            #+#    #+#             */
-/*   Updated: 2021/01/07 17:07:26 by dokang           ###   ########.fr       */
+/*   Updated: 2021/01/08 11:39:04 by dokang           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ void		built_in_error(void)
 		write(2, errmsg, ft_strlen(errmsg));
 		write(2, "\n", 1);
 	}
+	errno = 0;
 }
 
 static void	parsing_err_value(char *error_point)

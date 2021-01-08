@@ -2,7 +2,7 @@ CC			= gcc
 
 INCLUDE		= include/
 
-CFLAGS		= -I$(INCLUDE) 
+CFLAGS		= -I$(INCLUDE) -Wall -Wextra -Werror 
 
 LIB			= libft/
 
@@ -84,19 +84,6 @@ SRC			+= $(FILES)
 OBJS		= $(SRC:.c=.o)
 NAME		= minishell 
 
-TEST		= test
-TEST_DIR	= test_case/
-TEST_FILES	= test.c \
-				test_validate_line.c \
-				test_export.c \
-				test_env.c \
-				test_unset.c
-				
-TEST_SRC 	= $(addprefix $(TEST_DIR), $(TEST_FILES))
-TEST_SRC	+= $(FILES)
-
-TEST_OBJS	= $(TEST_SRC:.c=.o)
-
 all: 
 	make -C libft
 	make $(NAME)
@@ -107,34 +94,10 @@ $(NAME) : $(OBJS)
 
 clean :
 	rm -f $(OBJS)
-	rm -rf $(TEST_OBJS)
 	make clean -C libft
 
 fclean: clean
 	rm -f $(NAME)
-	rm -rf $(TEST)
 	make fclean -C libft
 
 re: fclean all
-
-$(TEST) : $(TEST_OBJS)
-	$(CC) -fsanitize=address -lasan $(CFLAGS) -o $(TEST) $(TEST_OBJS) $(LIBFTFLAG)
-
-t:
-	make -C libft
-	make $(TEST)
-	./$(TEST)
-
-tclear:
-	clear
-
-rt: tclear
-	make -C libft
-	make $(TEST)
-	rm -f $(OBJS)
-	rm -rf $(TEST_OBJS)
-	make clean -C libft
-	rm -f $(NAME)
-	make fclean -C libft
-	./$(TEST)
-	rm -rf $(TEST)
